@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <title>Zay Shop eCommerce HTML CSS Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="{% static 'assets/img/apple-icon.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/templatemo.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.min.css' %}">
+<!--
+    
+TemplateMo 559 Zay Shop
+
+https://templatemo.com/tm-559-zay-shop
+
+-->
+    
+</head>
+
+<body>
+    <!-- Start Top Nav -->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
+        <div class="container text-light">
+            <div class="w-100 d-flex justify-content-between">
+                <div>
+                    <i class="fa fa-envelope mx-2"></i>
+                    <a class="navbar-sm-brand text-light text-decoration-none" href="mailto:info@company.com">info@pridrianluxe.com</a>
+                    <i class="fa fa-phone mx-2"></i>
+                    <a class="navbar-sm-brand text-light text-decoration-none" href="tel:010-020-0340">070-020-0340</a>
+                </div>
+                <div>
+                    <a class="text-light" href="https://fb.com/templatemo" target="_blank" rel="sponsored"><i class="fab fa-facebook-f fa-sm fa-fw me-2"></i></a>
+                    <a class="text-light" href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram fa-sm fa-fw me-2"></i></a>
+                    <a class="text-light" href="https://twitter.com/" target="_blank"><i class="fab fa-twitter fa-sm fa-fw me-2"></i></a>
+                    <a class="text-light" href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin fa-sm fa-fw"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Close Top Nav -->
+
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a class="navbar-brand text-dark logo fa fa-bold h2 align-self-center" href="{% url 'index' %}">
+                PRIDRIAN Luxe
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'about' %}">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'shop' %}">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar align-self-center d-flex">
+                    <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
+                            <div class="input-group-text">
+                                <i class="fa fa-fw fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
+                        <i class="fa fa-fw fa-search text-dark mr-2"></i>
+                    </a>
+                    <a class="nav-icon position-relative text-decoration-none" href="#">
+                        <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">7</span>
+                    </a>
+                    <a class="nav-icon position-relative text-decoration-none" href="#">
+                        <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+    <!-- Close Header -->
+
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-black text-muted">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- Start Banner Hero -->
+    <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li>
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="{% static 'assets/img/one.avif' %}" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left align-self-center">
+                                
+                                <h2 class="h2 fw-bold">Louis Vuitton Keepall Bandoulière</h2>
+                                <p>
+Louis Vuitton Keepall Bandoulière in Monogram Eclipse canvas is a sleek, durable travel bag with a spacious interior. It features an adjustable shoulder strap, sturdy top handles, and iconic monogram detailing, making it perfect for short trips or as a carry-on.                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="{% static 'assets/img/two.webp' %}" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h2 class="h2 fw-bold">Dior Book Tote</h2>
+                                <p>
+                                    Dior Book Tote is a statement piece showcasing the iconic Toile de Jouy embroidery. Designed for versatility, it features spacious dimensions and top handles, perfect for carrying daily essentials. The "CHRISTIAN DIOR" signature adds a bold, luxurious touch.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="{% static 'assets/img/three.webp' %}" alt="">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h2 class="h2 fw-bold">Gucci GG Marmont Half-Moon Shoulder Bag </h2>
+                                <p>
+                                    Gucci GG Marmont Small Shoulder Bag, featuring a crescent shape with the iconic GG logo. Its quilted leather design and chain strap add a touch of sophistication, making it versatile for both casual and formal occasions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="next">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </div>
+    <!-- End Banner Hero -->
+
+<hr style="width: 80%" class="mx-auto">
+    <!-- Start Categories of The Month -->
+    <section class="container py-3">
+        <div class="row text-center pt-3">
+            <div class="col-lg-6 m-auto">
+                <h2 class="h2 fw-bold">Categories of The Month</h2>
+                <p>
+From elegant shoulder bags to spacious tote bags and practical cross bags, each piece combines luxury with functionality. 
+                    Explore these curated collections to find the perfect accessory for any occasion.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="{% static 'assets/img/shoulder.avif' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
+                <h5 class="text-center mt-3 mb-3">Shoulder Bags</h5>
+                <p class="text-center"><a href="{% url 'shop' %}" class="button-class btn btn-outline-dark"> Go Shop</a></p>
+                
+            </div>
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="{% static 'assets/img/tote.jpg' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
+                <h2 class="h5 text-center mt-3 mb-3">Tote Bags</h2>
+                <p class="text-center"><a href="{% url 'shop' %}" class="button-class btn btn-outline-dark"> Go Shop</a></p>
+            </div>
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="{% static 'assets/img/crossbody.avif' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
+                <h2 class="h5 text-center mt-3 mb-3">Cross Bags</h2>
+                <p class="text-center"><a href="{% url 'shop' %}" class="button-class btn btn-outline-dark"> Go Shop</a></p>
+            </div>
+        </div>
+    </section>
+    <!-- End Categories of The Month -->
+<hr style="width: 80%" class="mx-auto">
+
+    <!-- Start Featured Product -->
+    <section class="bg-muted">
+        <div class="container py-3">
+            <div class="row text-center py-3">
+                <div class="col-lg-6 m-auto">
+                    <h2 class="h2 fw-bold">Featured Product</h2>
+                    <p>
+ These handpicked selections showcase the finest craftsmanship and design, offering customers a glimpse of the most coveted pieces. Perfect for elevating any outfit or occasion, these products are must-haves for fashion enthusiasts.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="{% url 'shopsingle' %}">
+                            <img src="{% static 'assets/img/fe1.avif' %}" class="card-img-top w-100 h-100" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <i class="text-dark fa fa-star"></i>
+                                    <i class="text-dark fa fa-star"></i>
+                                    <i class="text-dark fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                </li>
+                                <li class="text-muted text-right">ksh 2,800</li>
+                            </ul>
+                            <a href="{% url 'shopsingle' %}" class="p fw-bold text-decoration-none text-dark">Prada Re-Edition 2000 Nylon Bag</a>
+                            <p class="card-text">
+                                Featuring a structured silhouette with gold-tone hardware, it combines elegance with practicality.
+                            </p>
+                            <p class="text-muted">Reviews (24)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="{% url 'shopsingle' %}">
+                            <img src="{% static 'assets/img/fe2.webp' %}" class="card-img-top w-100 h-100" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <i class="text-dark fa fa-star"></i>
+                                    <i class="text-dark fa fa-star"></i>
+                                    <i class="text-dark fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                    <i class="text-muted fa fa-star"></i>
+                                </li>
+                                <li class="text-muted text-right">ksh 3,100</li>
+                            </ul>
+                            <a href="{% url 'shopsingle' %}" class="p fw-bold text-decoration-none text-dark">Hermès Herbag Zip 31</a>
+                            <p class="card-text">
+                                Featuring a structured silhouette, top handle, and removable strap, it offers functionality and elegance for both casual and formal occasions.
+                            </p>
+                            <p class="text-muted">Reviews (48)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100">
+                        <a href="{% url 'shopsingle' %}">
+                            <img src="{% static 'assets/img/fe3.webp' %}" class="card-img-top w-100 h-100" alt="...">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <i class="text-dark fa fa-star"></i>
+                                    <i class="text-dark fa fa-star"></i>
+                                    <i class="text-dark fa fa-star"></i>
+                                    <i class="text-dark fa fa-star"></i>
+                                    <i class="text-dark fa fa-star"></i>
+                                </li>
+                                <li class="text-muted text-right">ksh 2,500</li>
+                            </ul>
+                            <a href="{% url 'shopsingle' %}" class="p fw-bold text-decoration-none text-dark">Nike Heritage Crossbody Bag</a>
+                            <p class="card-text">
+                                Made from durable materials, it features an adjustable strap, secure flap closure, and the iconic Nike logo for a sporty and stylish look.
+                            </p>
+                            <p class="text-muted">Reviews (74)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Featured Product -->
+
+
+    <!-- Start Footer -->
+    <footer class="bg-black" id="tempaltemo_footer">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">PRIDRIAN Luxe</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt fa-fw"></i>
+                            Nairobi - Kenya
+                        </li>
+                        <li>
+                            <i class="fa fa-phone fa-fw"></i>
+                            <a class="text-decoration-none" href="tel:010-020-0340">070-020-0340</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope fa-fw"></i>
+                            <a class="text-decoration-none" href="mailto:info@company.com">info@pridrianluxe.com</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li><a class="text-decoration-none" href="#">Shoulder Bags</a></li>
+                        <li><a class="text-decoration-none" href="#">Tote Bags</a></li>
+                        <li><a class="text-decoration-none" href="#">Crossbody Bags</a></li>
+                        <li><a class="text-decoration-none" href="#">Backpacks</a></li>
+    
+                    </ul>
+                </div>
+
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-light border-bottom pb-3 border-light">Further Info</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li><a class="text-decoration-none" href="#">Home</a></li>
+                        <li><a class="text-decoration-none" href="#">About Us</a></li>
+                        <li><a class="text-decoration-none" href="#">Shop Locations</a></li>
+                        <li><a class="text-decoration-none" href="#">FAQs</a></li>
+                        <li><a class="text-decoration-none" href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="row text-light mb-2">
+                <div class="col-12 mb-3">
+                    <div class="w-100 my-3 border-top border-light"></div>
+                </div>
+                <div class="col-auto me-auto">
+                    <ul class="list-inline text-left footer-icons">
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank" href="http://facebook.com/"><i class="fab fa-facebook-f fa-lg fa-fw"></i></a>
+                        </li>
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank" href="https://www.instagram.com/"><i class="fab fa-instagram fa-lg fa-fw"></i></a>
+                        </li>
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank" href="https://twitter.com/"><i class="fab fa-twitter fa-lg fa-fw"></i></a>
+                        </li>
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light text-decoration-none" target="_blank" href="https://www.linkedin.com/"><i class="fab fa-linkedin fa-lg fa-fw"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-auto">
+                    <label class="sr-only" for="subscribeEmail">Email address</label>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control bg-dark border-light" id="subscribeEmail" placeholder="Email address">
+                        <button type="submit" class="input-group-text btn-success text-light" value="Submit"> Subscribe</button>    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-100 bg-black py-0">
+            <div class="container">
+                <div class="row pt-1">
+                    <div class="col-12">
+                        <p class="text-left text-light">
+                            Copyright &copy; 2024 PRIDRIAN Luxe
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- End Footer -->
+
+    <!-- Start Script -->
+    <script src="{% static 'assets/js/jquery-1.11.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery-migrate-1.2.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/templatemo.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+    <!-- End Script -->
+</body>
+
+</html>
