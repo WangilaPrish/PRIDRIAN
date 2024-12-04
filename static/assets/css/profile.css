@@ -1,0 +1,246 @@
+/* General Styling */
+body {
+    font-family: Serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    align-items: center;
+    height: 100vh;
+
+}
+
+
+.signup-container {
+    background-color: white;
+    padding: 30px;
+    width: 70%;
+    max-width: 400px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Welcome Title */
+.signup-container h1 {
+    color: #122887;
+    font-size: 24px;
+    margin-bottom: 15px; /* Increase margin for better spacing */
+}
+
+/* Form Title */
+.signup-container h2 {
+    color: #122887;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: normal;
+    width: 100%; /* Make form fields take up full container width */
+}
+
+/* Row Styling */
+.row {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    flex-wrap: wrap; /* Add flex-wrap to ensure inputs stack if screen is too small */
+}
+
+.input-group {
+    flex: 1;
+}
+
+/* Input Group Styling */
+.input-group label {
+    display: block;
+    font-size: 14px;
+    color: #565759;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.input-group input[type="text"],
+.input-group input[type="email"],
+.input-group input[type="password"] {
+    width: 90%; /* Changed to 100% to make it more responsive */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: serif;
+}
+
+.input-group input[type="checkbox"] {
+    margin-right: 10px;
+    margin-top: 17px;
+}
+
+/* Checkbox and Terms Styling */
+.input-group.checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.input-group.checkbox a {
+    color: #122887;
+    text-decoration: none;
+}
+
+/* Button Styling */
+button {
+    width: 100%; /* Set width to 100% for easier clicking on mobile */
+    padding: 12px;
+    background-color: #636367;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-family: serif;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #000000;
+}
+
+/* Divider Styling */
+.divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.divider:before,
+.divider:after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: #ccc;
+}
+
+.divider span {
+    padding: 0 10px;
+    color: #888;
+    font-size: 12px;
+}
+
+/* Google Sign-Up Button Styling */
+.google-signup {
+    margin-top: 10px;
+}
+
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    background-color: #636367;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    color: #fff;
+}
+
+.google-btn img.google-icon {
+    width: 24px; /* Adjust size for better fit on mobile */
+    margin-right: 10px;
+}
+
+.google-btn:hover {
+    background-color: #000000;
+}
+
+/* Text inside the button */
+.google-btn span {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: bold;
+    font-family: serif;
+    text-transform: uppercase;
+}
+
+/* Login Link Styling */
+.login-link {
+    margin-top: 20px;
+}
+
+.login-link a {
+    color: #122887;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* General styling for mobile responsiveness */
+@media (max-width: 768px) {
+    h1, h2 {
+        font-size: 20px; /* Reduce the font size for mobile */
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .signup-container {
+        padding: 20px;
+        margin-top: 10px; /* Reduce the top margin for mobile */
+    }
+
+    form {
+        width: 100%;
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+        font-size: 14px; /* Adjust input font size for readability */
+        padding: 10px;
+    }
+
+    button {
+        font-size: 14px; /* Ensure button text is readable */
+        padding: 10px;
+    }
+}
+
+/* For very small screens, 480px and below */
+@media (max-width: 480px) {
+    h1, h2 {
+        font-size: 16px; /* Further reduce font size for very small screens */
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .signup-container {
+        padding: 15px; /* Reduce padding to fit very small screens */
+        margin-top: 10px; /* Further reduce margin for small devices */
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+        font-size: 12px;
+        padding: 8px;
+        width: 100%; /* Ensure form fields take up the full width */
+    }
+
+    button {
+        font-size: 14px;
+        padding: 8px 12px; /* Adjust button padding */
+        width: 100%;
+    }
+
+    .google-btn {
+        font-size: 12px;
+        padding: 8px 10px; /* Adjust padding for better fit */
+    }
+}

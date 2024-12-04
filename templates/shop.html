@@ -1,0 +1,34 @@
+{% extends 'contact.html' %}
+{% load static %}
+
+{% block body %}
+
+
+
+<div class="container py-5">
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4">
+            <div class="card mb-4 product-wap rounded-0">
+                <div class="card rounded-0">
+                    <img class="card-img rounded-0 img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                        <ul class="list-unstyled">
+                            <li><a class="btn btn-dark text-white" href="#"><i class="far fa-heart"></i></a></li>
+                            <li><a class="btn btn-dark text-white mt-2" href="{% url 'product_detail' product.id %}"><i class="fas fa-cart-plus"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <a href="#" class="p text-decoration-none">{{ product.name }}</a>
+                    
+                    <p class="text-center mb-0">ksh {{ product.price }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}
