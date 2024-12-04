@@ -2,12 +2,12 @@
 <html lang="en">
 {% load static %}
 <head>
-    <title>Zay Shop - Contact</title>
+    <title>PRIDRIAN Luxe</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="apple-touch-icon" href="{% static 'assets/img/apple-icon.png' %}">
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/icons8-bag-16.png' %}">
 
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/templatemo.css' %}">
@@ -55,7 +55,7 @@ https://templatemo.com/tm-559-zay-shop
     <nav class="navbar navbar-expand-lg navbar-light shadow">
         <div class="container d-flex justify-content-between align-items-center">
 
-            <a class="navbar-brand text-dark logo h2 fa fa-bold align-self-center" href="{% url 'index' %}">
+            <a class="navbar-brand text-dark logo fa fa-bold h2 align-self-center" href="{% url 'index' %}">
                 PRIDRIAN Luxe
             </a>
 
@@ -92,14 +92,21 @@ https://templatemo.com/tm-559-zay-shop
                     <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
                         <i class="fa fa-fw fa-search text-dark mr-2"></i>
                     </a>
-                    <a class="nav-icon position-relative text-decoration-none" href="#">
-                        <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">7</span>
-                    </a>
-                    <a class="nav-icon position-relative text-decoration-none" href="#">
-                        <i class="fa fa-fw fa-user text-dark mr-3"></i>
-                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
-                    </a>
+<a href="{% url 'shopandcart' %}" class=" position-relative">
+    <i class="fas fa-shopping-cart"></i>
+</a>
+
+
+                    <div class="dropdown">
+                    <button class=" dropdown-toggle nav-icon position-relative text-decoration-none" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                    </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -134,7 +141,7 @@ https://templatemo.com/tm-559-zay-shop
             <div class="row">
 
                 <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">PRIDRIAN Luxe</h2>
+                    <h2 class="h2 text-light border-bottom pb-3 border-light logo">PRIDRIAN Luxe</h2>
                     <ul class="list-unstyled text-light footer-link-list">
                         <li>
                             <i class="fas fa-map-marker-alt fa-fw"></i>
@@ -158,6 +165,7 @@ https://templatemo.com/tm-559-zay-shop
                         <li><a class="text-decoration-none" href="#">Tote Bags</a></li>
                         <li><a class="text-decoration-none" href="#">Crossbody Bags</a></li>
                         <li><a class="text-decoration-none" href="#">Backpacks</a></li>
+                        <li><a class="text-decoration-none" href="#">Travel Bags</a></li>
     
                     </ul>
                 </div>
@@ -195,13 +203,16 @@ https://templatemo.com/tm-559-zay-shop
                         </li>
                     </ul>
                 </div>
+                <form method="POST">
+                    {% csrf_token %}
                 <div class="col-auto">
                     <label class="sr-only" for="subscribeEmail">Email address</label>
                     <div class="input-group mb-2">
-                        <input type="text" class="form-control bg-dark border-light" id="subscribeEmail" placeholder="Email address">
-                        <button type="submit" class="input-group-text btn-success text-light" value="Submit"> Subscribe</button>    
+                        <input type="text" class="form-control bg-dark border-light"  name="email" id="subscribeEmail" placeholder="Email address">
+                        <button type="submit" class="input-group-text btn-secondary text-light" value="Submit"> Subscribe</button>
                     </div>
                 </div>
+                </form>    
             </div>
         </div>
 
@@ -216,9 +227,9 @@ https://templatemo.com/tm-559-zay-shop
                 </div>
             </div>
         </div>
-
     </footer>
     <!-- End Footer -->
+
 
     <!-- Start Script -->
     <script src="{% static 'assets/js/jquery-1.11.0.min.js' %}"></script>
