@@ -1,0 +1,70 @@
+{% extends 'contact.html' %}
+{% load static %}
+{% block body %}
+<main class="main pages" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; background-color: #f9f9f9;">
+    <div class="page-content py-4" style="width: 100%; display: flex; justify-content: center; align-items: center;">
+        <div class="container" style="width: 100%; max-width: 800px; padding: 0;">
+            <div class="card-login" style="display: flex; flex-direction: row; border-radius: 15px; border: 1px solid #ececec; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); overflow: hidden; width: 100%;">
+
+                <!-- Left Column: Image -->
+                <div class="image-section" style="flex: 1; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                    <img src="{% static 'assets/img/aboutus.png' %}" alt="About Us" style="width: 100%; height: auto; object-fit: cover;">
+                </div>
+
+                <!-- Right Column: Form -->
+                <div class="form-section" style="flex: 1; padding: 40px; background-color: #fff;">
+                    <div class="heading_s1" style="margin-bottom: 30px; text-align: center;">
+                        <h2 style="font-family: 'Roboto', sans-serif; font-weight: 600; color: #333;">Login</h2>
+                        <p style="color: #777;">Don't have an account? <a href="{% url 'register' %}" style="color: #031429; text-decoration: none;">Create here</a></p>
+                    </div>
+
+                    <form method="POST" style="width: 100%;">
+                        {% csrf_token %}
+
+                        <!-- Username/Email -->
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <div class="input-container" style="width: 100%; position: relative;">
+                                <input type="text" required name="email" placeholder="Username or Email *"
+                                    style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.3s, box-shadow 0.3s;" 
+                                    onfocus="this.style.borderColor='#031429'; this.style.boxShadow='0 0 6px rgba(24, 119, 242, 0.2)';" 
+                                    onblur="this.style.borderColor='#ccc'; this.style.boxShadow='none';" />
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group" style="margin-bottom: 30px;">
+                            <div class="input-container" style="width: 100%; position: relative;">
+                                <input type="password" required name="password" placeholder="Your password *"
+                                    style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.3s, box-shadow 0.3s;" 
+                                    onfocus="this.style.borderColor='#031429'; this.style.boxShadow='0 0 6px rgba(24, 119, 242, 0.2)';" 
+                                    onblur="this.style.borderColor='#ccc'; this.style.boxShadow='none';" />
+                            </div>
+                        </div>
+
+                        <!-- Remember Me and Forgot Password -->
+                        <div class="login_footer form-group mb-50" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <div class="chek-form">
+                                <div class="custome-checkbox" style="display: flex; align-items: center;">
+                                    <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" value="" style="margin-right: 10px;" />
+                                    <label class="form-check-label" for="exampleCheckbox1" style="color: #555;">Remember me</label>
+                                </div>
+                            </div>
+                            <a class="text-muted" href="#" style="color: #031429; text-decoration: none;">Forgot password?</a>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block" 
+                                style="background-color:#031429; color: #fff; font-size: 16px; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: background-color 0.3s, transform 0.2s; width: 100%;" 
+                                onmouseover="this.style.backgroundColor='#031429';" 
+                                onmouseout="this.style.backgroundColor='#031429';">
+                                Log in
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
