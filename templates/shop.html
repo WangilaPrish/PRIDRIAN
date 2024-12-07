@@ -4,21 +4,32 @@
 {% block body %}
 
 
+<div class="container py-3">
+<div id="myBtnContainer" class="py-2" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px;">
+    <a href="?brand=" class="btn active" style="background-color: #f8f9fa; color: #333; border: 1px solid #ccc; padding: 10px 20px; border-radius: 25px; font-weight: 500; text-decoration: none; transition: background-color 0.3s, color 0.3s, transform 0.2s;">Show all</a> <!-- Show all products -->
+    {% for brand in brands %}
+        <a href="?brand={{ brand }}" class="btn" style="background-color: #f8f9fa; color: #333; border: 1px solid #ccc; padding: 10px 20px; border-radius: 25px; font-weight: 500; text-decoration: none; transition: background-color 0.3s, color 0.3s, transform 0.2s;">
+            {{ brand }}
+        </a>
+    {% endfor %}
+</div>
 
-<div class="container py-5">
+
+
     <div class="row">
         {% for product in products %}
         <div class="col-md-4">
             <div class="card mb-4 product-wap rounded-0">
                 <div class="card rounded-0">
-                    <img class="card-img rounded-0 img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-                    <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                        <ul class="list-unstyled">
-                            <li><a class="btn btn-dark text-white" href="#"><i class="far fa-heart"></i></a></li>
-                            <li><a class="btn btn-dark text-white mt-2" href="{% url 'product_detail' product.id %}"><i class="fas fa-cart-plus"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
+    <img class="card-img rounded-0 img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: 250px; object-fit: cover;">
+    <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+        <ul class="list-unstyled">
+            <li><a class="btn btn-dark text-white" href="#"><i class="far fa-heart"></i></a></li>
+            <li><a class="btn btn-dark text-white mt-2" href="{% url 'shopandcart' product.id %}"><i class="fas fa-cart-plus"></i></a></li>
+        </ul>
+    </div>
+</div>
+
                 <div class="card-body">
                     <a href="#" class="p text-decoration-none">{{ product.name }}</a>
                     

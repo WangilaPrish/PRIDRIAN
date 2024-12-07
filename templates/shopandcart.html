@@ -1,10 +1,9 @@
-
 {% extends 'contact.html' %}
 {% load static %}
 {% block body %}
     
-<section class="bg-light">
-    <div class="container pb-5">
+<section class="bg-white">
+    <div class="container pb-3 my-2" style="align-items: center; display: flex; justify-content: center">
         <div class="row">
             <div class="col-lg-5 mt-5">
                 <div class="card mb-3">
@@ -16,16 +15,9 @@
                 <div class="card">
                     <div class="card-body">
                         <!-- Dynamically load product details -->
-                        <h1 class="h2">{{ product.name }}</h1>
-                        <p class="h3 py-2">ksh {{ product.price }}</p>
-                        <p class="py-2">
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <span class="list-inline-item text-dark">Rating {{ product.rating }} | {{ product.comments_count }} Comments</span>
-                        </p>
+                        <h1 class="h2 py-3 mb-2">{{ product.name }}</h1>
+                        <p class="h3 current-price">ksh {{ product.price }}</p>
+
                         <ul class="list-inline">
                             <li class="list-inline-item">
                                 <h6>Brand:</h6>
@@ -36,42 +28,79 @@
                         </ul>
                         <ul class="list-inline">
                             <li class="list-inline-item">
-                                <h6>Available Colors:</h6>
-                            </li>
-                            <li class="list-inline-item">
                                 <p class="text-muted"><strong>{{ product.available_colors }}</strong></p>
                             </li>
                         </ul>
 
                         <!-- Form to add to cart -->
-<form action="{% url 'shopandcart' %}" method="POST">
-    {% csrf_token %}
-    <input type="hidden" name="product_id" value="{{ product.id }}">
-    <div>
-        <h6>Select Color:</h6>
-        <select name="color" required>
-            {% for color in product.get_colors %}
-            <option value="{{ color }}">{{ color }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div>
-        <h6>Quantity:</h6>
-        <input type="number" name="quantity" value="1" min="1">
-    </div>
-    <button type="submit" class="btn btn-primary" name="action" value="add">Add to Cart</button>
-</form>
-             
-                        
+                        <form id="add-to-cart-form" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" class="product-id" value="{{ product.id }}">
+                            <input type="hidden" name="product_name" class="product-name" value="{{ product.name }}">
+                            <input type="hidden" name="product_image" class="product-image" value="{{ product.image.url }}">
+                            <div class="mb-3">
+                                <h6>Select Color:</h6>
+                                <select class="w-25" name="color" required>
+                                    {% for color in product.get_colors %}
+                                    <option value="{{ color }}">{{ color }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <h6>Quantity:</h6>
+                                <input class="w-25" type="number" name="quantity" value="1" min="1" id="product-quantity">
+                            </div>
+                            <button type="submit" id="add-to-cart-btn" class="btn btn-secondary button-add-to-cart">
+                                <i class="fi-rs-shopping-cart"></i>
+                                Add to Cart
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="py-4 mx-5">
+        <a href="{% url 'shop' %}" class="btn btn-secondary" style="font-family: sans-serif">
+            Continue Shopping
+        </a>
+    </div>
 </section>
-    
-    
+
+<script>
+    document.getElementById('add-to-cart-form').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const productId = document.querySelector('.product-id').value;
+        const productName = document.querySelector('.product-name').value;
+        const productImage = document.querySelector('.product-image').value;
+        const productQuantity = document.getElementById('product-quantity').value;
+        const color = this.querySelector('select[name="color"]').value;
+
+        const response = await fetch('/add-to-cart/', { // Adjust the URL to your Django view
+            method: 'POST', // Change to POST
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({
+                id: productId,
+                name: productName,
+                quantity: productQuantity,
+                price: {{ product.price }}, // Include the product price directly
+                image: productImage,
+                color: color, // Add the selected color
+            }),
+        });
+
+        const result = await response.json();
+        if (result.data) {
+            console.log('Item added:', result.data);
+            // Update your UI to reflect the added item (e.g., show a success message, update cart count)
+        } else {
+            console.error('Error adding item:', result.message);
+        }
+    });
+</script>
+
 {% endblock %}
-
-
-
