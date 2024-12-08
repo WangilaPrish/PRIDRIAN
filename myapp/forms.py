@@ -1,5 +1,7 @@
 from django import forms
-from .models import Product, User,Profile
+from django.contrib.auth import get_user_model
+
+from .models import Product, User, Profile, Review
 from django.contrib.auth.forms import UserCreationForm
 
 
@@ -16,21 +18,27 @@ class ProductForm(forms.ModelForm):
 
 
 class UserRegisterForm(UserCreationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Username"}))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder":"Email"}))
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder":"Password"}))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder":"Confirm Password"}))
+    username = forms.CharField(max_length=30, required=True, help_text='Required.')
 
     class Meta:
-        model = User
-        fields = ['username', 'email']
-
+        model = get_user_model()  # Use the custom user model
+        fields = ["username", "email", "password1", "password2"]
 
 
 class ProfileForm(forms.ModelForm):
-    full_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Full Name"}))
-    phone = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Phone"}))
+    full_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Full Name"}))
+    phone = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Phone"}))
+    address = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Address"}))
+    country = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Country"}))
+    image = forms.ImageField(required=False, help_text="Upload a profile photo (JPEG, PNG format).")  # Optional image field
 
     class Meta:
         model = Profile
-        fields = ['full_name', 'image', 'phone']
+        fields = ['full_name', 'phone', 'address', 'country', 'image']  # Include all relevant fields
+
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'content']

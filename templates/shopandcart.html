@@ -1,34 +1,35 @@
 {% extends 'contact.html' %}
 {% load static %}
+
 {% block body %}
-    
+
 <section class="bg-white">
-    <div class="container pb-3 my-2" style="align-items: center; display: flex; justify-content: center">
+    <div class="container pb-3 my-2" style="align-items: center; display: flex; justify-content: center;">
         <div class="row">
-            <div class="col-lg-5 mt-5">
-                <div class="card mb-3">
+            <div class="col-lg-6 mt-5">
+                <div class="card mb-3" style="height: 100%; display: flex; justify-content: center; align-items: center; padding: 20px;">
                     <!-- Dynamically load the product image -->
-                    <img class="card-img img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" id="product-detail">
+                    <img class="card-img img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" id="product-detail" style="max-height: 400px; object-fit: contain;">
                 </div>
             </div>
-            <div class="col-lg-7 mt-5">
-                <div class="card">
+            <div class="col-lg-6 mt-5">
+                <div class="card" style="height: 100%; padding: 20px;">
                     <div class="card-body">
                         <!-- Dynamically load product details -->
-                        <h1 class="h2 py-3 mb-2">{{ product.name }}</h1>
-                        <p class="h3 current-price">ksh {{ product.price }}</p>
+                        <h3 class="h3 py-3 mb-2" style="font-family: serif; color: #031429;">{{ product.name }}</h3>
+                        <p class="h3 current-price" style="font-family: serif; color: #555;">Ksh {{ product.price }}</p>
 
                         <ul class="list-inline">
                             <li class="list-inline-item">
-                                <h6>Brand:</h6>
+                                <h5 style="font-family: serif; color: #031429;">Brand:</h5>
                             </li>
                             <li class="list-inline-item">
-                                <p class="text-muted"><strong>{{ product.brand }}</strong></p>
+                                <p class="text-muted" style="font-family: serif;"><strong>{{ product.brand }}</strong></p>
                             </li>
                         </ul>
                         <ul class="list-inline">
                             <li class="list-inline-item">
-                                <p class="text-muted"><strong>{{ product.available_colors }}</strong></p>
+                                <p class="text-muted" style="font-family: serif;"><strong>{{ product.available_colors }}</strong></p>
                             </li>
                         </ul>
 
@@ -39,20 +40,19 @@
                             <input type="hidden" name="product_name" class="product-name" value="{{ product.name }}">
                             <input type="hidden" name="product_image" class="product-image" value="{{ product.image.url }}">
                             <div class="mb-3">
-                                <h6>Select Color:</h6>
-                                <select class="w-25" name="color" required>
+                                <h5 style="font-family: serif; color: #031429;">Select Color:</h5>
+                                <select class="form-control" name="color" required style="font-family: serif;">
                                     {% for color in product.get_colors %}
                                     <option value="{{ color }}">{{ color }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <h6>Quantity:</h6>
-                                <input class="w-25" type="number" name="quantity" value="1" min="1" id="product-quantity">
+                                <h5 style="font-family: serif; color: #031429;">Quantity:</h5>
+                                <input class="form-control w-50" type="number" name="quantity" value="1" min="1" id="product-quantity" style="font-family: serif;">
                             </div>
-                            <button type="submit" id="add-to-cart-btn" class="btn btn-secondary button-add-to-cart">
-                                <i class="fi-rs-shopping-cart"></i>
-                                Add to Cart
+                            <button type="submit" id="add-to-cart-btn" class="btn btn-secondary button-add-to-cart w-100" style="font-family: serif; background-color: #031429; color: #fff;">
+                                <i class="fi-rs-shopping-cart"></i> Add to Cart
                             </button>
                         </form>
                     </div>
@@ -60,14 +60,80 @@
             </div>
         </div>
     </div>
-    <div class="py-4 mx-5">
-        <a href="{% url 'shop' %}" class="btn btn-secondary" style="font-family: sans-serif">
+
+    <!-- Reviews Section -->
+    <div class="container mt-5">
+        <h4 style="font-family: serif; color: #031429;">Reviews</h4>
+        <ul class="list-unstyled">
+            {% for review in product.reviews.all %}
+                <li class="border-bottom mb-2 pb-2">
+                    <strong>{{ review.user.username }}:</strong>
+                    <div class="rating" style="display: inline-block;">
+                        <div class="stars" style="font-size: 20px;">
+                           
+                        </div>
+                    </div>
+                    <p>{{ review.content }}</p>
+                    <small>Posted on {{ review.created_at|date:"F j, Y" }}</small>
+                </li>
+            {% empty %}
+                <li>No reviews yet.</li>
+            {% endfor %}
+        </ul>
+
+        {% if user.is_authenticated %}
+        <h5 style="font-family: serif; color: #031429;">Submit a Review:</h5>
+        <form method="POST" action="{% url 'reviews' product.id %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="rating" style="font-family: serif; color: #031429;">Rating:</label>
+                <select name="rating" class="form-control" id="rating-selector" required onchange="updateStars(this.value)">
+                    <option value="">Select...</option>
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+            </div>
+            <div class="mb-3" id="star-display" style="font-size: 20px; color: gold; display: none;"></div> <!-- Stars will be displayed here -->
+            <div class="mb-3">
+                <label for="content" style="font-family: serif; color: #031429;">Your Review:</label>
+                <textarea name="content" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-secondary" style="font-family: serif; background-color: #031429; color: #fff;">Submit Review</button>
+        </form>
+        {% else %}
+            <p>You must be logged in to submit a review.</p>
+        {% endif %}
+    </div>
+
+    <div class="py-4 mx-5 text-center">
+        <a href="{% url 'shop' %}" class="btn btn-secondary" style="font-family: serif; background-color: #031429; color: #fff;">
             Continue Shopping
         </a>
     </div>
 </section>
 
 <script>
+    // Function to update the displayed stars based on the selected rating
+    function updateStars(rating) {
+        const starContainer = document.getElementById('star-display');
+        starContainer.innerHTML = ''; // Clear previous stars
+
+        if (rating) {
+            starContainer.style.display = 'block'; // Show the stars container
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement('span');
+                star.className = 'fa fa-star';
+                star.style.color = i <= rating ? 'gold' : '#ddd'; // Set color based on rating
+                starContainer.appendChild(star);
+            }
+        } else {
+            starContainer.style.display = 'none'; // Hide stars if no rating selected
+        }
+    }
+
     document.getElementById('add-to-cart-form').addEventListener('submit', async function(event) {
         event.preventDefault(); // Prevent the default form submission
 

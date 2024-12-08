@@ -134,5 +134,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+LOGIN_URL = '/login/'  # or the URL pattern you've set for logging in
+LOGOUT_REDIRECT_URL = '/login/'  # or wherever you want users to go after logging out
+
+
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default session engine
-AUTH_USER_MODEL = 'myapp.User'  # Replace 'myapp' with your app name
+AUTH_USER_MODEL = 'myapp.User'

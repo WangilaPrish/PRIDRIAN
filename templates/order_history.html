@@ -1,0 +1,54 @@
+{% extends 'contact.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-center row">
+        <div class="col-md-10">
+            <div class="rounded">
+                <div class="table-responsive table-borderless">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Customer Name</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in Orders %}
+                            <tr>
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.customer_name }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if order.status == 'Pending' %}badge-warning
+                                        {% elif order.status == 'Confirmed' %}badge-info
+                                        {% elif order.status == 'Shipped' %}badge-primary
+                                        {% elif order.status == 'Delivered' %}badge-success
+                                        {% endif %}">
+                                        {{ order.status }}
+                                    </span>
+                                </td>
+                                <td>${{ order.total }}</td>
+                                <td>{{ order.created_at|date:"F j, Y" }}</td>
+                                <td>
+                                    <a href="{% url 'order_detail' order.id %}" class="btn btn-outline-info btn-sm">View</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No orders found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,43 +3,128 @@
 
 {% block body %}
 
-
 <div class="container py-3">
-<div id="myBtnContainer" class="py-2" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px;">
-    <a href="?brand=" class="btn active" style="background-color: #f8f9fa; color: #333; border: 1px solid #ccc; padding: 10px 20px; border-radius: 25px; font-weight: 500; text-decoration: none; transition: background-color 0.3s, color 0.3s, transform 0.2s;">Show all</a> <!-- Show all products -->
-    {% for brand in brands %}
-        <a href="?brand={{ brand }}" class="btn" style="background-color: #f8f9fa; color: #333; border: 1px solid #ccc; padding: 10px 20px; border-radius: 25px; font-weight: 500; text-decoration: none; transition: background-color 0.3s, color 0.3s, transform 0.2s;">
-            {{ brand }}
-        </a>
-    {% endfor %}
-</div>
-
-
-
     <div class="row">
-        {% for product in products %}
-        <div class="col-md-4">
-            <div class="card mb-4 product-wap rounded-0">
-                <div class="card rounded-0">
-    <img class="card-img rounded-0 img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: 250px; object-fit: cover;">
-    <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-        <ul class="list-unstyled">
-            <li><a class="btn btn-dark text-white" href="#"><i class="far fa-heart"></i></a></li>
-            <li><a class="btn btn-dark text-white mt-2" href="{% url 'shopandcart' product.id %}"><i class="fas fa-cart-plus"></i></a></li>
-        </ul>
-    </div>
+        <!-- Sidebar for Filters -->
+        <div class="col-md-2 py-5">
+            
+    <form method="GET" action="{% url 'shop' %}">
+        <label style="font-family: serif;">Sort By:</label>
+        <select name="sort_by" class="form-control" style="font-family: serif;">
+            <option value="popularity" {% if request.GET.sort_by == 'popularity' %}selected{% endif %}>Popularity</option>
+            <option value="price" {% if request.GET.sort_by == 'price' %}selected{% endif %}>Price: Low - High</option>
+            
+        </select>
+        <button type="submit" class="btn btn-secondary w-100" style="font-family: serif; background-color: #031429; color: #fff;">Apply Filters</button>
+    </form>
 </div>
 
-                <div class="card-body">
-                    <a href="#" class="p text-decoration-none">{{ product.name }}</a>
-                    
-                    <p class="text-center mb-0">ksh {{ product.price }}</p>
+
+        <!-- Products -->
+        <div class="col-md-9">
+            <!-- Filter Buttons -->
+            <div id="myBtnContainer" class="py-2" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px;">
+                <a href="?brand=" class="btn active" style="background-color: #f8f9fa; font-family: serif; color: #333; border: 1px solid #ccc; padding: 10px 20px; border-radius: 25px; font-weight: 500; text-decoration: none; transition: background-color 0.3s, color 0.3s, transform 0.2s;">
+                    Show all
+                </a>
+                {% for brand in brands %}
+                <a href="?brand={{ brand }}" class="btn" style="background-color: #f8f9fa; color: #333; font-family: serif; border: 1px solid #ccc; padding: 10px 20px; border-radius: 25px; font-weight: 500; text-decoration: none; transition: background-color 0.3s, color 0.3s, transform 0.2s;">
+                    {{ brand }}
+                </a>
+                {% endfor %}
+            </div>
+
+            <div class="row">
+                {% for product in products %}
+                <div class="col-md-4">
+                    <div class="card mb-4 product-wap rounded-0">
+                        <div class="card rounded-0" style="overflow: hidden; transition: transform 0.3s ease;">
+                            <img class="card-img rounded-0 img-fluid product-image" src="{{ product.image.url }}" alt="{{ product.name }}" 
+                                 style="width: 100%; height: 250px; object-fit: cover; transform: scale(0.9); transition: transform 0.3s;">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <a class="btn btn-dark text-white" href="#" onclick="addToWishlist('{{ product.id }}')">
+                                            <i class="far fa-heart"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="btn btn-dark text-white mt-2" href="{% url 'shopandcart' product.id %}">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="card-body text-center">
+                            <a href="#" class="p text-decoration-none" style="font-family: serif;">{{ product.name }}</a>
+                            <p class="text-center mb-0" style="font-family: serif;">Ksh {{ product.price }}</p>
+                        </div>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
-        {% endfor %}
     </div>
 </div>
 
+<!-- JavaScript to Handle Adding to Wishlist -->
+<script>
+function addToWishlist(productId) {
+    fetch(`/add-to-wishlist/${productId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token for security
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message;  // Show success message
+        } else {
+            alert(data.message;  // Show error message
+        }
+    })
+    .catch(error => {
+        console.error('Error adding to wishlist:', error);
+        alert('Failed to add to wishlist. Please try again.');
+    });
+}
+</script>
+
+<!-- Styles -->
+<style>
+    /* Permanent Zoom-Out Effect */
+    .product-image {
+        transform: scale(0.9); /* Scale down all images by default */
+        transition: transform 0.3s ease-in-out; /* Add smooth transition */
+    }
+
+    /* Additional Zoom-Out Effect on Hover */
+    .product-wap:hover .product-image {
+        transform: scale(0.85); /* Slightly further zoom-out on hover */
+    }
+
+    /* Card Hover Effect */
+    .product-wap:hover {
+        transform: scale(1.02); /* Slight card scaling on hover */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Overlay Button Styling */
+    .product-overlay ul li a {
+        display: inline-block;
+        padding: 10px;
+        margin: 5px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+    .product-overlay ul li a:hover {
+        background-color: #f8f9fa;
+        color: #031429;
+    }
+</style>
 
 {% endblock %}
