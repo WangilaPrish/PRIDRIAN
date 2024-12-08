@@ -1,79 +1,85 @@
 {% extends 'contact.html' %}
 {% load static %}
 {% block body %}
+<section class="h-100">
+  <div class="container h-100 py-5">
+    <div class="row d-flex justify-content-center align-items-start h-100">
+      <div class="col-10">
+        {% if user.is_authenticated %}
+        <h3 class="fw-bold mb-4" style="font-family: serif">Checkout</h3>
 
-<main class="main">
-    <div class="container mb-80 mt-50">
-        <div class="row">
-            <div class="col-lg-8 mb-40">
-                <h1 class="heading-2 mb-10">Checkout</h1>
+        <form id="checkout-form" method="POST" action="{% url 'checkout' %}">
+          {% csrf_token %}
+          <div class="row">
+            <!-- Delivery Details -->
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 style="font-family: serif" class="mb-4 fw-bold">Delivery Details</h5>
+                  <div class="mb-3">
+                    <label for="name" class="form-label" style="font-family: serif">Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="phone" class="form-label" style="font-family: serif">Phone Number:</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="county" class="form-label" style="font-family: serif">County:</label>
+                    <input type="text" class="form-control" id="county" name="county" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="town" class="form-label" style="font-family: serif">Town:</label>
+                    <input type="text" class="form-control" id="town" name="town" required>
+                  </div>
+                </div>
+              </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-7">
-                <div class="row">
-                    {% for item in order_items %}
-                    <div class="col-lg-6">
-                        <div class="card" style="max-width: 540px">
-                            <div class="row g-0">
-                                <div class="col-sm-4">
-                                    <img src="{{ item.product.image.url }}" 
-                                         style="width: 100%; height: 100%; object-fit: cover" 
-                                         class="rounded-start" 
-                                         alt="{{ item.product.name }}" />
-                                </div>
-                                <div class="col-sm-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ item.product.name }}</h5>
-                                        <p class="card-text fs-sm">Qty: {{ item.quantity }}</p>
-                                        <p class="card-text fs-sm">Price: ${{ item.product.price }}</p>
-                                        <p class="card-text fs-sm">Total: ${{ item.quantity|floatformat:2|add:item.product.price }}</p>
-                                    </div>
-                                </div>
-                            </div>
+
+            <!-- Payment Information and Order Summary -->
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 style="font-family: serif" class="fw-bold mb-4">Payment Information</h5>
+                  <p style="font-family: serif">Total Amount: <span id="total-amount">Ksh {{ cart_total }}</span></p>
+                  
+                  <h5 style="font-family: serif" class="mb-3">Order Summary</h5>
+                  <ul class="list-unstyled">
+                    {% for product_id, item in cart_data.items %}
+                      <li class="d-flex justify-content-between align-items-center mb-2" style="font-family: serif">
+                        <img src="{{ item.image }}" alt="{{ item.name }}" style="width: 50px; height: auto; margin-right: 10px;">
+                        <div style="flex-grow: 1;" style="font-family: serif">
+                          <strong style="font-family: serif">{{ item.name }}</strong> - Ksh {{ item.price }} 
+                          <span class="text-muted" style="font-family: serif"> ({{ item.quantity }} pcs, Color: {{ item.color }})</span>
                         </div>
-                    </div>
+                      </li>
                     {% endfor %}
+                  </ul>
+                  
+                  <div class="mb-3">
+                    <label for="mpesa-number" class="form-label" style="font-family: serif">M-Pesa Number:</label>
+                    <input type="tel" class="form-control" id="mpesa-number" name="mpesa_number" required>
+                  </div>
                 </div>
+              </div>
             </div>
-            <div class="col-lg-5">
-                <div class="border cart-totals mb-50">
-                    <div class="d-flex align-items-end justify-content-between mb-30">
-                        <h4>Order Summary</h4>
-                    </div>
+          </div>
 
-                    <div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <p class="fw-bold">Tax</p>
-                            <p>${{ order.tax }}</p>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <p class="fw-bold">Shipping</p>
-                            <p>${{ order.shipping }}</p>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <p class="fw-bold">Total</p>
-                            <p>${{ order.price }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- M-Pesa payment form -->
-                <form method="POST" action="{% url 'core:checkout' order.oid %}">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="phone_number" class="form-label">Phone Number</label>
-                        <input type="text" id="phone_number" name="phone_number" 
-                               class="form-control" 
-                               placeholder="Enter your phone number" required />
-                    </div>
-                    <button type="submit" class="btn w-100" style="background-color: blueviolet; color: white;">
-                        Pay With M-Pesa
-                    </button>
-                </form>
-            </div>
+          <!-- Submit Button -->
+          <div class="d-flex justify-content-center mt-4">
+            <button type="submit" class="btn btn-lg w-50" style="background-color: #031429; color: white; font-family: serif;">
+              Confirm Order
+            </button>
+          </div>
+        </form>
+        {% else %}
+        <div class="alert alert-warning text-center" style="font-family: serif;">
+          <p>Please <a href="{% url 'login' %}" style="color: #031429; font-weight: bold;">Login</a> or 
+            <a href="{% url 'register' %}" style="color: #031429; font-weight: bold;">Register</a> to proceed with checkout.</p>
         </div>
+        {% endif %}
+      </div>
     </div>
-</main>
-
+  </div>
+</section>
 {% endblock %}

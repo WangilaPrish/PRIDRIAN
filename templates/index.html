@@ -81,18 +81,23 @@
                     </ul>
                 </div>
                 <div class="navbar align-self-center d-flex">
+<div class="dropdown">
+    <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown">
+        <i class="fa fa-fw fa-user text-dark mr-3"></i>
+        {% if user.is_authenticated %}
+            <span class="greeting">Hi, {{ user.username }}</span>
+        {% endif %}
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+        <li><a class="dropdown-item" href="#">Wishlist</a></li>
+        <li><a class="dropdown-item" href="{% url 'order_history' %}">Order History</a></li>
+        {% if user.is_authenticated %}
+            <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
+        {% endif %}
+    </ul>
+</div>
 
-    <div class="dropdown">
-  <button type="button" class=" dropdown-toggle" data-bs-toggle="dropdown">            
-      <i class="fa fa-fw fa-user text-dark mr-3"></i>
-            
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-            <li><a class="dropdown-item" href="{% url 'login' %}">Sign In</a></li>
-            <li><a class="dropdown-item" href="#">Sign Out</a></li>
-        </ul>
-    </div>
                     </div>
                 </div>
             </div>
@@ -122,8 +127,8 @@
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left align-self-center">
                                 
-                                <h2 class="h2 fw-bold">Louis Vuitton Keepall Bandoulière</h2>
-                                <p>
+                                <h2 class="h2 fw-bold" style="font-family: serif">Louis Vuitton Keepall Bandoulière</h2>
+                                <p style="font-family: serif">
 Louis Vuitton Keepall Bandoulière in Monogram Eclipse canvas is a sleek, durable travel bag with a spacious interior. It features an adjustable shoulder strap, sturdy top handles, and iconic monogram detailing, making it perfect for short trips or as a carry-on.                                </p>
                             </div>
                         </div>
@@ -138,8 +143,8 @@ Louis Vuitton Keepall Bandoulière in Monogram Eclipse canvas is a sleek, durabl
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left">
-                                <h2 class="h2 fw-bold">Dior Book Tote</h2>
-                                <p>
+                                <h2 class="h2 fw-bold" style="font-family: serif">Dior Book Tote</h2>
+                                <p style="font-family: serif">
                                     Dior Book Tote is a statement piece showcasing the iconic Toile de Jouy embroidery. Designed for versatility, it features spacious dimensions and top handles, perfect for carrying daily essentials. The "CHRISTIAN DIOR" signature adds a bold, luxurious touch.
                                 </p>
                             </div>
@@ -155,8 +160,8 @@ Louis Vuitton Keepall Bandoulière in Monogram Eclipse canvas is a sleek, durabl
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left">
-                                <h2 class="h2 fw-bold">Gucci GG Marmont Half-Moon Shoulder Bag </h2>
-                                <p>
+                                <h2 class="h2 fw-bold" style="font-family: serif">Gucci GG Marmont Half-Moon Shoulder Bag </h2>
+                                <p style="font-family: serif">
                                     Gucci GG Marmont Small Shoulder Bag, featuring a crescent shape with the iconic GG logo. Its quilted leather design and chain strap add a touch of sophistication, making it versatile for both casual and formal occasions.
                                 </p>
                             </div>
@@ -179,8 +184,8 @@ Louis Vuitton Keepall Bandoulière in Monogram Eclipse canvas is a sleek, durabl
     <section class="container py-3">
         <div class="row text-center pt-3">
             <div class="col-lg-6 m-auto">
-                <h2 class="h2 fw-bold">Categories of The Month</h2>
-                <p>
+                <h2 class="h2 fw-bold" style="font-family: serif">Categories of The Month</h2>
+                <p style="font-family: serif">
 From elegant shoulder bags to spacious tote bags and practical cross bags, each piece combines luxury with functionality. 
                     Explore these curated collections to find the perfect accessory for any occasion.
                 </p>
@@ -188,19 +193,19 @@ From elegant shoulder bags to spacious tote bags and practical cross bags, each 
         </div>
         <div class="row">
             <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="{% static 'assets/img/shoulder.avif' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
-                <h5 class="text-center mt-3 mb-3">Shoulder Bags</h5>
+                <a href="#"><img src="{% static 'assets/img/ysl.jpg' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
+                <h5 class="text-center mt-3 mb-3" style="font-family: serif">Shoulder Bags</h5>
                 <p class="text-center"><a href="{% url 'shop' %}" class="button-class btn btn-outline-dark"> Go Shop</a></p>
                 
             </div>
             <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="{% static 'assets/img/tote.jpg' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
-                <h2 class="h5 text-center mt-3 mb-3">Tote Bags</h2>
+                <a href="#"><img src="{% static 'assets/img/lvpr.jpg' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
+                <h2 class="h5 text-center mt-3 mb-3" style="font-family: serif">Tote Bags</h2>
                 <p class="text-center"><a href="{% url 'shop' %}" class="button-class btn btn-outline-dark"> Go Shop</a></p>
             </div>
             <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="{% static 'assets/img/crossbody.avif' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
-                <h2 class="h5 text-center mt-3 mb-3">Cross Bags</h2>
+                <a href="#"><img src="{% static 'assets/img/lv3.jpg' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
+                <h2 class="h5 text-center mt-3 mb-3" style="font-family: serif">Cross Bags</h2>
                 <p class="text-center"><a href="{% url 'shop' %}" class="button-class btn btn-outline-dark"> Go Shop</a></p>
             </div>
         </div>
@@ -208,94 +213,62 @@ From elegant shoulder bags to spacious tote bags and practical cross bags, each 
     <!-- End Categories of The Month -->
 <hr style="width: 80%" class="mx-auto">
 
-    <!-- Start Featured Product -->
-    <section class="bg-muted">
-        <div class="container py-3">
-            <div class="row text-center py-3">
-                <div class="col-lg-6 m-auto">
-                    <h2 class="h2 fw-bold">Featured Product</h2>
-                    <p>
- These handpicked selections showcase the finest craftsmanship and design, offering customers a glimpse of the most coveted pieces. Perfect for elevating any outfit or occasion, these products are must-haves for fashion enthusiasts.
-                    </p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <a href="">
-                            <img src="{% static 'assets/img/fe1.avif' %}" class="card-img-top w-100 h-100" alt="...">
-                        </a>
-                        <div class="card-body">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li>
-                                    <i class="text-dark fa fa-star"></i>
-                                    <i class="text-dark fa fa-star"></i>
-                                    <i class="text-dark fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                </li>
-                                <li class="text-muted text-right">ksh 2,800</li>
-                            </ul>
-                            <a href="" class="p fw-bold text-decoration-none text-dark">Prada Re-Edition 2000 Nylon Bag</a>
-                            <p class="card-text">
-                                Featuring a structured silhouette with gold-tone hardware, it combines elegance with practicality.
-                            </p>
-                            <p class="text-muted">Reviews (24)</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <a href="">
-                            <img src="{% static 'assets/img/fe2.webp' %}" class="card-img-top w-100 h-100" alt="...">
-                        </a>
-                        <div class="card-body">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li>
-                                    <i class="text-dark fa fa-star"></i>
-                                    <i class="text-dark fa fa-star"></i>
-                                    <i class="text-dark fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                </li>
-                                <li class="text-muted text-right">ksh 3,100</li>
-                            </ul>
-                            <a href="" class="p fw-bold text-decoration-none text-dark">Hermès Herbag Zip 31</a>
-                            <p class="card-text">
-                                Featuring a structured silhouette, top handle, and removable strap, it offers functionality and elegance for both casual and formal occasions.
-                            </p>
-                            <p class="text-muted">Reviews (48)</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <a href="">
-                            <img src="{% static 'assets/img/fe3.webp' %}" class="card-img-top w-100 h-100" alt="...">
-                        </a>
-                        <div class="card-body">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li>
-                                    <i class="text-dark fa fa-star"></i>
-                                    <i class="text-dark fa fa-star"></i>
-                                    <i class="text-dark fa fa-star"></i>
-                                    <i class="text-dark fa fa-star"></i>
-                                    <i class="text-dark fa fa-star"></i>
-                                </li>
-                                <li class="text-muted text-right">ksh 2,500</li>
-                            </ul>
-                            <a href="" class="p fw-bold text-decoration-none text-dark">Nike Heritage Crossbody Bag</a>
-                            <p class="card-text">
-                                Made from durable materials, it features an adjustable strap, secure flap closure, and the iconic Nike logo for a sporty and stylish look.
-                            </p>
-                            <p class="text-muted">Reviews (74)</p>
-                        </div>
-                    </div>
-                </div>
+<!-- Start Featured Product -->
+<section class="bg-muted">
+    <div class="container py-3">
+        <div class="row text-center py-3">
+            <div class="col-lg-6 m-auto">
+                <h2 class="h2 fw-bold" style="font-family: serif">Featured Products</h2>
+                <p style="font-family: serif">
+                    These handpicked selections showcase the finest craftsmanship and design...
+                </p>
             </div>
         </div>
-    </section>
-    <!-- End Featured Product -->
+
+        <div id="featuredProductsCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                {% for product in featured_products %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row">
+                        <div class="col-12 col-md-4 mb-4">
+                            <div class="card h-100">
+                                <a href="{% url 'shopandcart' product.id %}">
+                                    <img src="{{ product.image.url }}" class="card-img-top w-100 h-100" alt="{{ product.name }}">
+                                </a>
+                                <div class="card-body">
+                                    <ul class="list-unstyled d-flex justify-content-between">
+                                        <li>
+                                            {% for star in "12345"|make_list %}
+                                                <i class="text-dark fa fa-star" style="color: {% if star <= product.average_rating %}gold{% else %}#ddd{% endif %};"></i>
+                                            {% endfor %}
+                                        </li>
+                                        <li class="text-muted text-right" style="font-family: serif">Ksh {{ product.price }}</li>
+                                    </ul>
+                                    <a href="{% url 'shopandcart' product.id %}" class="p fw-bold text-decoration-none text-dark" style="font-family: serif">{{ product.name }}</a>
+                                    <p class="card-text" style="font-family: serif">{{ product.description }}</p>
+                                    <p class="text-muted" style="font-family: serif">Reviews ({{ product.reviews.count }})</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <a class="carousel-control-prev" href="#featuredProductsCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#featuredProductsCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+</section>
+<!-- End Featured Product -->
+
+
 
 
      <!-- Start Footer -->
@@ -305,19 +278,19 @@ From elegant shoulder bags to spacious tote bags and practical cross bags, each 
 
             <!-- Left column for the content -->
             <div class="col-md-8 pt-3">
-                <h2 class="h2 text-light border-bottom pb-3 border-light logo">PRIDRIAN Luxe</h2>
+                <h2 class="h2 text-light border-bottom pb-3 border-light logo" style="font-family: serif">PRIDRIAN Luxe</h2>
                 <ul class="list-unstyled text-light footer-link-list">
-                    <li>
+                    <li  style="font-family: serif">
                         <i class="fas fa-map-marker-alt fa-fw"></i>
                         Nairobi - Kenya
                     </li>
                     <li>
                         <i class="fa fa-phone fa-fw"></i>
-                        <a class="text-decoration-none" href="tel:010-020-0340">070-020-0340</a>
+                        <a class="text-decoration-none" href="tel:010-020-0340" style="font-family: serif">070-020-0340</a>
                     </li>
                     <li>
                         <i class="fa fa-envelope fa-fw"></i>
-                        <a class="text-decoration-none" href="mailto:info@company.com">info@pridrianluxe.com</a>
+                        <a class="text-decoration-none" href="mailto:info@company.com" style="font-family: serif">info@pridrianluxe.com</a>
                     </li>
                 </ul>
                 <div class="row text-light mb-2">
@@ -329,12 +302,7 @@ From elegant shoulder bags to spacious tote bags and practical cross bags, each 
                             <li class="list-inline-item border border-light rounded-circle text-center">
                                 <a class="text-light text-decoration-none" target="_blank" href="https://www.instagram.com/"><i class="fab fa-instagram fa-lg fa-fw"></i></a>
                             </li>
-                            <li class="list-inline-item border border-light rounded-circle text-center">
-                                <a class="text-light text-decoration-none" target="_blank" href="https://twitter.com/"><i class="fab fa-twitter fa-lg fa-fw"></i></a>
-                            </li>
-                            <li class="list-inline-item border border-light rounded-circle text-center">
-                                <a class="text-light text-decoration-none" target="_blank" href="https://www.linkedin.com/"><i class="fab fa-linkedin fa-lg fa-fw"></i></a>
-                            </li>
+                
                         </ul>
                     </div>
                 </div>
@@ -345,10 +313,10 @@ From elegant shoulder bags to spacious tote bags and practical cross bags, each 
                 <form method="POST">
                     {% csrf_token %}
                     <div class="col-md-12 py-5">
-                        <label class="sr-only" for="subscribeEmail">Email address</label>
+                        <label class="sr-only" for="subscribeEmail" style="font-family: serif">Email address</label>
                         <div class="input-group mb-2">
                             <input type="text" class="form-control bg-dark border-light" name="email" id="subscribeEmail" placeholder="Email address">
-                            <button type="submit" class="input-group-text btn-secondary text-light">Subscribe</button>
+                            <button type="submit" class="input-group-text btn-secondary text-light" style="font-family: serif">Subscribe</button>
                         </div>
                     </div>
                 </form>
@@ -367,7 +335,7 @@ From elegant shoulder bags to spacious tote bags and practical cross bags, each 
             <div class="container">
                 <div class="row pt-1">
                     <div class="col-12">
-                        <p class="text-left text-light" style="text-align: center">
+                        <p class="text-left text-light" style="text-align: center; font-family: serif;">
                             Copyright &copy; 2024 PRIDRIAN Luxe. All Rights Reserved.
                         </p>
                     </div>

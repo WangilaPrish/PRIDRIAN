@@ -9,8 +9,15 @@
                 <!-- Left Column: Form -->
                 <div class="form-section" style="flex: 1; padding: 40px; background-color: #fff;">
                     {% if form.errors %}
-                    <div class="alert alert-danger" style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px; font-size: 14px;">
-                        <strong>{{ form.errors }}</strong>
+                    <div class="alert alert-danger" style="margin-bottom: 20px; padding: 15px; border-radius: 5px; font-size: 14px;">
+                        <strong>There were some errors in your submission:</strong><br>
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
                     </div>
                     {% endif %}
 
@@ -27,7 +34,7 @@
                             <input type="text" name="username" placeholder="Username" 
                                 style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.3s, box-shadow 0.3s;" 
                                 onfocus="this.style.borderColor='#031429'; this.style.boxShadow='0 0 6px rgba(24, 119, 242, 0.2)';" 
-                                onblur="this.style.borderColor='#ccc'; this.style.boxShadow='none';" />
+                                onblur="this.style.borderColor='#ccc'; this.style.boxShadow='none';" required />
                         </div>
 
                         <!-- Email -->
@@ -35,7 +42,7 @@
                             <input type="email" name="email" placeholder="Email" 
                                 style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.3s, box-shadow 0.3s;" 
                                 onfocus="this.style.borderColor='#031429'; this.style.boxShadow='0 0 6px rgba(24, 119, 242, 0.2)';" 
-                                onblur="this.style.borderColor='#ccc'; this.style.boxShadow='none';" />
+                                onblur="this.style.borderColor='#ccc'; this.style.boxShadow='none';" required />
                         </div>
 
                         <!-- Password -->
@@ -43,7 +50,7 @@
                             <input type="password" name="password1" placeholder="Password" 
                                 style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.3s, box-shadow 0.3s;" 
                                 onfocus="this.style.borderColor='#031429'; this.style.boxShadow='0 0 6px rgba(24, 119, 242, 0.2)';" 
-                                onblur="this.style.borderColor='#ccc'; this.style.boxShadow='none';" />
+                                onblur="this.style.borderColor='#ccc'; this.style.boxShadow='none';" required />
                         </div>
 
                         <!-- Confirm Password -->
@@ -51,7 +58,7 @@
                             <input type="password" name="password2" placeholder="Confirm Password" 
                                 style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.3s, box-shadow 0.3s;" 
                                 onfocus="this.style.borderColor='#031429'; this.style.boxShadow='0 0 6px rgba(24, 119, 242, 0.2)';" 
-                                onblur="this.style.borderColor='#031429'; this.style.boxShadow='none';" />
+                                onblur="this.style.borderColor='#031429'; this.style.boxShadow='none';" required />
                         </div>
 
                         <!-- Submit Button -->

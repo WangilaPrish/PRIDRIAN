@@ -1,63 +1,139 @@
 {% extends 'contact.html' %}
 {% load static %}
 {% block body %}
-<main class="main" id="checkout">
-    <div class="container mb-80 mt-20 py-5">
-        <h2 class="heading-2 mb-10">Cart</h2>
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="border p-md-4">
-                    
-                    <form method="POST" action="{% url 'paymentsuccess' %}"> {# Replace with your checkout processing URL #}
-                        {% csrf_token %}
-                     
-                        <h4 class="mb-4">Order Summary</h4>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Image</th> <!-- Product image column -->
-                                        <th>Quantity</th>
-                                        <th>Unit Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for product_id, item in cart_data.items %}
-                                    <tr>
-                                        <td>{{ item.name }}</td>
-                                        <td><img src="{{ item.image }}" alt="{{ item.name }}" style="width: 50px; height: auto;"></td> <!-- Product image -->
-                                        <td>{{ item.quantity }}</td>
-                                        <td>ksh {{ item.price|floatformat:2 }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                        <td>ksh {{ cart_total|floatformat:2 }}</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+<section class="h-100">
+  <div class="container h-100 py-5">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-10">
 
-                        <h4 class="mb-4">Payment Method</h4>
-                        <div class="mb-3">
-                            <label for="mpesa" class="form-label">Pay with M-Pesa</label>
-                            <input type="tel" class="form-control" id="mpesa" name="mpesa_number" placeholder="Enter M-Pesa Number" required>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-secondary w-100 mt-4">Complete Order</button>
-                    </form>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="border p-md-4">
-                    <h4 class="mb-4">Continue Shopping</h4>
-                    <a href="{% url 'shop' %}" class="btn btn-secondary w-100">Continue Shopping</a>
-                </div>
-            </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h3 class="fw-bold mb-0" style="font-family: serif">Cart</h3>
         </div>
+
+        <!-- Cart Items -->
+        <div id="cart-items">
+          {% for product_id, item in cart_data.items %}
+          <div class="card rounded-3 mb-4" id="item-{{ product_id }}">
+            <div class="card-body p-4">
+              <div class="row d-flex justify-content-between align-items-center">
+                <div class="col-md-2 col-lg-2 col-xl-2">
+                  <img src="{{ item.image }}" class="img-fluid rounded-3" alt="Product Image">
+                </div>
+                <div class="col-md-3 col-lg-3 col-xl-3">
+                  <p class="lead fw-normal mb-2" style="font-family: serif">{{ item.name }}</p>
+                  <p style="font-family: serif"><span class="text-muted">Color: </span>{{ item.color }}</p>
+                </div>
+                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                  <button class="btn btn-link px-2" onclick="changeQuantity(this, -1)">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input min="0" name="quantity" style="font-family: serif" value="{{ item.quantity }}" type="number" class="form-control form-control-sm" />
+                  <button class="btn btn-link px-2" onclick="changeQuantity(this, 1)">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                  <h5 class="mb-0" style="font-family: serif">Ksh {{ item.price }}</h5>
+                </div>
+                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                  <a href="#!" class="text-muted" onclick="removeItem('{{ product_id }}', this)"><i class="fas fa-trash fa-lg"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+<div class="card mb-4">
+    <div class="card-body p-4 d-flex justify-content-between">
+        <a href="{% url 'shop' %}" class="btn btn-lg" style="background-color: #031429; color: white; font-family: serif; flex-grow: 1; margin-right: 10px; text-align: center;">
+            Continue Shopping
+        </a>
+        <a href="{% url 'checkout' %}" class="btn btn-lg" style="background-color: #031429; color: white; font-family: serif; flex-grow: 1; text-align: center;">
+            Proceed to Checkout
+        </a>
     </div>
-</main>
+</div>
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function changeQuantity(button, increment) {
+    const input = button.parentNode.querySelector('input[type=number]');
+    let currentValue = parseInt(input.value);
+    currentValue += increment;
+    if (currentValue < 0) currentValue = 0; // Prevent negative quantities
+    input.value = currentValue;
+
+    // Get the product ID from the card element
+    const productId = button.closest('.card').id.split('-')[1]; // Extracting product ID from card ID
+
+    // Send the new quantity to the server
+    fetch('/update-cart-quantity/', { // Adjust the URL if necessary
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is sent for security
+      },
+      body: JSON.stringify({
+        product_id: productId, // Product ID to update
+        quantity: currentValue,  // Updated quantity
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        updateTotal(); // Update total amount dynamically
+      } else {
+        alert(data.message); // Show error message
+      }
+    })
+    .catch(error => {
+      console.error('Error updating quantity:', error);
+    });
+  }
+
+  function removeItem(productId, button) {
+    fetch(`/remove-from-cart/${productId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token for security
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        const cartItem = button.closest('.card');
+        cartItem.remove();
+        updateTotal(); // Update total amount dynamically
+      } else {
+        alert(data.message); // Show error message
+      }
+    })
+    .catch(error => {
+      console.error('Error removing item:', error);
+    });
+  }
+
+  function updateTotal() {
+    let total = 0;
+    document.querySelectorAll('#cart-items .card').forEach(card => {
+      const priceText = card.querySelector('.col-md-3.col-lg-2.col-xl-2 h5').innerText.replace(/[^0-9.-]+/g, ""); // Removes currency and other characters
+      const price = parseFloat(priceText); // Convert to a float
+      const quantity = parseInt(card.querySelector('input[name=quantity]').value);
+
+      if (!isNaN(price) && !isNaN(quantity)) {
+        total += price * quantity; // Calculate total
+      }
+    });
+    
+    const totalAmount = document.getElementById('total-amount');
+    totalAmount.innerText = `Ksh ${total.toFixed(2)}`; // Format to Ksh and 2 decimal places
+  }
+</script>
+
 {% endblock %}

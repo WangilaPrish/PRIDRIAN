@@ -5,15 +5,17 @@ from myapp import views
 from django.conf import settings
 from django.conf.urls.static import static
 
+from myapp.views import profile, change_password, user_logout, featured_products
+
 urlpatterns = [
     path('useradmin/', admin.site.urls),
-    path('index/', views.index, name='index'),
+    path('', views.index, name='index'),
+    path('', views.featured_products, name='index'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
-    path('', views.shop, name='shop'),
+    path('shop/', views.shop, name='shop'),
     path('shopandcart/<int:product_id>/', views.shopandcart, name='shopandcart'),
     #path('product/<int:product_id>/', views.product_detail, name='product_detail'),
-    path('shopp/', views.shopp, name='shopp'),
     path('shopsingle/', views.shopsingle, name='shopsingle'),
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
@@ -21,14 +23,23 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('cart/', views.cart, name='cart'),
     path('addproduct/', views.addproduct, name='addproduct'),
-    path('reviews/', views.reviews, name='reviews'),
-    path('profile/update/', views.profile_update, name='profile'),
-    path('update-quantity/<int:item_id>/', views.update_cart_quantity, name='update_quantity'),
+    path('reviews/<int:product_id>/', views.reviews, name='reviews'),
+    path('profile/', profile, name='profile'),  # For viewing the profile
+    path('profile/update/', profile, name='profile_update'),
+    path('profile/change_password/', change_password, name='change_password'),  # For changing password
+    path('logout/', user_logout, name='logout'),
+    path('update-cart/', views.update_cart_quantity, name='update_cart'),
     path('remove-from-cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('add-to-cart/', views.add_to_cart, name='add_to_cart'),
-    path('checkout/<str:oid>/', views.checkout, name='checkout'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('order-history/', views.order_history, name='order_history'),
+    path('order-success/', views.order_success, name='order_success'),
+
+
     path('payment/', views.payment, name='payment'),
-    path('paymentsuccess/', views.paymentsuccess, name='paymentsuccess'),
+
+    path('update-cart-quantity/', views.update_cart_quantity, name='update_cart_quantity'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

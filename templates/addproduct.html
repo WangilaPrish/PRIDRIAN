@@ -1,14 +1,14 @@
 {% extends 'contact.html' %}
 {% load static %}
 {% block body %}
-<main class="main" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; background-color: #f9f9f9;">
+<main class="main" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; background-color: #f4f7fb;">
     <div class="container" style="width: 100%; max-width: 800px; padding: 0;">
-        <div class="card-login" style="border-radius: 15px; border: 1px solid #ececec; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); overflow: hidden; background-color: #fff; padding: 40px;">
-            
+        <div class="card-login" style="border-radius: 15px; border: 1px solid #ececec; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); overflow: hidden; background-color: #fff; padding: 40px;">
+
             <!-- Heading -->
             <div class="heading_s1" style="margin-bottom: 30px; text-align: center;">
-                <h2 style="font-family: 'Roboto', sans-serif; font-weight: 600; color: #333;">Add a New Product</h2>
-                <p style="color: #777;">Fill out the details below to add a product.</p>
+                <h2 style="; font-weight: 600; font-family: serif; color: #031429;">Add a New Product</h2>
+                <p style="color: #666; font-family: serif">Fill out the details below to add a product to your store.</p>
             </div>
 
             <!-- Form -->
@@ -16,16 +16,16 @@
                 {% csrf_token %}
 
                 <!-- Form Fields -->
-                <div class="form-group" style="margin-bottom: 20px;">
+                <div class="form-group" style="margin-bottom: 20px; font-family: serif">
                     {{ form.as_p }}
                 </div>
 
                 <!-- Submit Button -->
                 <div class="form-group">
                     <button type="submit" 
-                        style="background-color:#031429; color: #fff; font-size: 16px; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: background-color 0.3s, transform 0.2s; width: 100%;"
-                        onmouseover="this.style.backgroundColor='#022940';" 
-                        onmouseout="this.style.backgroundColor='#031429';">
+                        style="background-color: #031429; color: #fff; font-size: 16px; font-family: serif; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: all 0.3s ease; width: 100%;"
+                        onmouseover="this.style.backgroundColor='#022940'; transform: scale(1.02);"
+                        onmouseout="this.style.backgroundColor='#031429'; transform: scale(1);">
                         Add Product
                     </button>
                 </div>
