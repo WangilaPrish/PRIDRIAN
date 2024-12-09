@@ -59,7 +59,7 @@
                 </div>
 
                 <!-- M-Pesa payment form -->
-                <form method="POST" action="{% url 'payment' order.oid %}">
+                <form method="POST" action="{% url 'payment'  %}">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="phone_number" class="form-label">Phone Number</label>

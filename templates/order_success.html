@@ -1,9 +1,29 @@
 {% extends 'contact.html' %}
 
 {% block body %}
-<div class="container text-center my-5">
-    <h1>Thank you for your order!</h1>
-    <p>Your order has been placed successfully. You will receive a confirmation email shortly.</p>
-    <a href="{% url 'index' %}" class="btn btn-primary">Back to Home</a>
+<div class="container text-center py-5">
+    <h1 class="fw-bold" style="font-family: serif;">Thank You for Your Order!</h1>
+    <p style="font-family: serif;">Your payment was successful. Below are your order details:</p>
+
+    <div class="card mx-auto" style="max-width: 600px; text-align: left;">
+        <div class="card-body">
+            <h5 class="card-title" style="font-family: serif;">Order #{{ order.id }}</h5>
+            <p style="font-family: serif;"><strong>Date:</strong> {{ order.created_at|date:"F j, Y, g:i a" }}</p>
+            <p style="font-family: serif;"><strong>Status:</strong> {{ order.status }}</p>
+            <p style="font-family: serif;"><strong>Total:</strong> Ksh {{ order.total }}</p>
+            <hr>
+            <h6 style="font-family: serif;">Items:</h6>
+            <ul class="list-unstyled">
+                {% for item in order.orderitem_set.all %}
+                <li>
+                    <strong style="font-family: serif;">{{ item.product.name }}</strong> - Ksh {{ item.price }}
+                    <span style="font-family: serif;">({{ item.quantity }} pcs)</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <a href="{% url 'shop' %}" class="btn btn-secondary mt-3" style="font-family: serif; background-color: #031429; color: white;">Continue Shopping</a>
 </div>
 {% endblock %}

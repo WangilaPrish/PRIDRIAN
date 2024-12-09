@@ -1,3 +1,4 @@
+import requests
 from django.contrib.auth import logout, login, update_session_auth_hash
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.core.exceptions import ValidationError
@@ -8,12 +9,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from myapp.forms import ProductForm, ProfileForm, UserRegisterForm, ReviewForm
 from myapp.models import User, Product, CartItem, Newsletter, Profile, Review, Order, OrderItem
 import json
+from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from .models import User
+from requests.auth import HTTPBasicAuth
+from myapp.credentials import MpesaAccessToken, LipanaMpesaPpassword
 
 # Create your views here.
 def user_login(request):
@@ -405,21 +409,23 @@ def checkout(request):
             cart_total += int(item['quantity']) * float(item['price'])
 
     if request.method == 'POST':
-        # Retrieve the delivery details from the POST data
-        name = request.POST.get('name')
-        phone = request.POST.get('phone')
-        county = request.POST.get('county')
-        town = request.POST.get('town')
+        # Retrieve the M-Pesa number and total amount from the POST data
         mpesa_number = request.POST.get('mpesa_number')
+        total_amount = cart_total + 150  # Add fixed shipping fee
+
+        # Validate input
+        if not mpesa_number:
+            messages.error(request, "M-Pesa number is required.")
+            return redirect('checkout')
 
         # Create the order
         order = Order.objects.create(
             user=request.user,  # Link order to the logged-in user
-            total=cart_total,
-            customer_name=name,
-            phone=phone,
-            county=county,
-            town=town,
+            total=total_amount,
+            name=request.user.get_full_name(),
+            phone=mpesa_number,  # Use the M-Pesa number as a temporary phone number
+            county="N/A",  # Placeholder values since not collected
+            town="N/A",    # Placeholder values since not collected
             mpesa_number=mpesa_number,
             status="Pending",  # Default status for new orders
         )
@@ -437,18 +443,70 @@ def checkout(request):
         # Clear the cart data from the session after order placement
         del request.session['cart_data_object']
 
-        # Redirect to the order success page
-        return redirect('order_success')  # Replace with your success URL name
+        # Handle M-Pesa STK push logic here (optional)
+        # This is where you'd integrate with the M-Pesa API
+
+        # Redirect to the payment page
+        return redirect('payment')  # Replace with your payment processing URL name
 
     # If GET request, render the checkout page with the total amount and cart data
     return render(request, 'checkout.html', {
         'cart_total': cart_total,
-        'cart_data': cart_data  # Pass the cart data to the template for order summary
+        'cart_data': cart_data,  # Pass the cart data to the template for order summary
     })
 
 
-def payment(request):
-    return render(request, 'payment.html')
+def token(request):
+    consumer_key = 'xM2Zn9dUq7QYKNtkrnjhCh0wAOgOZ9EOStVxEU1XZh4RIHPr'
+    consumer_secret = 'fFGnV4AKYVAB89PdIhbNz6f6nEqmahmmz7PrknUuFu5l55KyoSz0b9EAV0Q9Zadu'
+    api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+
+    r = requests.get(api_URL, auth=HTTPBasicAuth(
+        consumer_key, consumer_secret))
+    mpesa_access_token = json.loads(r.text)
+    validated_mpesa_access_token = mpesa_access_token["access_token"]
+
+    return render(request, 'token.html', {"token":validated_mpesa_access_token})
+
+
+from django.shortcuts import redirect
+
+
+def stk(request):
+    if request.method == "POST":
+        mpesa_number = request.POST.get('mpesa_number')
+        total_amount = request.POST.get('total_amount')
+
+        if not mpesa_number or not total_amount:
+            return HttpResponse("Mpesa number and total amount are required.", status=400)
+
+        access_token = MpesaAccessToken.validated_mpesa_access_token
+        api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+        headers = {"Authorization": "Bearer %s" % access_token}
+        request_data = {
+            "BusinessShortCode": LipanaMpesaPpassword.Business_short_code,
+            "Password": LipanaMpesaPpassword.decode_password,
+            "Timestamp": LipanaMpesaPpassword.lipa_time,
+            "TransactionType": "CustomerPayBillOnline",
+            "Amount": total_amount,
+            "PartyA": mpesa_number,
+            "PartyB": LipanaMpesaPpassword.Business_short_code,
+            "PhoneNumber": mpesa_number,
+            "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",  # Use your callback URL
+            "AccountReference": "PRIDRIAN Luxe",
+            "TransactionDesc": "Order Payment"
+        }
+
+        response = requests.post(api_url, json=request_data, headers=headers)
+
+        if response.status_code == 200:
+            # Payment initiated successfully
+            return redirect('order_success')  # Redirect to your order success page
+        else:
+            # Handle errors in the payment process
+            return HttpResponse("Payment failed. Please try again.", status=400)
+
+
 
 
 def order_success(request):
