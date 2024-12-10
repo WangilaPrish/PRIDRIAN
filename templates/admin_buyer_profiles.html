@@ -1,0 +1,33 @@
+{% extends 'contact.html' %}
+{% load static %}
+
+{% block body %}
+<section class="h-100">
+  <div class="container h-100 py-5">
+    <h3 class="fw-bold mb-4 text-center" style="font-family: serif; color: #031429;">PRIDRIAN Luxe Users Profiles</h3>
+    <div class="row">
+      {% for buyer in buyers %}
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm border-0 rounded">
+          <div class="card-body">
+            <h5 style="font-family: serif; color: #031429;">{{ buyer.get_full_name }}</h5>
+            <p style="font-family: serif;">Email: {{ buyer.email }}</p>
+            <p style="font-family: serif;">Phone: {{ buyer.profile.phone|default:'N/A' }}</p>
+            <p style="font-family: serif;">Last Login: {{ buyer.last_login|date:"F j, Y, g:i a" }}</p>
+            <p style="font-family: serif;">Date Joined: {{ buyer.date_joined|date:"F j, Y" }}</p>
+            {% if user.is_superuser %}
+            <form method="POST" action="{% url 'delete_user' buyer.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm" style="font-family: serif; background-color: #031429">Delete User</button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center" style="font-family: serif;">No buyers found.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

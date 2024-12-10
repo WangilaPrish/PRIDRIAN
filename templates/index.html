@@ -83,17 +83,17 @@
                 <div class="navbar align-self-center d-flex">
 <div class="dropdown">
     <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown">
-        <i class="fa fa-fw fa-user text-dark mr-3"></i>
+        <i class="fa fa-fw fa-user text-dark mr-3" ></i>
         {% if user.is_authenticated %}
-            <span class="greeting">Hi, {{ user.username }}</span>
+            <span class="greeting" style="font-family: serif">Hi, {{ user.username }}</span>
         {% endif %}
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-        <li><a class="dropdown-item" href="#">Wishlist</a></li>
-        <li><a class="dropdown-item" href="{% url 'order_history' %}">Order History</a></li>
+        <li><a class="dropdown-item" style="font-family: serif" href="{% url 'profile' %}">Profile</a></li>
+        <li><a class="dropdown-item" style="font-family: serif" href="{% url 'addproduct' %}">Add Product</a></li>
+        <li><a class="dropdown-item" style="font-family: serif"  href="{% url 'order_history' %}">Order History</a></li>
         {% if user.is_authenticated %}
-            <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
+            <li><a class="dropdown-item" style="font-family: serif" href="{% url 'logout' %}">Sign Out</a></li>
         {% endif %}
     </ul>
 </div>
