@@ -1,9 +1,9 @@
 import requests
 from django.contrib.auth import logout, login, update_session_auth_hash
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.core.validators import validate_email
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from myapp.forms import ProductForm, ProfileForm, UserRegisterForm, ReviewForm
@@ -67,6 +67,12 @@ def shopsingle(request):
 
 @login_required
 def profile(request):
+    if request.user.is_superuser:
+        # Admin view: Display all buyer profiles
+        buyers = User.objects.filter(is_superuser=False)  # Exclude admins
+        return render(request, "admin_buyer_profiles.html", {"buyers": buyers})
+
+    # Buyer view: Allow the logged-in user to view and edit their own profile
     profile, created = Profile.objects.get_or_create(user=request.user)  # Get or create the profile
 
     if request.method == "POST":
@@ -84,6 +90,32 @@ def profile(request):
     }
 
     return render(request, "profile.html", context)
+
+
+def is_admin(user):
+    return user.is_superuser
+
+@login_required
+@user_passes_test(is_admin)
+def view_buyer_profile(request, user_id):
+    # Get the user's profile using their user ID
+    user_profile = get_object_or_404(User, id=user_id)
+
+    # Render the profile template with the user's details
+    return render(request, 'buyer_profile.html', {'profile': user_profile})
+
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def delete_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    if user == request.user:
+        raise PermissionDenied("You cannot delete your own account.")
+
+    user.delete()
+    messages.success(request, "User account has been deleted successfully.")
+    return redirect('admin_buyer_profiles')  # Redirect to the admin buyer profiles page
 
 
 @login_required
@@ -247,16 +279,40 @@ def featured_products(request):
 
     return render(request, 'index.html', {'featured_products': products_with_reviews})
 
+def is_admin(user):
+    """Check if the user is an admin."""
+    return user.is_superuser
+
+@login_required  # Ensure the user is logged in
+@user_passes_test(is_admin)  # Ensure the user is an admin
 def addproduct(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied  # Raise a 403 Forbidden error
+
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('shop')
     else:
-        form = ProductForm()  # No changes needed here
+        form = ProductForm()
 
     return render(request, 'addproduct.html', {'form': form})
+
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('shop')  # Redirect to shop or wherever you want
+    else:
+        form = ProductForm(instance=product)
+
+    return render(request, 'edit_product.html', {'form': form, 'product': product})
 
 
 
@@ -362,7 +418,13 @@ def update_cart_quantity(request):
 
 @login_required
 def order_history(request):
-    orders = Order.objects.filter(user=request.user).order_by('-created_at')  # Fetch orders for the logged-in user
+    if request.user.is_superuser:
+        # Admin sees all orders
+        orders = Order.objects.all().order_by('-created_at')
+    else:
+        # Buyers see only their orders
+        orders = Order.objects.filter(user=request.user).order_by('-created_at')
+
     return render(request, 'order_history.html', {'orders': orders})
 
 

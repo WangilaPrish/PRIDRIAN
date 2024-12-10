@@ -17,14 +17,14 @@
                     <div class="card-body">
                         <!-- Dynamically load product details -->
                         <h3 class="h3 py-3 mb-2" style="font-family: serif; color: #031429;">{{ product.name }}</h3>
-                        <p class="h3 current-price" style="font-family: serif; color: #555;">Ksh {{ product.price }}</p>
+                        <p class="h4 current-price" style="font-family: serif; color: #555;">Ksh {{ product.price }}</p>
 
                         <ul class="list-inline">
                             <li class="list-inline-item">
                                 <h5 style="font-family: serif; color: #031429;">Brand:</h5>
                             </li>
                             <li class="list-inline-item">
-                                <p class="text-muted" style="font-family: serif;"><strong>{{ product.brand }}</strong></p>
+                                <p class="text-muted " style="font-family: serif;"><strong>{{ product.brand }}</strong></p>
                             </li>
                         </ul>
                         <ul class="list-inline">
@@ -34,27 +34,43 @@
                         </ul>
 
                         <!-- Form to add to cart -->
-                        <form id="add-to-cart-form" method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" name="product_id" class="product-id" value="{{ product.id }}">
-                            <input type="hidden" name="product_name" class="product-name" value="{{ product.name }}">
-                            <input type="hidden" name="product_image" class="product-image" value="{{ product.image.url }}">
-                            <div class="mb-3">
-                                <h5 style="font-family: serif; color: #031429;">Select Color:</h5>
-                                <select class="form-control" name="color" required style="font-family: serif;">
-                                    {% for color in product.get_colors %}
-                                    <option value="{{ color }}">{{ color }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <h5 style="font-family: serif; color: #031429;">Quantity:</h5>
-                                <input class="form-control w-50" type="number" name="quantity" value="1" min="1" id="product-quantity" style="font-family: serif;">
-                            </div>
-                            <button type="submit" id="add-to-cart-btn" class="btn btn-secondary button-add-to-cart w-100" style="font-family: serif; background-color: #031429; color: #fff;">
-                                <i class="fi-rs-shopping-cart"></i> Add to Cart
-                            </button>
-                        </form>
+<!-- Form to add to cart -->
+<!-- Form to add to cart -->
+<form id="add-to-cart-form" method="POST" style="margin-top: 20px;">
+    {% csrf_token %}
+    <input type="hidden" name="product_id" class="product-id" value="{{ product.id }}">
+    <input type="hidden" name="product_name" class="product-name" value="{{ product.name }}">
+    <input type="hidden" name="product_image" class="product-image" value="{{ product.image.url }}">
+    
+    <div class="mb-3">
+        <h5 style="font-family: serif; color: #031429;">Select color:</h5>
+        <select class="form-control" name="color" required style="font-family: serif;">
+            {% for color in product.get_colors %}
+            <option value="{{ color }}">{{ color }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+    <div class="mb-3">
+        <h5 style="font-family: serif; color: #031429;">Quantity:</h5>
+        <input class="form-control w-50" type="number" name="quantity" value="1" min="1" id="product-quantity" style="font-family: serif;">
+    </div>
+    
+    <!-- Button Section -->
+    <div class="button-group d-flex justify-content-between mt-4">
+        <button type="submit" id="add-to-cart-btn" class="btn btn-secondary button-add-to-cart w-50" 
+                style="font-family: serif; background-color: #031429; color: #fff; margin-right: 10px;">
+            <i class="fi-rs-shopping-cart"></i> Add to Cart
+        </button>
+        
+        <a href="{% url 'cart' %}" class="btn btn-outline-secondary w-50" 
+           style="font-family: serif; color: #031429; border: 2px solid #031429; text-align: center;">
+            Continue to Cart
+        </a>
+    </div>
+</form>
+
+
                     </div>
                 </div>
             </div>
@@ -70,7 +86,7 @@
                     <strong>{{ review.user.username }}:</strong>
                     <div class="rating" style="display: inline-block;">
                         <div class="stars" style="font-size: 20px;">
-                           
+                            <!-- Stars can be displayed here -->
                         </div>
                     </div>
                     <p>{{ review.content }}</p>
@@ -162,7 +178,16 @@
         const result = await response.json();
         if (result.data) {
             console.log('Item added:', result.data);
-            // Update your UI to reflect the added item (e.g., show a success message, update cart count)
+            // Change the button text to "Item Added"
+            const button = document.getElementById('add-to-cart-btn');
+            button.innerHTML = '<i class="fi-rs-shopping-cart"></i> Item Added';
+            button.disabled = true; // Optionally disable the button after adding
+
+            // Optional: reset button text after a few seconds
+            setTimeout(() => {
+                button.innerHTML = '<i class="fi-rs-shopping-cart"></i> Add to Cart';
+                button.disabled = false; // Re-enable the button
+            }, 3000); // Reset after 3 seconds
         } else {
             console.error('Error adding item:', result.message);
         }
