@@ -1,17 +1,18 @@
 {% extends 'contact.html' %}
-{% load static %}
-
 {% block body %}
 <div class="container mt-5">
+    <h3 class="fw-bold mb-4 text-center" style="font-family: serif;">Order History</h3>
     <div class="d-flex justify-content-center row">
         <div class="col-md-10">
             <div class="rounded">
                 <div class="table-responsive table-borderless">
                     <table class="table">
                         <thead>
-                            <tr>
+                            <tr style="background-color: #031429; color: white;">
                                 <th>Order #</th>
+                                {% if user.is_superuser %}
                                 <th>Customer Name</th>
+                                {% endif %}
                                 <th>Status</th>
                                 <th>Total</th>
                                 <th>Created</th>
@@ -22,7 +23,9 @@
                             {% for order in Orders %}
                             <tr>
                                 <td>{{ order.id }}</td>
-                                <td>{{ order.customer_name }}</td>
+                                {% if user.is_superuser %}
+                                <td>{{ order.user.get_full_name }}</td>
+                                {% endif %}
                                 <td>
                                     <span class="badge 
                                         {% if order.status == 'Pending' %}badge-warning
@@ -33,15 +36,17 @@
                                         {{ order.status }}
                                     </span>
                                 </td>
-                                <td>${{ order.total }}</td>
-                                <td>{{ order.created_at|date:"F j, Y" }}</td>
+                                <td>Ksh {{ order.total }}</td>
+                                <td>{{ order.created_at|date:"F j, Y, g:i a" }}</td>
                                 <td>
                                     <a href="{% url 'order_detail' order.id %}" class="btn btn-outline-info btn-sm">View</a>
                                 </td>
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="6" class="text-center">No orders found.</td>
+                                <td colspan="{% if user.is_superuser %}6{% else %}5{% endif %}" class="text-center">
+                                    No orders found.
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
