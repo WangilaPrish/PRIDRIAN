@@ -2,12 +2,13 @@ import requests
 from django.contrib.auth import logout, login, update_session_auth_hash
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.core.exceptions import ValidationError, PermissionDenied
+from django.core.paginator import Paginator
 from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
-from myapp.forms import ProductForm, ProfileForm, UserRegisterForm, ReviewForm
-from myapp.models import User, Product, CartItem, Newsletter, Profile, Review, Order, OrderItem
+from myapp.forms import ProductForm, ProfileForm, UserRegisterForm, ReviewForm, AddressForm
+from myapp.models import User, Product, CartItem, Newsletter, Profile, Review, Order, OrderItem, Wishlist, Address
 import json
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -35,7 +36,7 @@ def user_login(request):
 
             if user:
                 login(request, user)
-                messages.success(request, f"Hi {user.first_name or user.username}, login successful!")
+
                 next_url = request.GET.get("next", "index")  # Adjust as needed
                 return redirect(next_url)
             else:
@@ -67,30 +68,89 @@ def shopsingle(request):
 
 @login_required
 def profile(request):
-    if request.user.is_superuser:
-        # Admin view: Display all buyer profiles
-        buyers = User.objects.filter(is_superuser=False)  # Exclude admins
-        return render(request, "admin_buyer_profiles.html", {"buyers": buyers})
+    user = request.user
+    # Get or create the user's default address
+    address = Address.objects.filter(user=user, is_default=True).first()
 
-    # Buyer view: Allow the logged-in user to view and edit their own profile
-    profile, created = Profile.objects.get_or_create(user=request.user)  # Get or create the profile
-
-    if request.method == "POST":
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
+    if request.method == 'POST':
+        form = AddressForm(request.POST, instance=address)
         if form.is_valid():
-            form.save()  # Save the profile instance directly
-            messages.success(request, "Profile Updated Successfully.")
-            return redirect("profile")  # Redirect to the profile page after saving
+            form.save()
+            return redirect('profile')  # Redirect to the profile page after saving
     else:
-        form = ProfileForm(instance=profile)  # Prepopulate form with current profile data
+        form = AddressForm(instance=address)
 
-    context = {
-        "form": form,
-        "profile": profile,
-    }
+    return render(request, 'profile.html', {'user': user, 'address': address, 'address_form': form})
 
-    return render(request, "profile.html", context)
 
+
+def edit(request, pk):
+    address = get_object_or_404(Address, pk=pk)  # Get the address instance by primary key (pk)
+    if request.method == 'POST':
+        form = AddressForm(request.POST, instance=address)  # Bind the form to the instance
+        if form.is_valid():
+            form.save()  # Save the updated address
+            return redirect('address')  # Redirect to profile page after saving
+    else:
+        form = AddressForm(instance=address)  # Prepopulate the form with the current address details
+
+    return render(request, 'edit.html', {'address_form': form})  # Pass the form as 'address_form' for the template
+
+
+def address(request):
+    addresses = Address.objects.filter(user=request.user)  # Assuming you have a ForeignKey to user
+    return render(request, 'address.html', {'addresses': addresses})
+
+
+
+# View to add a new address
+@login_required
+def add_address(request):
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user  # Associate the address with the user
+            address.save()
+
+            # Optionally, set this address as the default if the user wants
+            if request.POST.get('set_as_default'):
+                # Set all other addresses for this user to not default
+                Address.objects.filter(user=request.user).update(is_default=False)
+                address.is_default = True
+                address.save()
+
+            return redirect('address')  # Redirect to the address overview
+    else:
+        form = AddressForm()
+
+    return render(request, 'add_address.html', {'form': form})
+
+# View to edit an existing address
+
+
+# View to delete an address
+def delete_address(request, address_id):
+    address = get_object_or_404(Address, id=address_id, user=request.user)
+    if request.method == 'POST':
+        address.delete()
+        return redirect('address')
+    return render(request, 'confirm_delete.html', {'address': address})
+
+# View to set an address as default
+def set_default_address(request, address_id):
+    # Get the address object, or return a 404 error if not found
+    address = get_object_or_404(Address, id=address_id, user=request.user)
+
+    # Set all other addresses to not default
+    Address.objects.filter(user=request.user).update(is_default=False)
+
+    # Set the selected address as default
+    address.is_default = True
+    address.save()
+
+    # Redirect to the profile page after setting the default address
+    return redirect('profile')  # Change 'profile' to match your URL name for the profile page
 
 def is_admin(user):
     return user.is_superuser
@@ -148,7 +208,7 @@ def register(request):
             )
             if authenticated_user:
                 login(request, authenticated_user)
-                messages.success(request, "Your account was created successfully.")
+
                 return redirect('index')  # Redirect to the home page or another page
             else:
                 messages.error(request, "Unable to log in. Please try again.")
@@ -239,6 +299,67 @@ def cart(request):
             'oid': None
         })
 
+
+def wishlist(request):
+    if request.user.is_authenticated:
+        wishlist = Wishlist.objects.filter(user=request.user).first()
+        wishlist_items = wishlist.products.all().order_by('id') if wishlist else []  # Order by 'id'
+
+        # Set up pagination
+        paginator = Paginator(wishlist_items, 10)  # Show 10 products per page
+        page_number = request.GET.get('page')  # Get the page number from the URL
+        page_obj = paginator.get_page(page_number)  # Get the products for the current page
+
+        # Add stock status for each product in the page object
+        for product in page_obj:
+            product.is_out_of_stock = product.stock == 0
+
+        # Get the total number of products in the wishlist
+        total_products_count = wishlist_items.count()
+
+        return render(request, 'wishlist.html', {'page_obj': page_obj, 'total_products_count': total_products_count})  # Pass 'total_products_count'
+    else:
+        return render(request, 'wishlist.html', {'page_obj': None, 'total_products_count': 0})  # Pass 0 for unauthenticated users
+
+
+
+def add_to_wishlist(request, product_id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
+        product = get_object_or_404(Product, id=product_id)
+        wishlist.products.add(product)
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+
+
+def remove_from_wishlist(request, product_id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        wishlist = Wishlist.objects.filter(user=request.user).first()
+        if wishlist:
+            product = get_object_or_404(Product, id=product_id)
+            wishlist.products.remove(product)
+            return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+
+
+
+@login_required
+def get_wishlist_items(request):
+    # Assuming you have a Wishlist model related to the user
+    wishlist_items = Wishlist.objects.filter(user=request.user).select_related('product')
+
+    items = []
+    for item in wishlist_items:
+        items.append({
+            'product': {
+                'id': item.product.id,
+                'name': item.product.name,
+                'image': item.product.image.url,
+                'price': item.product.price,
+            }
+        })
+
+    return JsonResponse({'wishlist_items': items})
 
 def shopandcart(request, product_id):
     # Fetch the specific product by its ID
