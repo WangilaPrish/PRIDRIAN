@@ -12,8 +12,8 @@
 
                 <div class="form-section" style="flex: 1; padding: 40px; background-color: #fff;">
                     <div class="heading_s1" style="margin-bottom: 30px; text-align: center;">
-                        <h2 style="font-family: 'Roboto', sans-serif; font-weight: 600; color: #333;">Sign In</h2>
-                        <p style="color: #777;">Don't have an account? <a href="{% url 'register' %}" style="color: #031429; text-decoration: none;">Create here</a></p>
+                        <h2 style="font-family: serif; font-weight: 600; color: #333;" class="fs-4">Sign In</h2>
+                        <p style="color: #777;font-family: serif" class="fs-6">Don't have an account? <a href="{% url 'register' %}" style="color: #031429;font-family: serif; text-decoration: none;" class="fs-6">Create here</a></p>
                     </div>
 
                     {% if messages %}
@@ -27,26 +27,26 @@
                     <form method="POST" style="width: 100%;">
                         {% csrf_token %}
                         <div class="form-group" style="margin-bottom: 20px;">
-                            <input type="text" required name="email" placeholder="Email *"
+                            <input type="text" class="fs-6" required name="email" placeholder="Email "
                                 style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);" />
                         </div>
 
                         <div class="form-group" style="margin-bottom: 30px;">
-                            <input type="password" required name="password" placeholder="Password *"
+                            <input type="password" class="fs-6" required name="password" placeholder="Password "
                                 style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);" />
                         </div>
 
                         <div class="login_footer form-group mb-50" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                             <div class="chek-form">
                                 <input class="form-check-input" type="checkbox" name="remember" id="rememberMe" />
-                                <label class="form-check-label" for="rememberMe" style="color: #555;">Remember me</label>
+                                <label class="form-check-label fs-6" for="rememberMe" style="color: black;">Remember me</label>
                             </div>
-                            <a class="text-muted" href="#" style="color: #031429; text-decoration: none;">Forgot password?</a>
+                            <a class="text-secondary fs-6" href="#" style="color: #031429; text-decoration: none;">Forgot password?</a>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group text-center">
                             <button type="submit" class="btn btn-primary btn-block" 
-                                style="background-color:#031429; color: #fff; font-size: 16px; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;">
+                                style="background-color:#031429; color: #fff;font-family: serif; font-size: 16px; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;">
                                 Sign In
                             </button>
                         </div>
