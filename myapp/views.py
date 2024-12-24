@@ -2,12 +2,13 @@ import requests
 from django.contrib.auth import logout, login, update_session_auth_hash
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.core.exceptions import ValidationError, PermissionDenied
+from django.core.paginator import Paginator
 from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
-from myapp.forms import ProductForm, ProfileForm, UserRegisterForm, ReviewForm
-from myapp.models import User, Product, CartItem, Newsletter, Profile, Review, Order, OrderItem
+from myapp.forms import ProductForm, ProfileForm, UserRegisterForm, ReviewForm, AddressForm
+from myapp.models import User, Product, CartItem, Newsletter, Profile, Review, Order, OrderItem, Wishlist, Address
 import json
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -22,29 +23,35 @@ from myapp.credentials import MpesaAccessToken, LipanaMpesaPpassword
 # Create your views here.
 def user_login(request):
     if request.user.is_authenticated:
-        messages.info(request, "You are already logged in.")
-        return redirect("index")  # Change this to your desired redirect URL
+        return redirect("index")  # Redirect to the index page if already logged in
 
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-        try:
-            user = User.objects.get(email=email)
-            user = authenticate(request, username=email, password=password)
+        # Authenticate the user
+        user = authenticate(request, username=email, password=password)
 
-            if user:
-                login(request, user)
-                messages.success(request, f"Hi {user.first_name or user.username}, login successful!")
-                next_url = request.GET.get("next", "index")  # Adjust as needed
-                return redirect(next_url)
+        if user is not None:
+            # Ensure the profile exists
+            try:
+                user.profile  # Try accessing the profile to ensure it exists
+            except Profile.DoesNotExist:
+                # If no profile exists, create one
+                Profile.objects.create(user=user)
+
+            # Log the user in
+            login(request, user)
+            next_url = request.GET.get("next", "index")  # Redirect to 'next' or index
+            return redirect(next_url)
+        else:
+            # If authentication fails, check if the user exists
+            if User.objects.filter(email=email).exists():
+                messages.error(request, "Invalid password. Please try again.")
             else:
-                messages.error(request, "Invalid email or password.")
-        except User.DoesNotExist:
-            messages.error(request, f"No account found for {email}. Please register.")
+                messages.error(request, f"No account found for {email}. Please register.")
 
     return render(request, "registration/login.html")
-
 
 def user_logout(request):
     logout(request)
@@ -67,30 +74,89 @@ def shopsingle(request):
 
 @login_required
 def profile(request):
-    if request.user.is_superuser:
-        # Admin view: Display all buyer profiles
-        buyers = User.objects.filter(is_superuser=False)  # Exclude admins
-        return render(request, "admin_buyer_profiles.html", {"buyers": buyers})
+    user = request.user
+    # Get or create the user's default address
+    address = Address.objects.filter(user=user, is_default=True).first()
 
-    # Buyer view: Allow the logged-in user to view and edit their own profile
-    profile, created = Profile.objects.get_or_create(user=request.user)  # Get or create the profile
-
-    if request.method == "POST":
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
+    if request.method == 'POST':
+        form = AddressForm(request.POST, instance=address)
         if form.is_valid():
-            form.save()  # Save the profile instance directly
-            messages.success(request, "Profile Updated Successfully.")
-            return redirect("profile")  # Redirect to the profile page after saving
+            form.save()
+            return redirect('profile')  # Redirect to the profile page after saving
     else:
-        form = ProfileForm(instance=profile)  # Prepopulate form with current profile data
+        form = AddressForm(instance=address)
 
-    context = {
-        "form": form,
-        "profile": profile,
-    }
+    return render(request, 'profile.html', {'user': user, 'address': address, 'address_form': form})
 
-    return render(request, "profile.html", context)
 
+
+def edit(request, pk):
+    address = get_object_or_404(Address, pk=pk)  # Get the address instance by primary key (pk)
+    if request.method == 'POST':
+        form = AddressForm(request.POST, instance=address)  # Bind the form to the instance
+        if form.is_valid():
+            form.save()  # Save the updated address
+            return redirect('address')  # Redirect to profile page after saving
+    else:
+        form = AddressForm(instance=address)  # Prepopulate the form with the current address details
+
+    return render(request, 'edit.html', {'address_form': form})  # Pass the form as 'address_form' for the template
+
+
+def address(request):
+    addresses = Address.objects.filter(user=request.user)  # Assuming you have a ForeignKey to user
+    return render(request, 'address.html', {'addresses': addresses})
+
+
+
+# View to add a new address
+@login_required
+def add_address(request):
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user  # Associate the address with the user
+            address.save()
+
+            # Optionally, set this address as the default if the user wants
+            if request.POST.get('set_as_default'):
+                # Set all other addresses for this user to not default
+                Address.objects.filter(user=request.user).update(is_default=False)
+                address.is_default = True
+                address.save()
+
+            return redirect('address')  # Redirect to the address overview
+    else:
+        form = AddressForm()
+
+    return render(request, 'add_address.html', {'form': form})
+
+# View to edit an existing address
+
+
+# View to delete an address
+def delete_address(request, address_id):
+    address = get_object_or_404(Address, id=address_id, user=request.user)
+    if request.method == 'POST':
+        address.delete()
+        return redirect('address')
+    return render(request, 'confirm_delete.html', {'address': address})
+
+# View to set an address as default
+def set_default_address(request, address_id):
+    # Get the address object, or return a 404 error if not found
+    address = get_object_or_404(Address, id=address_id, user=request.user)
+
+    # Set all other addresses to not default
+    Address.objects.filter(user=request.user).update(is_default=False)
+
+    # Set the selected address as default
+    address.is_default = True
+    address.save()
+
+    # Redirect to the profile page after setting the default address
+    return redirect('profile')  # Change 'profile' to match your URL name for the profile page
 
 def is_admin(user):
     return user.is_superuser
@@ -148,7 +214,7 @@ def register(request):
             )
             if authenticated_user:
                 login(request, authenticated_user)
-                messages.success(request, "Your account was created successfully.")
+
                 return redirect('index')  # Redirect to the home page or another page
             else:
                 messages.error(request, "Unable to log in. Please try again.")
@@ -192,7 +258,7 @@ def index(request):
 
 
 def shop(request):
-    brand_name = request.GET.get('brand')
+    brand_name = request.GET.get('brand', '')  # Get the selected brand, default to an empty string
     sort_by = request.GET.get('sort_by', 'popularity')  # Default sort is by popularity
 
     # Filter by brand
@@ -204,6 +270,8 @@ def shop(request):
     # Sort products based on the selected criteria
     if sort_by == 'price':
         products = products.order_by('price')
+    elif sort_by == 'price_desc':
+        products = products.order_by('-price')
     elif sort_by == 'arrival':
         products = products.order_by('-created_at')  # Assuming you have a created_at field
     else:
@@ -212,7 +280,14 @@ def shop(request):
     # Get distinct brands for the filter options
     brands = Product.objects.values_list('brand', flat=True).distinct()
 
-    return render(request, 'shop.html', {'products': products, 'brands': brands})
+    # Pass the selected brand and sorting option to the template
+    context = {
+        'products': products,
+        'brands': brands,
+        'selected_brand': brand_name,
+        'selected_sort': sort_by
+    }
+    return render(request, 'shop.html', context)
 
 
 def cart(request):
@@ -239,6 +314,66 @@ def cart(request):
             'oid': None
         })
 
+
+def wishlist(request):
+    if request.user.is_authenticated:
+        wishlist = Wishlist.objects.filter(user=request.user).first()
+        wishlist_items = wishlist.products.all().order_by('id') if wishlist else []  # Order by 'id'
+
+        # Set up pagination
+        paginator = Paginator(wishlist_items, 10)  # Show 10 products per page
+        page_number = request.GET.get('page')  # Get the page number from the URL
+        page_obj = paginator.get_page(page_number)  # Get the products for the current page
+
+        # Add stock status for each product in the page object
+        for product in page_obj:
+            product.is_out_of_stock = product.stock == 0
+
+        # Get the total number of products in the wishlist
+        total_products_count = len(wishlist_items)  # Use len() for a list
+
+        return render(request, 'wishlist.html', {'page_obj': page_obj, 'total_products_count': total_products_count})  # Pass 'total_products_count'
+    else:
+        return render(request, 'wishlist.html', {'page_obj': None, 'total_products_count': 0})  # Pass 0 for unauthenticated users
+
+
+def add_to_wishlist(request, product_id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
+        product = get_object_or_404(Product, id=product_id)
+        wishlist.products.add(product)
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+
+
+def remove_from_wishlist(request, product_id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        wishlist = Wishlist.objects.filter(user=request.user).first()
+        if wishlist:
+            product = get_object_or_404(Product, id=product_id)
+            wishlist.products.remove(product)
+            return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+
+
+
+@login_required
+def get_wishlist_items(request):
+    # Assuming you have a Wishlist model related to the user
+    wishlist_items = Wishlist.objects.filter(user=request.user).select_related('product')
+
+    items = []
+    for item in wishlist_items:
+        items.append({
+            'product': {
+                'id': item.product.id,
+                'name': item.product.name,
+                'image': item.product.image.url,
+                'price': item.product.price,
+            }
+        })
+
+    return JsonResponse({'wishlist_items': items})
 
 def shopandcart(request, product_id):
     # Fetch the specific product by its ID
@@ -283,6 +418,7 @@ def is_admin(user):
     """Check if the user is an admin."""
     return user.is_superuser
 
+
 @login_required  # Ensure the user is logged in
 @user_passes_test(is_admin)  # Ensure the user is an admin
 def addproduct(request):
@@ -290,10 +426,25 @@ def addproduct(request):
         raise PermissionDenied  # Raise a 403 Forbidden error
 
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
+        form = ProductForm(request.POST, request.FILES)  # Include request.FILES to handle image files
         if form.is_valid():
-            form.save()
-            return redirect('shop')
+            # Save the product
+            product = form.save(commit=False)
+
+            # Check if images are provided and assign them
+            if 'image1' in request.FILES:
+                product.image1 = request.FILES['image1']
+            if 'image2' in request.FILES:
+                product.image2 = request.FILES['image2']
+            if 'image3' in request.FILES:
+                product.image3 = request.FILES['image3']
+            if 'image4' in request.FILES:
+                product.image4 = request.FILES['image4']
+
+            # Save the product with the images
+            product.save()
+
+            return redirect('shop')  # Redirect to the shop page after successful product creation
     else:
         form = ProductForm()
 
@@ -320,11 +471,15 @@ def edit_product(request, product_id):
 def add_to_cart(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)  # Load JSON data from the request body
+            # Parse the incoming JSON data
+            data = json.loads(request.body)
+            print("Received data:", data)  # Debugging: Log the received data
 
-            # Check if necessary data is present
-            if 'id' not in data or 'name' not in data or 'quantity' not in data or 'price' not in data or 'image' not in data or 'color' not in data:
-                return JsonResponse({'success': False, 'message': 'Missing required fields'}, status=400)
+            # Check if all required fields are present in the request
+            required_fields = ['id', 'name', 'quantity', 'price', 'image', 'color']
+            for field in required_fields:
+                if field not in data:
+                    return JsonResponse({'success': False, 'message': f'Missing required field: {field}'}, status=400)
 
             # Create the cart product structure
             cart_product = {
@@ -334,16 +489,16 @@ def add_to_cart(request):
                     'price': float(data['price']),
                     'image': data['image'],
                     'product_id': data['id'],
-                    'color': data['color'],  # Add the color to the cart product structure
+                    'color': data['color'],  # Add color to the cart structure
                 }
             }
 
-            # Initialize or update the session cart
+            # Check if there's an existing cart in the session
             if 'cart_data_object' in request.session:
                 cart_data = request.session['cart_data_object']
 
                 if str(data['id']) in cart_data:
-                    # Update the quantity of the existing product
+                    # Update quantity if the product already exists in the cart
                     cart_data[str(data['id'])]['quantity'] += int(data['quantity'])
                 else:
                     # Add the new product to the cart
@@ -352,23 +507,25 @@ def add_to_cart(request):
                 # Save the updated cart to the session
                 request.session['cart_data_object'] = cart_data
             else:
-                # Initialize the session cart with the new product
+                # Initialize a new cart with the product
                 request.session['cart_data_object'] = cart_product
 
-            # Log the updated cart for debugging
-            print(f"Updated cart: {request.session['cart_data_object']}")  # Debugging line
+            # Debugging: Log the updated cart data
+            print(f"Updated cart data: {request.session['cart_data_object']}")
 
-            # Return the updated cart data and total item count
+            # Calculate the total number of items in the cart
+            total_cart_items = sum(item['quantity'] for item in request.session['cart_data_object'].values())
+
             return JsonResponse({
+                "success": True,
                 "data": request.session['cart_data_object'],
-                'totalcartitems': len(request.session['cart_data_object'])
+                "totalcartitems": total_cart_items
             })
 
         except json.JSONDecodeError:
             return JsonResponse({'success': False, 'message': 'Invalid JSON'}, status=400)
     else:
         return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
-
 
 def remove_from_cart(request, item_id):
     if request.method == 'POST':
@@ -473,7 +630,7 @@ def checkout(request):
     if request.method == 'POST':
         # Retrieve the M-Pesa number and total amount from the POST data
         mpesa_number = request.POST.get('mpesa_number')
-        total_amount = cart_total + 150  # Add fixed shipping fee
+        total_amount = cart_total + 0  # Add fixed shipping fee
 
         # Validate input
         if not mpesa_number:
@@ -542,6 +699,7 @@ def stk(request):
         if not mpesa_number or not total_amount:
             return HttpResponse("Mpesa number and total amount are required.", status=400)
 
+        # Access token and API setup
         access_token = MpesaAccessToken.validated_mpesa_access_token
         api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
         headers = {"Authorization": "Bearer %s" % access_token}
@@ -554,22 +712,32 @@ def stk(request):
             "PartyA": mpesa_number,
             "PartyB": LipanaMpesaPpassword.Business_short_code,
             "PhoneNumber": mpesa_number,
-            "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",  # Use your callback URL
+            "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",  # Replace with your callback URL
             "AccountReference": "PRIDRIAN Luxe",
             "TransactionDesc": "Order Payment"
         }
 
+        # Make the API request
         response = requests.post(api_url, json=request_data, headers=headers)
 
         if response.status_code == 200:
             # Payment initiated successfully
-            return redirect('order_success')  # Redirect to your order success page
+            return redirect('order_success')  # Replace 'order_success' with your actual success view name
         else:
-            # Handle errors in the payment process
+            # Log the error response for debugging
+            error_message = f"Payment failed: {response.text}"
+            print(error_message)  # Log error (you can use logging instead of print)
             return HttpResponse("Payment failed. Please try again.", status=400)
 
-
+    # Handle non-POST requests gracefully
+    return HttpResponse("Invalid request method. Only POST is allowed.", status=405)
 
 
 def order_success(request):
-    return render(request, 'order_success.html')
+    # Fetch the most recent order or use a specific identifier (e.g., order ID)
+    order_id = request.session.get('order_id')  # Store the order ID in session after payment
+    if not order_id:
+        return HttpResponse("No order information available.", status=400)
+
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'order_success.html', {'order': order})

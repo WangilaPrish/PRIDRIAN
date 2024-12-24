@@ -2,196 +2,200 @@
 {% load static %}
 
 {% block body %}
-
 <section class="bg-white">
-    <div class="container pb-3 my-2" style="align-items: center; display: flex; justify-content: center;">
-        <div class="row">
-            <div class="col-lg-6 mt-5">
-                <div class="card mb-3" style="height: 100%; display: flex; justify-content: center; align-items: center; padding: 20px;">
-                    <!-- Dynamically load the product image -->
-                    <img class="card-img img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" id="product-detail" style="max-height: 400px; object-fit: contain;">
-                </div>
-            </div>
-            <div class="col-lg-6 mt-5">
-                <div class="card" style="height: 100%; padding: 20px;">
-                    <div class="card-body">
-                        <!-- Dynamically load product details -->
-                        <h3 class="h3 py-3 mb-2" style="font-family: serif; color: #031429;">{{ product.name }}</h3>
-                        <p class="h4 current-price" style="font-family: serif; color: #555;">Ksh {{ product.price }}</p>
-
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <h5 style="font-family: serif; color: #031429;">Brand:</h5>
-                            </li>
-                            <li class="list-inline-item">
-                                <p class="text-muted " style="font-family: serif;"><strong>{{ product.brand }}</strong></p>
-                            </li>
-                        </ul>
-                        <ul class="list-inline">
-                            <li class="list-inline-item">
-                                <p class="text-muted" style="font-family: serif;"><strong>{{ product.available_colors }}</strong></p>
-                            </li>
-                        </ul>
-
-                        <!-- Form to add to cart -->
-<!-- Form to add to cart -->
-<!-- Form to add to cart -->
-<form id="add-to-cart-form" method="POST" style="margin-top: 20px;">
-    {% csrf_token %}
-    <input type="hidden" name="product_id" class="product-id" value="{{ product.id }}">
-    <input type="hidden" name="product_name" class="product-name" value="{{ product.name }}">
-    <input type="hidden" name="product_image" class="product-image" value="{{ product.image.url }}">
-    
-    <div class="mb-3">
-        <h5 style="font-family: serif; color: #031429;">Select color:</h5>
-        <select class="form-control" name="color" required style="font-family: serif;">
-            {% for color in product.get_colors %}
-            <option value="{{ color }}">{{ color }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    
-    <div class="mb-3">
-        <h5 style="font-family: serif; color: #031429;">Quantity:</h5>
-        <input class="form-control w-50" type="number" name="quantity" value="1" min="1" id="product-quantity" style="font-family: serif;">
-    </div>
-    
-    <!-- Button Section -->
-    <div class="button-group d-flex justify-content-between mt-4">
-        <button type="submit" id="add-to-cart-btn" class="btn btn-secondary button-add-to-cart w-50" 
-                style="font-family: serif; background-color: #031429; color: #fff; margin-right: 10px;">
-            <i class="fi-rs-shopping-cart"></i> Add to Cart
-        </button>
-        
-        <a href="{% url 'cart' %}" class="btn btn-outline-secondary w-50" 
-           style="font-family: serif; color: #031429; border: 2px solid #031429; text-align: center;">
-            Continue to Cart
-        </a>
-    </div>
-</form>
+    <div class="container pb-3">
+       
 
 
-                    </div>
+<div class="row d-flex justify-content-center align-items-start" style="gap: 0; margin: 0; width: 100%; display: flex; justify-content: center;">
+    <div class="col-lg-12 col-md-12 col-sm-12 d-flex flex-wrap justify-content-center" style="max-width: 100%; margin: 0;">
+
+
+        <!-- Product Image Section -->
+        <div class="col-lg-6 col-md-6 col-sm-12" style="max-width: 600px; padding: 10px;">
+            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; height: 100%; background: none; border: none;">
+                
+                <!-- Main Product Image -->
+                <img class="card-img img-fluid" src="{{ product.image1.url }}" alt="{{ product.name }}" id="product-detail" style="max-height: 400px; object-fit: contain; object-position: center; width: 100%;">
+                
+                <!-- Thumbnails for different angles -->
+                <div class="d-flex justify-content-center flex-wrap mt-3">
+                    {% if product.image1 %}
+                        <img src="{{ product.image1.url }}" alt="Front View" class="img-thumbnail" style="cursor: pointer; width: 60px; height: 60px; object-fit: cover; margin: 5px;" onclick="changeImage('{{ product.image1.url }}')">
+                    {% endif %}
+                    {% if product.image2 %}
+                        <img src="{{ product.image2.url }}" alt="Side View" class="img-thumbnail" style="cursor: pointer; width: 60px; height: 60px; object-fit: cover; margin: 5px;" onclick="changeImage('{{ product.image2.url }}')">
+                    {% endif %}
+                    {% if product.image3 %}
+                        <img src="{{ product.image3.url }}" alt="Back View" class="img-thumbnail" style="cursor: pointer; width: 60px; height: 60px; object-fit: cover; margin: 5px;" onclick="changeImage('{{ product.image3.url }}')">
+                    {% endif %}
+                    {% if product.image4 %}
+                        <img src="{{ product.image4.url }}" alt="Other View" class="img-thumbnail" style="cursor: pointer; width: 60px; height: 60px; object-fit: cover; margin: 5px;" onclick="changeImage('{{ product.image4.url }}')">
+                    {% endif %}
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Reviews Section -->
-    <div class="container mt-5">
-        <h4 style="font-family: serif; color: #031429;">Reviews</h4>
-        <ul class="list-unstyled">
-            {% for review in product.reviews.all %}
-                <li class="border-bottom mb-2 pb-2">
-                    <strong>{{ review.user.username }}:</strong>
-                    <div class="rating" style="display: inline-block;">
-                        <div class="stars" style="font-size: 20px;">
-                            <!-- Stars can be displayed here -->
+        <!-- Product Details Section -->
+        <div class="col-lg-6 col-md-6 col-sm-12" style="max-width: 400px; padding: 10px; display: flex; justify-content: center; align-items: center;">
+            <div style="width: 100%; padding: 20px; background: none; border: none;">
+                <div>
+                    <h5 class="fs-5 fw-bold py-1" style="font-family: serif; color: #031429; margin-bottom: 5px;">{{ product.name }}</h5>
+                    <p class="fs-6 current-price" style="font-family: serif; color: #555; margin-bottom: 5px;">Ksh {{ product.price }}</p>
+
+                    <ul class="list-inline" style="margin-bottom: 0;">
+                        <li class="list-inline-item" style="margin-bottom: 0;">
+                            <h6 style="font-family: serif; color: #031429; font-size: 14px; margin-bottom: 0;">Brand:</h6>
+                        </li>
+                        <li class="list-inline-item" style="margin-bottom: 0;">
+                            <p class="text-muted fs-6" style="font-family: serif; margin-bottom: 0;"><strong>{{ product.brand }}</strong></p>
+                        </li>
+                    </ul>
+
+                    <!-- Reduced space between brand and color selection -->
+                    <ul class="list-inline" style="margin-top: 5px;">
+                        <li class="list-inline-item">
+                            <p class="text-muted" style="font-family: serif; font-size: 14px; margin-bottom: 0;"><strong>{{ product.available_colors }}</strong></p>
+                        </li>
+                    </ul>
+
+                    <form id="add-to-cart-form" method="POST" style="margin-top: 10px;">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" class="product-id" value="{{ product.id }}">
+                        <input type="hidden" name="product_name" class="product-name" value="{{ product.name }}">
+                        <input type="hidden" name="product_image" class="product-image" value="{{ product.image1.url }}">
+                        <input type="hidden" name="price" class="product-price" value="{{ product.price }}">
+
+                        <div class="mb-2">
+                            <h6 style="font-family: serif; color: #031429; font-size: 14px;">Color:</h6>
+                            <select class="form-control w-50" name="color" required style="font-family: serif; font-size: 14px;">
+                                {% for color in product.get_colors %}
+                                <option value="{{ color }}">{{ color }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
-                    </div>
-                    <p>{{ review.content }}</p>
-                    <small>Posted on {{ review.created_at|date:"F j, Y" }}</small>
-                </li>
-            {% empty %}
-                <li>No reviews yet.</li>
-            {% endfor %}
-        </ul>
 
-        {% if user.is_authenticated %}
-        <h5 style="font-family: serif; color: #031429;">Submit a Review:</h5>
-        <form method="POST" action="{% url 'reviews' product.id %}">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="rating" style="font-family: serif; color: #031429;">Rating:</label>
-                <select name="rating" class="form-control" id="rating-selector" required onchange="updateStars(this.value)">
-                    <option value="">Select...</option>
-                    <option value="1">1 Star</option>
-                    <option value="2">2 Stars</option>
-                    <option value="3">3 Stars</option>
-                    <option value="4">4 Stars</option>
-                    <option value="5">5 Stars</option>
-                </select>
+                        <div class="mb-2">
+                            <h6 style="font-family: serif; color: #031429; font-size: 14px;">Quantity:</h6>
+                            <input class="form-control w-50 fs-6" type="number" name="quantity" value="1" min="1" id="product-quantity" style="font-family: serif; font-size: 14px;">
+                        </div>
+
+                        <div class="d-flex flex-column flex-md-row justify-content-start gap-3 mt-4">
+                            {% if product.stock == 0 %}
+                                <button type="button" id="add-to-cart-btn" class="btn btn-secondary mb-2 mb-md-0 fs-6" style="font-family: serif; background-color: #ccc; color: #fff;" disabled>
+                                    Out of Stock
+                                </button>
+                            {% else %}
+                                <button type="button" id="add-to-cart-btn" class="btn btn-secondary mb-2 mb-md-0 fs-6" style="font-family: serif; background-color: #031429; color: #fff;" onclick="addToCart(event)">
+                                    Add to Cart
+                                </button>
+                            {% endif %}
+
+                            <a href="{% url 'cart' %}" class="btn btn-outline-secondary fs-6" style="font-family: serif; color: white; background-color: #031429">
+                                Continue to Cart
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3" id="star-display" style="font-size: 20px; color: gold; display: none;"></div> <!-- Stars will be displayed here -->
-            <div class="mb-3">
-                <label for="content" style="font-family: serif; color: #031429;">Your Review:</label>
-                <textarea name="content" class="form-control" rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-secondary" style="font-family: serif; background-color: #031429; color: #fff;">Submit Review</button>
-        </form>
-        {% else %}
-            <p>You must be logged in to submit a review.</p>
-        {% endif %}
+        </div>
+
     </div>
+</div>
 
-    <div class="py-4 mx-5 text-center">
-        <a href="{% url 'shop' %}" class="btn btn-secondary" style="font-family: serif; background-color: #031429; color: #fff;">
-            Continue Shopping
-        </a>
+
+
+
+            <!-- Product Description and Reviews -->
+            <div class="row mt-5 py-4">
+                <!-- Description -->
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h3 style="font-family: serif; color: #031429;" class="fs-5">Product Description</h3>
+                    <p style="font-family: serif; text-align: justify; color: #555;" class="fs-6">{{ product.description|safe }}</p>
+                </div>
+
+                <!-- Reviews -->
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h3 style="font-family: serif; color: #031429;" class="fs-5">Customer Reviews</h3>
+                    <div class="reviews-container" style="max-height: 400px; overflow-y: auto;">
+                        {% for review in product.reviews.all %}
+                        <div class="review mb-3" style="background-color: #f9f9f9; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
+                            <p class="fs-6" style="font-family: serif"><strong>{{ review.user.get_full_name }}</strong> ({{ review.created_at|date:"M d, Y" }})</p>
+                            <p class="fs-6" style="font-family: serif">{{ review.text }}</p>
+                            <div class="rating" style="color: #ffa500;">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= review.rating %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p style="font-family: serif" class="fs-6">No reviews yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </section>
 
-<script>
-    // Function to update the displayed stars based on the selected rating
-    function updateStars(rating) {
-        const starContainer = document.getElementById('star-display');
-        starContainer.innerHTML = ''; // Clear previous stars
 
-        if (rating) {
-            starContainer.style.display = 'block'; // Show the stars container
-            for (let i = 1; i <= 5; i++) {
-                const star = document.createElement('span');
-                star.className = 'fa fa-star';
-                star.style.color = i <= rating ? 'gold' : '#ddd'; // Set color based on rating
-                starContainer.appendChild(star);
-            }
-        } else {
-            starContainer.style.display = 'none'; // Hide stars if no rating selected
-        }
+<script>
+    // Function to change the main image when a thumbnail is clicked
+    function changeImage(imageUrl) {
+        document.getElementById('product-detail').src = imageUrl; // Change the main image to the clicked thumbnail
     }
 
-    document.getElementById('add-to-cart-form').addEventListener('submit', async function(event) {
-        event.preventDefault(); // Prevent the default form submission
+    function addToCart(event) {
+        event.preventDefault();  // Prevent form submission
 
-        const productId = document.querySelector('.product-id').value;
-        const productName = document.querySelector('.product-name').value;
-        const productImage = document.querySelector('.product-image').value;
-        const productQuantity = document.getElementById('product-quantity').value;
-        const color = this.querySelector('select[name="color"]').value;
+        // Create a FormData object from the form
+        const form = document.getElementById('add-to-cart-form');
+        const formData = new FormData(form);
 
-        const response = await fetch('/add-to-cart/', { // Adjust the URL to your Django view
-            method: 'POST', // Change to POST
+        // Create an object to hold the data
+        const data = {
+            id: formData.get('product_id'),
+            name: formData.get('product_name'),
+            quantity: formData.get('quantity'),
+            price: formData.get('price'),   // Ensure price is included
+            image: formData.get('product_image'),
+            color: formData.get('color')
+        };
+
+        // Send the data to the server using fetch with JSON payload
+        fetch("{% url 'add_to_cart' %}", {
+            method: "POST",
+            body: JSON.stringify(data),  // Convert the data object to a JSON string
             headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}',
-            },
-            body: JSON.stringify({
-                id: productId,
-                name: productName,
-                quantity: productQuantity,
-                price: {{ product.price }}, // Include the product price directly
-                image: productImage,
-                color: color, // Add the selected color
-            }),
+                'Content-Type': 'application/json',  // Set content-type as JSON
+                'X-CSRFToken': '{{ csrf_token }}'    // Include CSRF token for security
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const button = document.getElementById('add-to-cart-btn');
+                button.innerHTML = "<i class='fi-rs-shopping-cart'></i> Item Added";
+                button.disabled = true;  // Disable the button after adding the item
+
+                // Optionally update the cart item count
+                const cartItemCount = document.getElementById('cart-item-count');
+                if (cartItemCount) {
+                    cartItemCount.textContent = data.totalcartitems; // Update cart item count
+                }
+            } else {
+                alert(data.message);  // Show error message if the request failed
+            }
+        })
+        .catch(error => {
+            console.error('Error adding item to cart:', error);
         });
-
-        const result = await response.json();
-        if (result.data) {
-            console.log('Item added:', result.data);
-            // Change the button text to "Item Added"
-            const button = document.getElementById('add-to-cart-btn');
-            button.innerHTML = '<i class="fi-rs-shopping-cart"></i> Item Added';
-            button.disabled = true; // Optionally disable the button after adding
-
-            // Optional: reset button text after a few seconds
-            setTimeout(() => {
-                button.innerHTML = '<i class="fi-rs-shopping-cart"></i> Add to Cart';
-                button.disabled = false; // Re-enable the button
-            }, 3000); // Reset after 3 seconds
-        } else {
-            console.error('Error adding item:', result.message);
-        }
-    });
+    }
 </script>
 
 {% endblock %}

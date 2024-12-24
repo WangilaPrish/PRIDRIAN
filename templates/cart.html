@@ -1,139 +1,171 @@
 {% extends 'contact.html' %}
 {% load static %}
+
 {% block body %}
 <section class="h-100">
-  <div class="container h-100 py-5">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-10">
+    <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-10">
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h3 class="fw-bold mb-0" style="font-family: serif">Cart</h3>
-        </div>
-
-        <!-- Cart Items -->
-        <div id="cart-items">
-          {% for product_id, item in cart_data.items %}
-          <div class="card rounded-3 mb-4" id="item-{{ product_id }}">
-            <div class="card-body p-4">
-              <div class="row d-flex justify-content-between align-items-center">
-                <div class="col-md-2 col-lg-2 col-xl-2">
-                  <img src="{{ item.image }}" class="img-fluid rounded-3" alt="Product Image">
+                <!-- Cart Items -->
+                <div id="cart-items">
+                    {% if cart_data.items|length == 0 %}
+                        <!-- Display this when cart is empty -->
+                        <div class="alert alert-muted fs-12" style="font-family: serif; text-align: center" role="alert">
+                            😔 Your cart is empty!
+                        </div>
+                    {% else %}
+                        {% for product_id, item in cart_data.items %}
+                        <div class="card rounded-3 mb-4" id="item-{{ product_id }}" style="box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <div class="card-body p-4">
+                                <div class="row d-flex justify-content-between align-items-center">
+                                    <div class="col-4 col-sm-3 col-md-2">
+                                        <img src="{{ item.image }}" class="img-fluid rounded-3" alt="Product Image" style="height: auto; max-height: 120px; object-fit: cover;">
+                                    </div>
+                                    <div class="col-6 col-sm-4 px-1 col-md-3">
+                                        <p class="lead fw-normal mb-2 fs-6" style="font-family: serif; color: #031429;">{{ item.name }}</p>
+                                        <p style="font-family: serif;" class="fs-6"><span class="text-muted fs-6">Color: </span>{{ item.color }}</p>
+                                    </div>
+                                    <div class="col-4 col-sm-3 col-md-2 d-flex pt-2 align-items-center">
+                                        <button class="btn btn-link px-1" onclick="changeQuantity(this, -1)">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <input min="1" name="quantity"  style="font-family: serif; width: 50px; height: 30px; font-size: 14px;" value="{{ item.quantity }}" type="number" class="form-control fs-6" oninput="handleInputChange(this)"/>
+                                        <button class="btn btn-link px-1" onclick="changeQuantity(this, 1)">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-4 col-sm-2 col-md-2">
+                                        <h5 class="mb-0  fs-6" style="font-family: serif; color: #031429;">Ksh {{ item.price }}</h5>
+                                    </div>
+                                    <div class="col-1 text-end">
+                                        <a href="#!" class="text-muted" onclick="removeItem('{{ product_id }}', this)"><i class="fas fa-trash fs-6 fa-lg"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                        <!-- Continue Shopping and Proceed to Checkout Buttons -->
+                        <div class="card-body p-4 d-flex justify-content-between flex-wrap">
+                            <a href="{% url 'shop' %}" class="btn btn-lg fs-6" style="background-color: #031429; color: white; font-family: serif; flex-grow: 1; margin: 5px; text-align: center; border-radius: 25px;">
+                                Continue Shopping
+                            </a>
+                            <a href="{% url 'checkout' %}" class="btn btn-lg fs-6" style="background-color: #031429; color: white; font-family: serif; flex-grow: 1; margin: 5px; text-align: center; border-radius: 25px;">
+                                Proceed to Checkout
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
-                <div class="col-md-3 col-lg-3 col-xl-3">
-                  <p class="lead fw-normal mb-2" style="font-family: serif">{{ item.name }}</p>
-                  <p style="font-family: serif"><span class="text-muted">Color: </span>{{ item.color }}</p>
-                </div>
-                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                  <button class="btn btn-link px-2" onclick="changeQuantity(this, -1)">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <input min="0" name="quantity" style="font-family: serif" value="{{ item.quantity }}" type="number" class="form-control form-control-sm" />
-                  <button class="btn btn-link px-2" onclick="changeQuantity(this, 1)">
-                    <i class="fas fa-plus"></i>
-                  </button>
-                </div>
-                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                  <h5 class="mb-0" style="font-family: serif">Ksh {{ item.price }}</h5>
-                </div>
-                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                  <a href="#!" class="text-muted" onclick="removeItem('{{ product_id }}', this)"><i class="fas fa-trash fa-lg"></i></a>
-                </div>
-              </div>
+               
             </div>
-          </div>
-          {% endfor %}
         </div>
-
-<div class="card mb-4">
-    <div class="card-body p-4 d-flex justify-content-between">
-        <a href="{% url 'shop' %}" class="btn btn-lg" style="background-color: #031429; color: white; font-family: serif; flex-grow: 1; margin-right: 10px; text-align: center;">
-            Continue Shopping
-        </a>
-        <a href="{% url 'checkout' %}" class="btn btn-lg" style="background-color: #031429; color: white; font-family: serif; flex-grow: 1; text-align: center;">
-            Proceed to Checkout
-        </a>
     </div>
-</div>
-
-
-      </div>
-    </div>
-  </div>
 </section>
 
 <script>
-  function changeQuantity(button, increment) {
-    const input = button.parentNode.querySelector('input[type=number]');
-    let currentValue = parseInt(input.value);
-    currentValue += increment;
-    if (currentValue < 0) currentValue = 0; // Prevent negative quantities
-    input.value = currentValue;
+    function changeQuantity(button, increment) {
+        const input = button.parentNode.querySelector('input[type=number]');
+        let currentValue = parseInt(input.value);
+        currentValue += increment;
+        if (currentValue < 1) currentValue = 1; // Prevent negative quantities
+        input.value = currentValue;
 
-    // Get the product ID from the card element
-    const productId = button.closest('.card').id.split('-')[1]; // Extracting product ID from card ID
+        const productId = button.closest('.card').id.split('-')[1]; // Extracting product ID from card ID
 
-    // Send the new quantity to the server
-    fetch('/update-cart-quantity/', { // Adjust the URL if necessary
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is sent for security
-      },
-      body: JSON.stringify({
-        product_id: productId, // Product ID to update
-        quantity: currentValue,  // Updated quantity
-      }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 'success') {
-        updateTotal(); // Update total amount dynamically
-      } else {
-        alert(data.message); // Show error message
-      }
-    })
-    .catch(error => {
-      console.error('Error updating quantity:', error);
-    });
-  }
+        fetch('/update-cart-quantity/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is sent for security
+            },
+            body: JSON.stringify({
+                product_id: productId, 
+                quantity: currentValue, 
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                updateTotal();
+            } else {
+                alert(data.message); 
+            }
+        })
+        .catch(error => {
+            console.error('Error updating quantity:', error);
+        });
+    }
 
-  function removeItem(productId, button) {
-    fetch(`/remove-from-cart/${productId}/`, {
-      method: 'POST',
-      headers: {
-        'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token for security
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 'success') {
-        const cartItem = button.closest('.card');
-        cartItem.remove();
-        updateTotal(); // Update total amount dynamically
-      } else {
-        alert(data.message); // Show error message
-      }
-    })
-    .catch(error => {
-      console.error('Error removing item:', error);
-    });
-  }
+    function removeItem(productId, button) {
+        fetch(`/remove-from-cart/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}', 
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const cartItem = button.closest('.card');
+                cartItem.remove();
+                updateTotal(); 
+            } else {
+                alert(data.message); 
+            }
+        })
+        .catch(error => {
+            console.error('Error removing item:', error);
+        });
+    }
 
-  function updateTotal() {
-    let total = 0;
-    document.querySelectorAll('#cart-items .card').forEach(card => {
-      const priceText = card.querySelector('.col-md-3.col-lg-2.col-xl-2 h5').innerText.replace(/[^0-9.-]+/g, ""); // Removes currency and other characters
-      const price = parseFloat(priceText); // Convert to a float
-      const quantity = parseInt(card.querySelector('input[name=quantity]').value);
+    function handleInputChange(input) {
+        const currentValue = parseInt(input.value);
+        if (isNaN(currentValue) || currentValue < 0) {
+            input.value = 0; 
+        } else {
+            const productId = input.closest('.card').id.split('-')[1];
 
-      if (!isNaN(price) && !isNaN(quantity)) {
-        total += price * quantity; // Calculate total
-      }
-    });
-    
-    const totalAmount = document.getElementById('total-amount');
-    totalAmount.innerText = `Ksh ${total.toFixed(2)}`; // Format to Ksh and 2 decimal places
-  }
+            fetch('/update-cart-quantity/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}', 
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: input.value,  
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    updateTotal(); 
+                } else {
+                    alert(data.message); 
+                }
+            })
+            .catch(error => {
+                console.error('Error updating quantity:', error);
+            });
+        }
+    }
+
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll('#cart-items .card').forEach(card => {
+            const priceText = card.querySelector('.col-md-3.col-lg-2.col-xl-2 h5').innerText.replace(/[^0-9.-]+/g, "");
+            const price = parseFloat(priceText);
+            const quantity = parseInt(card.querySelector('input[name=quantity]').value);
+
+            if (!isNaN(price) && !isNaN(quantity)) {
+                total += price * quantity; 
+            }
+        });
+
+        const totalAmount = document.getElementById('total-amount');
+        totalAmount.innerText = `Ksh ${total.toFixed(2)}`; 
+    }
 </script>
 
 {% endblock %}

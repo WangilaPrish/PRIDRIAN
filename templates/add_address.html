@@ -1,0 +1,71 @@
+{% extends 'contact.html' %}  <!-- Extend your base template -->
+
+{% block body %}
+<div class="container py-5">
+    <h5 class="text-center mb-4 fs-5 text-capitalize" style="font-family: serif; font-weight: 700;">Add New Address</h5>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title text-uppercase fs-6 fw-bold text-dark" style="font-family: serif; letter-spacing: 0.05rem;">Your Address</h6>
+                    <hr>
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- Start of the form fields -->
+                        <div class="row">
+                            <!-- First Name and Last Name Fields (Two columns) -->
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name" class="form-label fs-6" style="font-size: 0.9rem; font-family: serif; font-weight: 500;">First Name</label>
+                                <input type="text" name="first_name" class="form-control fs-6" required placeholder="Enter your first name" style="font-size: 0.875rem; font-family: serif; padding: 0.75rem; border-radius: 0.25rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name" class="form-label fs-6" style="font-size: 0.9rem; font-family: serif; font-weight: 500;">Last Name</label>
+                                <input type="text" name="last_name" class="form-control fs-6" required placeholder="Enter your last name" style="font-size: 0.875rem; font-family: serif; padding: 0.75rem; border-radius: 0.25rem;">
+                            </div>
+
+                            <!-- Phone Number and Additional Phone Number Fields (Two columns) -->
+                            <div class="col-md-6 mb-3">
+                                <label for="phone_number" class="form-label fs-6" style="font-size: 0.9rem; font-family: serif; font-weight: 500;">Phone Number</label>
+                                <input type="text" name="phone_number" class="form-control fs-6" required placeholder="Enter your phone number" style="font-size: 0.875rem; font-family: serif; padding: 0.75rem; border-radius: 0.25rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="additional_phone_number" class="form-label fs-6" style="font-size: 0.9rem; font-family: serif; font-weight: 500;">Additional Phone Number</label>
+                                <input type="text" name="additional_phone_number" class="form-control fs-6" placeholder="Optional" style="font-size: 0.875rem; font-family: serif; padding: 0.75rem; border-radius: 0.25rem;">
+                            </div>
+
+                            <!-- Address and Country Fields (Two columns) -->
+                            <div class="col-md-6 mb-3">
+                                <label for="address_line" class="form-label fs-6" style="font-size: 0.9rem; font-family: serif; font-weight: 500;">Address</label>
+                                <input type="text" name="address_line" class="form-control fs-6" required placeholder="Enter your address" style="font-size: 0.875rem; font-family: serif; padding: 0.75rem; border-radius: 0.25rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label fs-6" style="font-size: 0.9rem; font-family: serif; font-weight: 500;">City</label>
+                                <input type="text" name="city" class="form-control fs-6" required placeholder="Enter your city" style="font-size: 0.875rem; font-family: serif; padding: 0.75rem; border-radius: 0.25rem;">
+                            </div>
+
+                            <!-- City and Delivery Information Fields (Two columns) -->
+                            <div class="col-md-6 mb-3">
+                                <label for="region" class="form-label fs-6" style="font-size: 0.9rem; font-family: serif; font-weight: 500;">Country</label>
+                                <input type="text" name="region" class="form-control fs-6" required placeholder="Enter your country" style="font-size: 0.875rem; font-family: serif; padding: 0.75rem; border-radius: 0.25rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="additional_information" class="form-label fs-6" style="font-size: 0.9rem; font-family: serif; font-weight: 500;">Delivery Information</label>
+                                <input type="text" name="additional_information" class="form-control fs-6" placeholder="Any delivery information" style="font-size: 0.875rem; font-family: serif; padding: 0.75rem; border-radius: 0.25rem;">
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn fs-6 w-50 fw-bold" style="background-color: #031429; border-color: #031429; font-family: serif; color:white; font-size: 0.875rem; font-weight: bold;">
+                                Add Address
+                            </button>
+                        </div>             
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

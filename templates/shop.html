@@ -3,56 +3,70 @@
 
 {% block body %}
 
-<div class="container py-3">
+<div class="container py-3 px-4">
     <div class="row">
         <!-- Sidebar for Filters -->
-        <div class="col-md-2 py-5">
-            <form method="GET" action="{% url 'shop' %}">
-                <label style="font-family: serif;">Sort By:</label>
-                <select name="sort_by" class="form-control" style="font-family: serif;">
-                    <option value="popularity" {% if request.GET.sort_by == 'popularity' %}selected{% endif %}>Popularity</option>
-                    <option value="price" {% if request.GET.sort_by == 'price' %}selected{% endif %}>Price: Low - High</option>
-                </select>
-                <button type="submit" class="btn btn-secondary w-100" style="font-family: serif; background-color: #031429; color: #fff;">Apply Filters</button>
-            </form>
-        </div>
+<div class="col-12 col-md-2 py-2 fs-6">
+    <div class="dropdown fs-6">
+        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #031429; color: #fff; font-family: serif;">
+            Filters
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+            <li>
+                <form method="GET" action="{% url 'shop' %}" class="px-4 py-2">
+                    <label class="fs-6" style="font-family: serif;">Brands:</label>
+                    <select name="brand" class="form-control fs-6" style="font-family: serif;">
+                        <option value="" {% if not request.GET.brand %}selected{% endif %}>Show All</option>
+                        {% for brand in brands %}
+                        <option value="{{ brand }}" {% if brand == request.GET.brand %}selected{% endif %}>{{ brand }}</option>
+                        {% endfor %}
+                    </select>
 
+                    <label class="fs-6 mt-2" style="font-family: serif;">Sort by:</label>
+                    <select name="sort_by" class="form-control fs-6" style="font-family: serif;">
+                        <option value="popularity" {% if request.GET.sort_by == 'popularity' %}selected{% endif %}>Popularity</option>
+                        <option value="price" {% if request.GET.sort_by == 'price' %}selected{% endif %}>Price: Low - High</option>
+                        <option value="price_desc" {% if request.GET.sort_by == 'price_desc' %}selected{% endif %}>Price: High - Low</option>
+                        <option value="arrival" {% if request.GET.sort_by == 'arrival' %}selected{% endif %}>Newest Arrivals</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-secondary fs-6 w-100 mt-2" style="font-family: serif; background-color: #031429; color: #fff;">Apply Filters</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
         <!-- Products -->
-        <div class="col-md-9">
-            <!-- Filter Buttons -->
-            <div id="myBtnContainer" class="py-2" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px;">
-                <a href="?brand=" class="btn active" style="background-color: #f8f9fa; font-family: serif; color: #333; border: 1px solid #ccc; padding: 10px 20px; border-radius: 25px; font-weight: 500; text-decoration: none; transition: background-color 0.3s, color 0.3s, transform 0.2s;">
-                    Show all
-                </a>
-                {% for brand in brands %}
-                <a href="?brand={{ brand }}" class="btn" style="background-color: #f8f9fa; color: #333; font-family: serif; border: 1px solid #ccc; padding: 10px 20px; border-radius: 25px; font-weight: 500; text-decoration: none; transition: background-color 0.3s, color 0.3s, transform 0.2s;">
-                    {{ brand }}
-                </a>
-                {% endfor %}
-            </div>
-
+        <div class="col-12 col-md-9 fs-6">
             <div class="row">
                 {% for product in products %}
-                <div class="col-md-4">
+                <div class="col-6 col-md-3 mb-4">
                     <div class="card mb-4 product-wap rounded-0">
                         <div class="card rounded-0" style="overflow: hidden; transition: transform 0.3s ease;">
-                            <img class="card-img rounded-0 img-fluid product-image" src="{{ product.image.url }}" alt="{{ product.name }}" 
+                            {% if product.image1 %}
+                            <img class="card-img rounded-0 img-fluid product-image fs-6" src="{{ product.image1.url }}" alt="{{ product.name }}"
                                  style="width: 100%; height: 250px; object-fit: cover; transform: scale(0.9); transition: transform 0.3s;">
+                            {% else %}
+                            <!-- Fallback image if image1 is not available -->
+                            <img class="card-img rounded-0 img-fluid product-image fs-6" src="{% static 'images/default_image.jpg' %}" alt="No Image"
+                                 style="width: 100%; height: 250px; object-fit: cover; transform: scale(0.9); transition: transform 0.3s;">
+                            {% endif %}
+
                             <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                                 <ul class="list-unstyled">
                                     <li>
-                                        <a class="btn btn-dark text-white" href="#" onclick="addToWishlist('{{ product.id }}')">
+                                        <a class="btn btn-dark text-white fs-6" href="{% url 'wishlist' %}" onclick="addToWishlist('{{ product.id }}')">
                                             <i class="far fa-heart"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="btn btn-dark text-white mt-2" href="{% url 'shopandcart' product.id %}">
+                                        <a class="btn btn-dark text-white mt-2 fs-6" href="{% url 'shopandcart' product.id %}">
                                             <i class="fas fa-cart-plus"></i>
                                         </a>
                                     </li>
                                     {% if user.is_authenticated and user.is_superuser %}
                                     <li>
-                                        <a class="btn btn-primary text-white mt-2" style="background-color: #031429" href="{% url 'edit_product' product.id %}">
+                                        <a class="btn btn-primary text-white mt-2 fs-6" style="background-color: #031429" href="{% url 'edit_product' product.id %}">
                                             Edit
                                         </a>
                                     </li>
@@ -62,9 +76,10 @@
                         </div>
 
                         <!-- Product Info -->
-                        <div class="card-body text-center">
-                            <a href="#" class="p text-decoration-none" style="font-family: serif;">{{ product.name }}</a>
-                            <p class="text-center mb-0" style="font-family: serif;">Ksh {{ product.price }}</p>
+                        <div class="card-body text-center fs-6">
+                            <a href="#" class="p text-decoration-none fs-6" style="font-family: serif;">{{ product.name }}</a>
+                            <p class="text-center mb-0 fs-6" style="font-family: serif; ">Ksh {{ product.price }}</p>
+
                         </div>
                     </div>
                 </div>
@@ -73,5 +88,55 @@
         </div>
     </div>
 </div>
+
+<script>
+function addToWishlist(productId) {
+    fetch(`/add-to-wishlist/${productId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}', // Ensure CSRF token is sent for security
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showCustomNotification('Product added to wishlist!', 'success');
+        } else {
+            showCustomNotification('Failed to add to wishlist: ' + data.error, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error adding to wishlist:', error);
+        showCustomNotification('An error occurred while adding to wishlist.', 'error');
+    });
+}
+
+// Function to show a custom notification
+function showCustomNotification(message, type) {
+    // Create the notification element
+    const notification = document.createElement('div');
+    notification.classList.add('alert', 'fs-6');
+    notification.style.fontFamily = 'serif';
+    notification.style.textAlign = 'center';
+
+    // Set the message and type of notification
+    if (type === 'success') {
+        notification.classList.add('alert-success');
+        notification.innerHTML = `😄 ${message}`;
+    } else {
+        notification.classList.add('alert-danger');
+        notification.innerHTML = `😔 ${message}`;
+    }
+
+    // Append the notification to the body or a specific container
+    document.body.appendChild(notification);
+
+    // Remove the notification after 3 seconds
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+</script>
 
 {% endblock %}

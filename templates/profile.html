@@ -1,63 +1,57 @@
 {% extends 'contact.html' %}
 {% load static %}
+
 {% block body %}
-<section class="h-100">
-  <div class="container h-100 py-5">
-    <div class="row d-flex justify-content-center align-items-start h-100">
-      <div class="col-lg-8 col-md-10">
-        <h3 class="fw-bold mb-4 text-center" style="font-family: serif; color: #031429;">My Profile</h3>
+<div class="container py-5">
+    <h4 class="text-center mb-4 fw-bold" style="text-transform: capitalize;font-family: serif">Account Overview</h4>
 
-        <form id="profile-form" method="POST" action="{% url 'profile_update' %}" enctype="multipart/form-data">
-          {% csrf_token %}
-          <div class="row">
-            <div class="col-md-8 mb-4">
-              <div class="card shadow-sm border-0 rounded">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card mb-4">
                 <div class="card-body">
-                  <h5 class="mb-4" style="font-family: serif; color: #031429;">Update Your Information</h5>
-                  <div class="mb-3">
-                    <label class="form-label" style="font-family: serif;">Full Name</label>
-                    <input class="form-control" type="text" name="full_name" value="{{ profile.full_name|default:'' }}" required style="font-family: serif;" />
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label" style="font-family: serif;">Phone</label>
-                    <input class="form-control" type="tel" name="phone" value="{{ profile.phone|default:'' }}" required style="font-family: serif;" />
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label" style="font-family: serif;">Address</label>
-                    <input class="form-control" type="text" name="address" value="{{ profile.address|default:'' }}" style="font-family: serif;" />
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label" style="font-family: serif;">Country</label>
-                    <input class="form-control" type="text" name="country" value="{{ profile.country|default:'' }}" style="font-family: serif;" />
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label" style="font-family: serif;">Upload Profile Photo</label>
-                    <input class="form-control" type="file" name="image" accept="image/*" />
-                    <small class="text-muted">Accepted formats: JPEG, PNG.</small>
-                  </div>
-                  <div class="text-center">
-                    <button class="btn btn-primary" style="background-color: #031429; border: none; font-family: serif;" type="submit">Save changes</button>
-                  </div>
+                    <h6 class="card-title fw-bold" style="text-transform: uppercase;font-family: serif">Account Details</h6>
+                    <hr>
+                    <p class="fs-6" style="font-family: serif">{{ user.first_name }} {{ user.last_name }}</p>
+                    <p class="fs-6" style="font-family: serif">{{ user.email }}</p>
                 </div>
-              </div>
             </div>
+        </div>
 
-            <aside class="col-md-4 mb-4">
-              <div class="text-lg-center">
-                <img class="img-lg mb-3 img-avatar" 
-                     src="{% if profile.image %}{{ profile.image.url }}{% else %}{% static 'assets/imgs/people/default-avatar.png' %}{% endif %}" 
-                     alt="User Photo" 
-                     style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 2px solid #031429; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" />
-              </div>
-              <div class="text-center mt-3">
-                <a class="btn btn-light rounded" href="{% url 'change_password' %}" style="background-color: #031429; color: white; font-family: serif; width: 100%;">Change Password</a>
-                <a class="btn btn-light rounded mt-2" href="{% url 'logout' %}" style="background-color: #031429; color: white; font-family: serif; width: 100%;">Sign Out</a>
-              </div>
-            </aside>
-          </div>
-        </form>
-      </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h6 class="card-title fw-bold" style="text-transform: uppercase; font-family:serif; display: flex; justify-content: space-between; align-items: center;">
+                        Address Book
+                        <a href="{% url 'add_address' %}" title="Add New Address">
+                            <i class="fas fa-plus text-muted" style="cursor: pointer;"></i>
+                        </a>
+                    </h6>
+                    <hr>
+
+                    {% if address %}
+                        <p class="fs-6" style="font-family: serif"><strong>Your default shipping address:</strong></p>
+                        <div class="address-entry">
+                            <p class="fs-6" style="font-family: serif">{{ address.first_name }} {{ address.last_name }}</p>
+                            <p class="fs-6" style="font-family: serif">{{ address.phone_number }}</p>
+                            <p class="fs-6" style="font-family: serif">{{ address.address_line }}, {{ address.city }}</p>
+                            <a href="{% url 'edit' address.id %}" title="Edit" style="font-family: serif">
+                                <i class="fas fa-pen text-muted" style="cursor: pointer;"></i>
+                            </a>
+                        </div>
+                    {% else %}
+                        <p class="fs-6" style="font-family: serif">No default address found. Please enter your address below:</p>
+                    {% endif %}
+
+                    <!-- Change Default Address Button -->
+                    <div class="mt-3">
+                        <a href="{% url 'address' %}" class="btn btn-dark fs-6" style="font-family: serif; background-color: #031429">
+                            Change Default Address
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</section>
+</div>
 {% endblock %}

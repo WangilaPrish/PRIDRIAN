@@ -5,16 +5,72 @@
 <main class="main" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; background-color: #f4f7fb;">
     <div class="container" style="width: 100%; max-width: 800px; padding: 0;">
         <div class="card-login" style="border-radius: 15px; border: 1px solid #ececec; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); overflow: hidden; background-color: #fff; padding: 40px;">
-            <h2 style="font-weight: 600; font-family: serif; color: #031429;">Edit Product</h2>
+            <h2 class="fs-4" style="font-weight: 600; font-family: serif; text-align: center; color: #031429;">Edit Product</h2>
+            
             <form method="POST" enctype="multipart/form-data" style="width: 100%;">
                 {% csrf_token %}
-                <div class="form-group" style="margin-bottom: 20px; font-family: serif;">
-                    {{ form.as_p }}
+
+                <!-- Product Name -->
+                <div class="form-group fs-6" style="margin-bottom: 20px; font-family: serif;">
+                    <label for="name" class="fs-6" style="font-family: serif; color: #031429;">Name:</label>
+                    <input type="text" name="name" id="name" style="font-family: serif" class="form-control fs-6 w-50" value="{{ form.name.value|default:'' }}" required>
                 </div>
-                <button type="submit" 
-                    style="background-color: #031429; color: #fff; font-size: 16px; font-family: serif; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: all 0.3s ease; width: 100%;">
-                    Update Product
-                </button>
+
+                <!-- Product Price -->
+                <div class="form-group fs-6" style="margin-bottom: 20px; font-family: serif;">
+                    <label for="price" class="fs-6" style="font-family: serif; color: #031429;">Price:</label>
+                    <input type="number" name="price" id="price" style="font-family: serif" class="form-control fs-6 w-50" value="{{ form.price.value|default:'' }}" required step="0.01">
+                </div>
+
+                <!-- Product Stock -->
+                <div class="form-group fs-6" style="margin-bottom: 20px; font-family: serif;">
+                    <label for="stock" class="fs-6" style="font-family: serif; color: #031429;">Stock:</label>
+                    <input type="number" name="stock" id="stock" style="font-family: serif" class="form-control fs-6 w-50" value="{{ form.stock.value|default:0 }}" required min="0">
+                </div>
+
+                <!-- Product Brand -->
+                <div class="form-group fs-6" style="margin-bottom: 20px; font-family: serif;">
+                    <label for="brand" class="fs-6" style="font-family: serif; color: #031429;">Brand:</label>
+                    <input type="text" name="brand" id="brand" style="font-family: serif" class="form-control fs-6 w-50" value="{{ form.brand.value|default:'' }}" required>
+                </div>
+
+                <!-- Product Colors -->
+                <div class="form-group fs-6" style="margin-bottom: 20px; font-family: serif;">
+                    <label for="colors" class="fs-6" style="font-family: serif; color: #031429;">Colors:</label>
+                    <input type="text" name="colors" id="colors" style="font-family: serif" class="form-control fs-6 w-75" value="{{ form.colors.value|default:'' }}" required>
+                    <small class="form-text fs-6 text-muted" style="font-family: serif">Enter colors as a comma-separated list (e.g., Red, Blue, Green).</small>
+                </div>
+
+                <!-- Product Description -->
+                <div class="form-group fs-6" style="margin-bottom: 20px; font-family: serif;">
+                    <label for="description" class="fs-6" style="font-family: serif; color: #031429;">Description:</label>
+                    <textarea name="description" id="description" class="form-control fs-6" rows="4" required>{{ form.description.value|default:'' }}</textarea>
+                </div>
+
+                <!-- Add Fields for Multiple Images -->
+                <div class="form-group fs-6" style="margin-bottom: 20px; font-family: serif;">
+                    <label for="image1" class="fs-6" style="font-family: serif; color: #031429;">Product Image 1:</label>
+                    <input type="file" name="image1" id="image1" style="font-family: serif" class="form-control fs-6" accept="image/*" required>
+                </div>
+                <div class="form-group fs-6" style="margin-bottom: 20px; font-family: serif;">
+                    <label for="image2" class="fs-6" style="font-family: serif; color: #031429;">Product Image 2:</label>
+                    <input type="file" name="image2" id="image2" style="font-family: serif" class="form-control fs-6" accept="image/*" required>
+                </div>
+                <div class="form-group fs-6" style="margin-bottom: 20px; font-family: serif;">
+                    <label for="image3" class="fs-6" style="font-family: serif; color: #031429;">Product Image 3:</label>
+                    <input type="file" name="image3" id="image3" style="font-family: serif" class="form-control fs-6" accept="image/*" required>
+                </div>
+                <div class="form-group fs-6" style="margin-bottom: 20px; font-family: serif;">
+                    <label for="image4" class="fs-6" style="font-family: serif; color: #031429;">Product Image 4:</label>
+                    <input type="file" name="image4" id="image4" class="form-control fs-6" style="font-family: serif" accept="image/*" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <button type="submit" class="fs-6" style="background-color: #031429; color: #fff; font-family: serif; padding: 14px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: all 0.3s ease; width: 100%; text-transform: uppercase; letter-spacing: 1px;">
+                        Update Product
+                    </button>
+                </div>
             </form>
         </div>
     </div>

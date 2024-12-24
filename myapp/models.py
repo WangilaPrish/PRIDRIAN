@@ -1,6 +1,7 @@
 from datetime import timezone
 from enum import unique
-
+import os
+from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
@@ -58,22 +59,52 @@ class Profile(models.Model):
         return f"{self.user.username} - {self.full_name} "
 
 
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Change to ForeignKey
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)
+    additional_phone_number = models.CharField(max_length=15, blank=True, null=True)  # Optional
+    address_line = models.TextField()
+    additional_information = models.TextField(blank=True, null=True)  # Optional
+    region = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    is_default = models.BooleanField(default=False)  # You can add this to allow setting a default address
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+def validate_image_extension(value):
+    valid_extensions = [
+        '.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.tiff', '.svg', '.heif', '.raw'
+    ]
+    ext = os.path.splitext(value.name)[1].lower()  # Extract and normalize the file extension
+    if ext not in valid_extensions:
+        raise ValidationError(
+            'File type not supported. Please upload an image file with one of the following extensions: '
+            '.jpg, .jpeg, .png, .gif, .webp, .bmp, .tiff, .svg, .heif, .raw'
+        )
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='products/')
     stock = models.PositiveIntegerField(default=0)
     brand = models.CharField(max_length=200, null=True, blank=True)
     colors = models.CharField(max_length=500, null=True, blank=True)
+    description = models.TextField()
 
+    # Apply the validation function to the ImageFields
+    image1 = models.ImageField(upload_to='products/', validators=[validate_image_extension], blank=True, null=True)
+    image2 = models.ImageField(upload_to='products/', validators=[validate_image_extension], blank=True, null=True)
+    image3 = models.ImageField(upload_to='products/', validators=[validate_image_extension], blank=True, null=True)
+    image4 = models.ImageField(upload_to='products/', validators=[validate_image_extension], blank=True, null=True)
 
     def get_colors(self):
         return self.colors.split(",") if self.colors else []
 
     def __str__(self):
         return self.name
-
 
 class Review(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='reviews')
@@ -96,7 +127,12 @@ class CartItem(models.Model):
     def __str__(self):
         return f"{self.quantity} x {self.product.name} for {self.user.username}"
 
+class Wishlist(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    products = models.ManyToManyField('Product', related_name='wishlists')
 
+    def __str__(self):
+        return f"{self.user.username}'s Wishlist"
 
 class Order(models.Model):
     STATUS_CHOICES = [

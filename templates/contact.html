@@ -14,9 +14,8 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
     <link rel="stylesheet" href="{% static 'assets/css/fontawesome.min.css' %}">
-    
     <style>
-        .dropdown-toggle {
+                .dropdown-toggle {
             border: none; /* Removes the border around the button */
             background-color: transparent; /* Makes the background transparent */
         }
@@ -24,15 +23,10 @@
         .dropdown-toggle:focus {
             box-shadow: none; /* Removes the focus outline */
         }
-
-        .greeting {
-            font-weight: bold;
-            margin-left: 10px; /* Add spacing between the icon and the greeting */
-        }
     </style>
 </head>
 
-<body>
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
     <!-- Start Top Nav -->
     <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
         <div class="container text-light">
@@ -46,122 +40,208 @@
                 <div>
                     <a class="text-light" href="https://fb.com/templatemo" target="_blank" rel="sponsored"><i class="fab fa-facebook-f fa-sm fa-fw me-2"></i></a>
                     <a class="text-light" href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram fa-sm fa-fw me-2"></i></a>
-                    <a class="text-light" href="#" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
-                </div>
+                        </div>
             </div>
         </div>
     </nav>
     <!-- Close Top Nav -->
 
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-light shadow">
-        <div class="container d-flex justify-content-between align-items-center">
-            <a class="navbar-brand text-dark logo fa fa-bold h2 align-self-center" href="{% url 'index' %}">PRIDRIAN Luxe</a>
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-light shadow sticky-top" style="background-color: white; z-index: 1000;">
+    <div class="container d-flex justify-content-between align-items-center">
+        <!-- Brand -->
+        <a class="navbar-brand text-dark logo fa fa-bold h2 pt-2 align-self-center" href="{% url 'index' %}">
+            PRIDRIAN Luxe
+        </a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <!-- Toggle Button -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="templatemo_main_nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="align-self-center collapse navbar-collapse flex-fill d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
-                <div class="flex-fill">
-                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
-                        <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'shop' %}">Shop</a></li>
-                    </ul>
-                </div>
-                <div class="navbar align-self-center d-flex">
-                    <a class="nav-icon text-decoration-none" href="{% url 'cart' %}">
-                        <i class="fa fa-fw fa-cart-arrow-down text-dark"></i>
-                        <span id="cart-item-count">{{ totalcartitems }}</span>
+        <!-- Navigation Menu -->
+        <div class="align-self-center collapse navbar-collapse flex-fill d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
+            <!-- Links for Small Screens -->
+            <ul class="nav navbar-nav flex-column d-lg-none text-start">
+                <li class="nav-item">
+                    <a class="nav-link fs-6" href="{% url 'index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-6" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-6" href="{% url 'shop' %}">Shop</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-6" href="{% url 'cart' %}">Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-6" href="{% url 'wishlist' %}">Wishlist</a>
+                </li>
+                <li class="nav-item dropdown position-relative">
+                    <a class="nav-link dropdown-toggle fs-6" href="#" id="accountDropdownSmall" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        My Account
                     </a>
-<div class="dropdown">
-    <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown">
-        <i class="fa fa-fw fa-user text-dark mr-3" ></i>
-        {% if user.is_authenticated %}
-            <span class="greeting" style="font-family: serif">Hi, {{ user.username }}</span>
-        {% endif %}
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <li><a class="dropdown-item" style="font-family: serif" href="{% url 'profile' %}">Profile</a></li>
-        <li><a class="dropdown-item" style="font-family: serif" href="{% url 'addproduct' %}">Add Product</a></li>
-        <li><a class="dropdown-item" style="font-family: serif"  href="{% url 'order_history' %}">Order History</a></li>
-        {% if user.is_authenticated %}
-            <li><a class="dropdown-item" style="font-family: serif" href="{% url 'logout' %}">Sign Out</a></li>
-        {% endif %}
-    </ul>
-</div>
+                    <ul class="dropdown-menu dropdown-menu-custom" aria-labelledby="accountDropdownSmall">
+                        <li>
+                            <a class="dropdown-item fs-6" href="{% url 'profile' %}">Profile</a>
+                        </li>
+                        {% if user.is_superuser %}
+                        <li>
+                            <a class="dropdown-item fs-6" href="{% url 'addproduct' %}">Add Product</a>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a class="dropdown-item fs-6" href="{% url 'order_history' %}">Order History</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                        <li>
+                            <a class="dropdown-item fs-6" href="{% url 'logout' %}">Sign Out</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
 
-                </div>
-            </div>
-        </div>
-    </nav>
-    <!-- Close Header -->
-
-      {% block body %}
-      {% endblock %}
-    
-
- <footer class="bg-black" id="tempaltemo_footer">
-    <div class="container">
-        <div class="row">
-
-            <!-- Left column for the content -->
-            <div class="col-md-4 pt-3">
-                <h2 class="h2 text-light border-bottom pb-3 border-light logo"  style="font-family: serif">PRIDRIAN Luxe</h2>
-                <ul class="list-unstyled text-light footer-link-list">
-                    <li  style="font-family: serif">
-                        <i class="fas fa-map-marker-alt fa-fw"></i>
-                        Nairobi - Kenya
-                    </li>
-                    <li>
-                        <i class="fa fa-phone fa-fw"></i>
-                        <a class="text-decoration-none" href="tel:010-020-0340"  style="font-family: serif">070-020-0340</a>
-                    </li>
-                    <li>
-                        <i class="fa fa-envelope fa-fw"></i>
-                        <a class="text-decoration-none" href="mailto:info@company.com"  style="font-family: serif">info@pridrianluxe.com</a>
-                    </li>
+            <!-- Links for Large Screens -->
+            <div class="flex-fill">
+                <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                    <li class="nav-item"><a class="nav-link fs-6" href="{% url 'index' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link fs-6" href="{% url 'about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link fs-6" href="{% url 'shop' %}">Shop</a></li>
                 </ul>
-                <div class="row text-light mb-2">
-                    <div class="col-auto me-auto">
-                        <ul class="list-inline text-left footer-icons">
-                            <li class="list-inline-item border border-light rounded-circle text-center">
-                                <a class="text-light text-decoration-none" target="_blank" href="http://facebook.com/"><i class="fab fa-facebook-f fa-lg fa-fw"></i></a>
-                            </li>
-                            <li class="list-inline-item border border-light rounded-circle text-center">
-                                <a class="text-light text-decoration-none" target="_blank" href="https://www.instagram.com/"><i class="fab fa-instagram fa-lg fa-fw"></i></a>
-                            </li>
-
-                        </ul>
+            </div>
+            <div class="navbar align-self-center d-flex">
+                <a class="nav-icon text-decoration-none" href="{% url 'cart' %}">
+                    <i class="fa fa-fw fa-cart-arrow-down fs-6 text-dark"></i>
+                    <span id="cart-item-count">{{ totalcartitems }}</span>
+                </a>
+                <a class="nav-icon text-decoration-none" href="{% url 'wishlist' %}">
+                    <i class="fa fa-fw fa-heart fs-6 text-dark"></i>
+                    
+                </a>
+                <div class="dropdown">
+                    <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fa fa-fw fa-user fs-6 text-dark mr-3"></i>
+                        {% if user.is_authenticated %}
+                            <span class="greeting fs-6" style="font-family: serif">Hi, {{ user.username }}</span>
+                        {% endif %}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item fs-6" style="font-family: serif" href="{% url 'profile' %}">Profile</a></li>
+                        {% if user.is_superuser %}  <!-- Check if the user is an admin -->
+                            <li><a class="dropdown-item fs-6" style="font-family: serif" href="{% url 'addproduct' %}">Add Product</a></li>
+                        {% endif %}
+                        <li><a class="dropdown-item fs-6" style="font-family: serif" href="{% url 'order_history' %}">Order History</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a class="dropdown-item fs-6" style="font-family: serif" href="{% url 'logout' %}">Sign Out</a></li>
+                        {% endif %}
+                    </ul>
                     </div>
                 </div>
             </div>
-
-
-        </div>
-        <!-- Bottom border -->
-        <div class="col-12">
-            <div class="w-100 my-3 border-top border-light"></div>
         </div>
     </div>
+</nav>
+<!-- Close Header -->
+
+<!-- Additional CSS -->
+<style>
+    /* Main Dropdown: Prevent pushing content */
+    .dropdown-menu-custom {
+        position: absolute !important;
+        top: 100%;
+        left: 0;
+        z-index: 1050;
+        display: none; /* Initially hidden */
+    }
+
+    /* Show dropdown on toggle */
+    .dropdown.show .dropdown-menu-custom {
+        display: block;
+    }
+
+    /* My Account Dropdown: Hover on large screens */
+    @media (min-width: 992px) {
+        .hover-dropdown:hover .dropdown-menu-custom {
+            display: block !important;
+        }
+    }
+
+    /* Small screens: Full width dropdowns */
+    @media (max-width: 992px) {
+        .dropdown-menu-custom {
+            width: 100%;
+        }
+    }
+</style>
 
 
+    <main style="flex-grow: 1;">
+        {% block body %}
+        {% endblock %}
+    </main>
 
-        <div class="w-100 bg-black py-0">
-            <div class="container">
-                <div class="row pt-1">
-                    <div class="col-12">
-                        <p class="text-left text-light" style="text-align: center; font-family: serif">
-                            Copyright &copy; 2024 PRIDRIAN Luxe. All Rights Reserved.
-                        </p>
-                    </div>
+    <footer class="bg-black" id="tempaltemo_footer">
+        <div class="container">
+            <div class="row">
+                <!-- Logo Column -->
+                <div class="col-md-4 col-12 text-center text-md-start pt-2">
+                    <h2 class="fs-2 text-light logo" style="font-family: serif;">PRIDRIAN Luxe</h2>
+                </div>
+
+                <!-- Contact Info Column -->
+                <div class="col-md-4 col-12 d-flex justify-content-center pt-2">
+                    <ul class="list-unstyled text-light footer-link-list mb-0 text-center">
+                        <li style="font-family: serif" class="fs-6">
+                            <i class="fas fa-map-marker-alt fa-fw"></i> Nairobi - Kenya
+                        </li>
+                        <li>
+                            <i class="fa fa-phone fa-fw"></i>
+                            <a class="text-decoration-none text-light fs-6" href="tel:010-020-0340" style="font-family: serif">070-020-0340</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope fa-fw"></i>
+                            <a class="text-decoration-none text-light fs-6" href="mailto:info@pridrianluxe.com" style="font-family: serif">info@pridrianluxe.com</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social Media Column -->
+                <div class="col-md-4 mt-3 pe-5 col-12 text-center text-md-end pt-2">
+                    <ul class="list-inline footer-icons mb-0">
+                        <li class="list-inline-item border border-light rounded-circle text-center me-2">
+                            <a class="text-light fs-6 text-decoration-none" target="_blank" href="http://facebook.com/">
+                                <i class="fab fa-facebook-f fs-6 fa-lg fa-fw"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item border border-light rounded-circle text-center">
+                            <a class="text-light fs-6 text-decoration-none" target="_blank" href="https://www.instagram.com/">
+                                <i class="fab fa-instagram fs-6 fa-lg fa-fw"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Bottom Border -->
+            <div class="row">
+                <div class="col-12 mt-3">
+                    <div class="w-100 my-2 border-top border-light"></div>
+                </div>
+            </div>
+
+            <!-- Bottom Text -->
+            <div class="row">
+                <div class="col-12">
+                    <p class="text-center text-light mb-0 fs-6" style="font-family: serif;">
+                        Copyright &copy; <span id="current-year">2024</span> PRIDRIAN Luxe. All Rights Reserved.
+                    </p>
                 </div>
             </div>
         </div>
     </footer>
-    <!-- Start Script -->
-
 
     <!-- Start Script -->
     <script src="{% static 'assets/js/jquery-1.11.0.min.js' %}"></script>
@@ -169,8 +249,13 @@
     <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'assets/js/templatemo.js' %}"></script>
     <script src="{% static 'assets/js/custom.js' %}"></script>
-   
-    <!-- End Script -->
-</body>
 
+    <!-- JavaScript for Dynamic Year -->
+    <script>
+        const currentYear = new Date().getFullYear();
+        document.getElementById("current-year").textContent = currentYear;
+    </script>
+    <!-- End Script -->
+
+</body>
 </html>

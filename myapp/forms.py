@@ -1,18 +1,24 @@
 from django import forms
 from django.contrib.auth import get_user_model
-
-from .models import Product, User, Profile, Review
+from django import forms
+from .models import Product
+from django.core.exceptions import ValidationError
+import os
+from .models import Product, User, Profile, Review, Address
 from django.contrib.auth.forms import UserCreationForm
+
+
 
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'price', 'stock', 'brand', 'colors', 'image']
+        fields = ['name', 'price', 'stock', 'brand', 'colors', 'description', 'image1', 'image2', 'image3', 'image4' ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['colors'].help_text = "Enter colors as a comma-separated list (e.g., Red, Blue, Green)."
+
 
 
 
@@ -37,6 +43,28 @@ class ProfileForm(forms.ModelForm):
         fields = ['full_name', 'phone', 'address', 'country', 'image']  # Include all relevant fields
 
 
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address  # Make sure to use your actual Address model
+        fields = [
+            'first_name',
+            'last_name',
+            'phone_number',
+            'additional_phone_number',
+            'address_line',
+            'additional_information',
+            'region',
+            'city'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(AddressForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'  # Add Bootstrap class to each field
+
+
+class NewsletterSubscriptionForm(forms.Form):
+    email = forms.EmailField(label='Email', required=True)
 
 class ReviewForm(forms.ModelForm):
     class Meta:

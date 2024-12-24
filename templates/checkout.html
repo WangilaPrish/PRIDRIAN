@@ -2,75 +2,75 @@
 {% load static %}
 {% block body %}
 <section class="h-100">
-  <div class="container h-100 py-5">
-    <div class="row d-flex justify-content-center align-items-start h-100">
-      <div class="col-10">
-        {% if user.is_authenticated %}
-        <h3 class="fw-bold mb-4" style="font-family: serif">Checkout</h3>
+    <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-start h-100">
+            <div class="col-10">
+                {% if user.is_authenticated %}
+                <h3 class="fw-bold mb-4" style="font-family: serif; color: #031429;">Checkout</h3>
 
-        <div class="row">
-          <!-- Left Column: Order Summary -->
-          <div class="col-md-7 mb-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="fw-bold" style="font-family: serif">Items</h5>
-                <ul class="list-unstyled">
-                  {% for product_id, item in cart_data.items %}
-                  <li class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="d-flex align-items-center">
-                      <img src="{{ item.image }}" alt="{{ item.name }}" style="width: 50px; height: auto; margin-right: 10px;">
-                      <div>
-                        <p class="mb-0 fw-bold" style="font-family: serif">{{ item.name }}</p>
-                        <p class="text-muted" style="font-family: serif">Color: {{ item.color }}, Quantity: {{ item.quantity }}</p>
-                      </div>
+                <div class="row">
+                    <!-- Left Column: Order Summary -->
+                    <div class="col-12 col-md-7 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="fw-bold fs-6" style="font-family: serif; color: #031429;">Items in Your Cart</h5>
+                                <ul class="list-unstyled">
+                                    {% for product_id, item in cart_data.items %}
+                                    <li class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ item.image }}" alt="{{ item.name }}" style="width: 50px; height: auto; margin-right: 10px;">
+                                            <div>
+                                                <p class="mb-0 fs-6" style="font-family: serif;">{{ item.name }}</p>
+                                                <p class="text-muted fs-6" style="font-family: serif;">Color: {{ item.color }}, Quantity: {{ item.quantity }}</p>
+                                            </div>
+                                        </div>
+                                        <span style="font-family: serif;" class="fs-6">Ksh {{ item.price }}</span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <span style="font-family: serif">Ksh {{ item.price }}</span>
-                  </li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-          </div>
 
-          <!-- Right Column: Total and Payment -->
-          <div class="col-md-5 mb-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="fw-bold mb-3" style="font-family: serif">Order Summary</h5>
-                <div class="d-flex justify-content-between mb-2">
-                  <p style="font-family: serif">Subtotal</p>
-                  <p style="font-family: serif">Ksh {{ cart_total }}</p>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <p style="font-family: serif">Shipping Fee</p>
-                  <p style="font-family: serif">Ksh 150</p>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <p class="fw-bold" style="font-family: serif">Total</p>
-                  <p class="fw-bold" style="font-family: serif">Ksh {{ cart_total|add:150 }}</p>
-                </div>
+                    <!-- Right Column: Total and Payment -->
+                    <div class="col-12 col-md-5 mb-4"> 
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="fw-bold mb-3 fs-6" style="font-family: serif; color: #031429;">Order Summary</h5>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <p style="font-family: serif;" class="fs-6">Subtotal</p>
+                                    <p style="font-family: serif;" class="fs-6">Ksh {{ cart_total }}</p>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <p style="font-family: serif;" class="fs-6">Standard Shipping Fee</p>
+                                    <p style="font-family: serif;"class="fs-6">Ksh 0</p>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <p class="fw-bold" style="font-family: serif;">Total</p>
+                                    <p class="fw-bold" style="font-family: serif;" class="fs-6">Ksh {{ cart_total|add:0 }}</p>
+                                </div>
 
-                <form method="POST" action="{% url 'stk' %}">
-                  {% csrf_token %}
-                  <div class="mb-3">
-                    <label for="mpesa_number" class="form-label" style="font-family: serif;">Mpesa Number</label>
-                    <input type="text" class="form-control" id="mpesa_number" value="254" name="mpesa_number" placeholder="Enter your Mpesa number" required>
-                  </div>
-                    <input type="hidden" name="total_amount" value="{{ cart_total|add:150 }}"> <!-- Pass total amount here -->
-                  <button type="submit" class="btn btn-secondary w-100" style="font-family: serif; background-color: #031429; color: #fff;">Pay Now</button>
-                </form>
-              </div>
+                                <form method="POST" action="{% url 'stk' %}">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="mpesa_number" class="form-label fs-6" style="font-family: serif;">Mpesa Number</label>
+                                        <input type="text" class="form-control fs-6" id="mpesa_number" name="mpesa_number" value="254" style="font-family: serif" placeholder="Enter your Mpesa number" required>
+                                    </div>
+                                    <input type="hidden" name="total_amount" value="{{ cart_total|add:0 }}"> <!-- Pass total amount here -->
+                                    <button type="submit" class="btn btn-secondary w-100" style="font-family: serif; background-color: #031429; color: #fff;">Pay Now</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-warning text-center" style="font-family: serif;">
+                    <p>Please <a href="{% url 'login' %}" style="color: #031429; font-weight: bold;">Login</a> or 
+                    <a href="{% url 'register' %}" style="color: #031429; font-weight: bold;">Register</a> to proceed with payment.</p>
+                </div>
+                {% endif %}
             </div>
-          </div>
         </div>
-        {% else %}
-        <div class="alert alert-warning text-center" style="font-family: serif;">
-          <p>Please <a href="{% url 'login' %}" style="color: #031429; font-weight: bold;">Login</a> or 
-            <a href="{% url 'register' %}" style="color: #031429; font-weight: bold;">Register</a> to proceed with payment.</p>
-        </div>
-        {% endif %}
-      </div>
     </div>
-  </div>
 </section>
 {% endblock %}
