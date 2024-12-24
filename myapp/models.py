@@ -58,6 +58,21 @@ class Profile(models.Model):
         return f"{self.user.username} - {self.full_name} "
 
 
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Change to ForeignKey
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)
+    additional_phone_number = models.CharField(max_length=15, blank=True, null=True)  # Optional
+    address_line = models.TextField()
+    additional_information = models.TextField(blank=True, null=True)  # Optional
+    region = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    is_default = models.BooleanField(default=False)  # You can add this to allow setting a default address
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -96,7 +111,12 @@ class CartItem(models.Model):
     def __str__(self):
         return f"{self.quantity} x {self.product.name} for {self.user.username}"
 
+class Wishlist(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    products = models.ManyToManyField('Product', related_name='wishlists')
 
+    def __str__(self):
+        return f"{self.user.username}'s Wishlist"
 
 class Order(models.Model):
     STATUS_CHOICES = [

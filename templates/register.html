@@ -22,8 +22,8 @@
                     {% endif %}
 
                     <div class="heading_s1" style="margin-bottom: 30px; text-align: center;">
-                        <h2 style="font-family: 'Roboto', sans-serif; font-weight: 600; color: #333;">Create an Account</h2>
-                        <p style="color: #777; font-size: 14px;">Already have an account? <a href="{% url 'login' %}" style="color: #031429; text-decoration: none;">Sign In</a></p>
+                        <h5 style="font-family: 'Roboto', sans-serif; font-weight: 600; color: #333;">Create an Account</h5>
+                        <p style="color: #777; font-size: 14px;" class="fs-6">Already have an account? <a href="{% url 'login' %}" style="color: #031429; font-family: serif; text-decoration: none;" class="fs-6">Sign In</a></p>
                     </div>
 
                     <form method="post" style="width: 100%;">
@@ -31,7 +31,7 @@
                         
                         <!-- Username -->
                         <div class="form-group" style="margin-bottom: 20px;">
-                            <input type="text" name="username" placeholder="Username" 
+                            <input type="text" class="fs-6" name="username" placeholder="Username" 
                                 style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.3s, box-shadow 0.3s;" 
                                 onfocus="this.style.borderColor='#031429'; this.style.boxShadow='0 0 6px rgba(24, 119, 242, 0.2)';" 
                                 onblur="this.style.borderColor='#ccc'; this.style.boxShadow='none';" required />
@@ -39,7 +39,7 @@
 
                         <!-- Email -->
                         <div class="form-group" style="margin-bottom: 20px;">
-                            <input type="email" name="email" placeholder="Email" 
+                            <input type="email" class="fs-6" name="email" placeholder="Email" 
                                 style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.3s, box-shadow 0.3s;" 
                                 onfocus="this.style.borderColor='#031429'; this.style.boxShadow='0 0 6px rgba(24, 119, 242, 0.2)';" 
                                 onblur="this.style.borderColor='#ccc'; this.style.boxShadow='none';" required />
@@ -47,7 +47,7 @@
 
                         <!-- Password -->
                         <div class="form-group" style="margin-bottom: 20px;">
-                            <input type="password" name="password1" placeholder="Password" 
+                            <input type="password" class="fs-6" name="password1" placeholder="Password" 
                                 style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.3s, box-shadow 0.3s;" 
                                 onfocus="this.style.borderColor='#031429'; this.style.boxShadow='0 0 6px rgba(24, 119, 242, 0.2)';" 
                                 onblur="this.style.borderColor='#ccc'; this.style.boxShadow='none';" required />
@@ -55,7 +55,7 @@
 
                         <!-- Confirm Password -->
                         <div class="form-group" style="margin-bottom: 30px;">
-                            <input type="password" name="password2" placeholder="Confirm Password" 
+                            <input type="password" class="fs-6" name="password2" placeholder="Confirm Password" 
                                 style="width: 100%; padding: 12px 15px; font-size: 14px; font-family: 'Roboto', sans-serif; color: #333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); outline: none; transition: border-color 0.3s, box-shadow 0.3s;" 
                                 onfocus="this.style.borderColor='#031429'; this.style.boxShadow='0 0 6px rgba(24, 119, 242, 0.2)';" 
                                 onblur="this.style.borderColor='#031429'; this.style.boxShadow='none';" required />
@@ -63,8 +63,8 @@
 
                         <!-- Submit Button -->
                         <div class="form-group mb-30" style="margin-bottom: 30px;">
-                            <button type="submit" class="btn btn-secondary btn-block" 
-                                style="background-color: #031429; color: #fff; font-size: 16px; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: background-color 0.3s, transform 0.2s; width: 100%;"
+                            <button type="submit" class="btn btn-secondary btn-block fs-6" 
+                                style="background-color: #031429; color: #fff; font-family: serif; font-size: 16px; padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: background-color 0.3s, transform 0.2s; width: 100%;"
                                 onmouseover="this.style.backgroundColor='#031429';" 
                                 onmouseout="this.style.backgroundColor='#031429';">
                                 Sign Up
