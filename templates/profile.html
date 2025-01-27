@@ -3,48 +3,48 @@
 
 {% block body %}
 <div class="container py-5">
-    <h4 class="text-center mb-4" style="text-transform: capitalize;">Account Overview</h4>
+    <h4 class="text-center mb-4 fw-bold" style="text-transform: capitalize;font-family: serif">Account Overview</h4>
 
     <div class="row mb-4">
         <div class="col-md-6">
             <div class="card mb-4">
                 <div class="card-body">
-                    <h6 class="card-title" style="text-transform: uppercase;">Account Details</h6>
+                    <h6 class="card-title fw-bold" style="text-transform: uppercase;font-family: serif">Account Details</h6>
                     <hr>
-                    <p class="fs-6">{{ user.first_name }} {{ user.last_name }}</p>
-                    <p class="fs-6">{{ user.email }}</p>
+                    <p class="fs-6" style="font-family: serif">{{ user.first_name }} {{ user.last_name }}</p>
+                    <p class="fs-6" style="font-family: serif">{{ user.email }}</p>
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-6">
             <div class="card mb-4">
                 <div class="card-body">
-                    <h6 class="card-title" style="text-transform: uppercase; display: flex; justify-content: space-between; align-items: center;">
-                        Address Book 
+                    <h6 class="card-title fw-bold" style="text-transform: uppercase; font-family:serif; display: flex; justify-content: space-between; align-items: center;">
+                        Address Book
                         <a href="{% url 'add_address' %}" title="Add New Address">
-                            <i class="fas fa-plus" style="cursor: pointer;"></i>
+                            <i class="fas fa-plus text-muted" style="cursor: pointer;"></i>
                         </a>
                     </h6>
                     <hr>
 
                     {% if address %}
-                        <p class="fs-6"><strong>Your default shipping address:</strong></p>
+                        <p class="fs-6" style="font-family: serif"><strong>Your default shipping address:</strong></p>
                         <div class="address-entry">
-                            <p class="fs-6">{{ address.first_name }} {{ address.last_name }}</p>
-                            <p class="fs-6">{{ address.phone_number }}</p>
-                            <p class="fs-6">{{ address.address_line }}, {{ address.city }}</p>
-                            <a href="{% url 'edit' address.id %}" title="Edit">
-                                <i class="fas fa-pen" style="cursor: pointer;"></i>
+                            <p class="fs-6" style="font-family: serif">{{ address.first_name }} {{ address.last_name }}</p>
+                            <p class="fs-6" style="font-family: serif">{{ address.phone_number }}</p>
+                            <p class="fs-6" style="font-family: serif">{{ address.address_line }}, {{ address.city }}</p>
+                            <a href="{% url 'edit' address.id %}" title="Edit" style="font-family: serif">
+                                <i class="fas fa-pen text-muted" style="cursor: pointer;"></i>
                             </a>
                         </div>
                     {% else %}
-                        <p class="fs-6">No default address found. Please enter your address below:</p>
+                        <p class="fs-6" style="font-family: serif">No default address found. Please enter your address below:</p>
                     {% endif %}
 
                     <!-- Change Default Address Button -->
                     <div class="mt-3">
-                        <a href="{% url 'address' %}" class="btn btn-secondary fs-6" style="font-family: serif">
+                        <a href="{% url 'address' %}" class="btn btn-dark fs-6" style="font-family: serif; background-color: #031429">
                             Change Default Address
                         </a>
                     </div>

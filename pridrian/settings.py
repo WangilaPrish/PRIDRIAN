@@ -140,3 +140,5 @@ LOGOUT_REDIRECT_URL = '/login/'  # or wherever you want users to go after loggin
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default session engine
 AUTH_USER_MODEL = 'myapp.User'
+
+
