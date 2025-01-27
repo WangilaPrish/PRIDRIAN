@@ -1,6 +1,7 @@
 from datetime import timezone
 from enum import unique
-
+import os
+from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
@@ -74,21 +75,36 @@ class Address(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
+def validate_image_extension(value):
+    valid_extensions = [
+        '.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.tiff', '.svg', '.heif', '.raw'
+    ]
+    ext = os.path.splitext(value.name)[1].lower()  # Extract and normalize the file extension
+    if ext not in valid_extensions:
+        raise ValidationError(
+            'File type not supported. Please upload an image file with one of the following extensions: '
+            '.jpg, .jpeg, .png, .gif, .webp, .bmp, .tiff, .svg, .heif, .raw'
+        )
+
 class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='products/')
     stock = models.PositiveIntegerField(default=0)
     brand = models.CharField(max_length=200, null=True, blank=True)
     colors = models.CharField(max_length=500, null=True, blank=True)
+    description = models.TextField()
 
+    # Apply the validation function to the ImageFields
+    image1 = models.ImageField(upload_to='products/', validators=[validate_image_extension], blank=True, null=True)
+    image2 = models.ImageField(upload_to='products/', validators=[validate_image_extension], blank=True, null=True)
+    image3 = models.ImageField(upload_to='products/', validators=[validate_image_extension], blank=True, null=True)
+    image4 = models.ImageField(upload_to='products/', validators=[validate_image_extension], blank=True, null=True)
 
     def get_colors(self):
         return self.colors.split(",") if self.colors else []
 
     def __str__(self):
         return self.name
-
 
 class Review(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='reviews')

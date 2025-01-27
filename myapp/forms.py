@@ -1,18 +1,24 @@
 from django import forms
 from django.contrib.auth import get_user_model
-
+from django import forms
+from .models import Product
+from django.core.exceptions import ValidationError
+import os
 from .models import Product, User, Profile, Review, Address
 from django.contrib.auth.forms import UserCreationForm
+
+
 
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'price', 'stock', 'brand', 'colors', 'image']
+        fields = ['name', 'price', 'stock', 'brand', 'colors', 'description', 'image1', 'image2', 'image3', 'image4' ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['colors'].help_text = "Enter colors as a comma-separated list (e.g., Red, Blue, Green)."
+
 
 
 

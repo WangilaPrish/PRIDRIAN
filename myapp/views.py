@@ -23,29 +23,35 @@ from myapp.credentials import MpesaAccessToken, LipanaMpesaPpassword
 # Create your views here.
 def user_login(request):
     if request.user.is_authenticated:
-        messages.info(request, "You are already logged in.")
-        return redirect("index")  # Change this to your desired redirect URL
+        return redirect("index")  # Redirect to the index page if already logged in
 
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-        try:
-            user = User.objects.get(email=email)
-            user = authenticate(request, username=email, password=password)
+        # Authenticate the user
+        user = authenticate(request, username=email, password=password)
 
-            if user:
-                login(request, user)
+        if user is not None:
+            # Ensure the profile exists
+            try:
+                user.profile  # Try accessing the profile to ensure it exists
+            except Profile.DoesNotExist:
+                # If no profile exists, create one
+                Profile.objects.create(user=user)
 
-                next_url = request.GET.get("next", "index")  # Adjust as needed
-                return redirect(next_url)
+            # Log the user in
+            login(request, user)
+            next_url = request.GET.get("next", "index")  # Redirect to 'next' or index
+            return redirect(next_url)
+        else:
+            # If authentication fails, check if the user exists
+            if User.objects.filter(email=email).exists():
+                messages.error(request, "Invalid password. Please try again.")
             else:
-                messages.error(request, "Invalid email or password.")
-        except User.DoesNotExist:
-            messages.error(request, f"No account found for {email}. Please register.")
+                messages.error(request, f"No account found for {email}. Please register.")
 
     return render(request, "registration/login.html")
-
 
 def user_logout(request):
     logout(request)
@@ -252,7 +258,7 @@ def index(request):
 
 
 def shop(request):
-    brand_name = request.GET.get('brand')
+    brand_name = request.GET.get('brand', '')  # Get the selected brand, default to an empty string
     sort_by = request.GET.get('sort_by', 'popularity')  # Default sort is by popularity
 
     # Filter by brand
@@ -264,6 +270,8 @@ def shop(request):
     # Sort products based on the selected criteria
     if sort_by == 'price':
         products = products.order_by('price')
+    elif sort_by == 'price_desc':
+        products = products.order_by('-price')
     elif sort_by == 'arrival':
         products = products.order_by('-created_at')  # Assuming you have a created_at field
     else:
@@ -272,7 +280,14 @@ def shop(request):
     # Get distinct brands for the filter options
     brands = Product.objects.values_list('brand', flat=True).distinct()
 
-    return render(request, 'shop.html', {'products': products, 'brands': brands})
+    # Pass the selected brand and sorting option to the template
+    context = {
+        'products': products,
+        'brands': brands,
+        'selected_brand': brand_name,
+        'selected_sort': sort_by
+    }
+    return render(request, 'shop.html', context)
 
 
 def cart(request):
@@ -315,12 +330,11 @@ def wishlist(request):
             product.is_out_of_stock = product.stock == 0
 
         # Get the total number of products in the wishlist
-        total_products_count = wishlist_items.count()
+        total_products_count = len(wishlist_items)  # Use len() for a list
 
         return render(request, 'wishlist.html', {'page_obj': page_obj, 'total_products_count': total_products_count})  # Pass 'total_products_count'
     else:
         return render(request, 'wishlist.html', {'page_obj': None, 'total_products_count': 0})  # Pass 0 for unauthenticated users
-
 
 
 def add_to_wishlist(request, product_id):
@@ -404,6 +418,7 @@ def is_admin(user):
     """Check if the user is an admin."""
     return user.is_superuser
 
+
 @login_required  # Ensure the user is logged in
 @user_passes_test(is_admin)  # Ensure the user is an admin
 def addproduct(request):
@@ -411,10 +426,25 @@ def addproduct(request):
         raise PermissionDenied  # Raise a 403 Forbidden error
 
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
+        form = ProductForm(request.POST, request.FILES)  # Include request.FILES to handle image files
         if form.is_valid():
-            form.save()
-            return redirect('shop')
+            # Save the product
+            product = form.save(commit=False)
+
+            # Check if images are provided and assign them
+            if 'image1' in request.FILES:
+                product.image1 = request.FILES['image1']
+            if 'image2' in request.FILES:
+                product.image2 = request.FILES['image2']
+            if 'image3' in request.FILES:
+                product.image3 = request.FILES['image3']
+            if 'image4' in request.FILES:
+                product.image4 = request.FILES['image4']
+
+            # Save the product with the images
+            product.save()
+
+            return redirect('shop')  # Redirect to the shop page after successful product creation
     else:
         form = ProductForm()
 
@@ -441,11 +471,15 @@ def edit_product(request, product_id):
 def add_to_cart(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)  # Load JSON data from the request body
+            # Parse the incoming JSON data
+            data = json.loads(request.body)
+            print("Received data:", data)  # Debugging: Log the received data
 
-            # Check if necessary data is present
-            if 'id' not in data or 'name' not in data or 'quantity' not in data or 'price' not in data or 'image' not in data or 'color' not in data:
-                return JsonResponse({'success': False, 'message': 'Missing required fields'}, status=400)
+            # Check if all required fields are present in the request
+            required_fields = ['id', 'name', 'quantity', 'price', 'image', 'color']
+            for field in required_fields:
+                if field not in data:
+                    return JsonResponse({'success': False, 'message': f'Missing required field: {field}'}, status=400)
 
             # Create the cart product structure
             cart_product = {
@@ -455,16 +489,16 @@ def add_to_cart(request):
                     'price': float(data['price']),
                     'image': data['image'],
                     'product_id': data['id'],
-                    'color': data['color'],  # Add the color to the cart product structure
+                    'color': data['color'],  # Add color to the cart structure
                 }
             }
 
-            # Initialize or update the session cart
+            # Check if there's an existing cart in the session
             if 'cart_data_object' in request.session:
                 cart_data = request.session['cart_data_object']
 
                 if str(data['id']) in cart_data:
-                    # Update the quantity of the existing product
+                    # Update quantity if the product already exists in the cart
                     cart_data[str(data['id'])]['quantity'] += int(data['quantity'])
                 else:
                     # Add the new product to the cart
@@ -473,23 +507,25 @@ def add_to_cart(request):
                 # Save the updated cart to the session
                 request.session['cart_data_object'] = cart_data
             else:
-                # Initialize the session cart with the new product
+                # Initialize a new cart with the product
                 request.session['cart_data_object'] = cart_product
 
-            # Log the updated cart for debugging
-            print(f"Updated cart: {request.session['cart_data_object']}")  # Debugging line
+            # Debugging: Log the updated cart data
+            print(f"Updated cart data: {request.session['cart_data_object']}")
 
-            # Return the updated cart data and total item count
+            # Calculate the total number of items in the cart
+            total_cart_items = sum(item['quantity'] for item in request.session['cart_data_object'].values())
+
             return JsonResponse({
+                "success": True,
                 "data": request.session['cart_data_object'],
-                'totalcartitems': len(request.session['cart_data_object'])
+                "totalcartitems": total_cart_items
             })
 
         except json.JSONDecodeError:
             return JsonResponse({'success': False, 'message': 'Invalid JSON'}, status=400)
     else:
         return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
-
 
 def remove_from_cart(request, item_id):
     if request.method == 'POST':
@@ -594,7 +630,7 @@ def checkout(request):
     if request.method == 'POST':
         # Retrieve the M-Pesa number and total amount from the POST data
         mpesa_number = request.POST.get('mpesa_number')
-        total_amount = cart_total + 150  # Add fixed shipping fee
+        total_amount = cart_total + 0  # Add fixed shipping fee
 
         # Validate input
         if not mpesa_number:
@@ -663,6 +699,7 @@ def stk(request):
         if not mpesa_number or not total_amount:
             return HttpResponse("Mpesa number and total amount are required.", status=400)
 
+        # Access token and API setup
         access_token = MpesaAccessToken.validated_mpesa_access_token
         api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
         headers = {"Authorization": "Bearer %s" % access_token}
@@ -675,22 +712,32 @@ def stk(request):
             "PartyA": mpesa_number,
             "PartyB": LipanaMpesaPpassword.Business_short_code,
             "PhoneNumber": mpesa_number,
-            "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",  # Use your callback URL
+            "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",  # Replace with your callback URL
             "AccountReference": "PRIDRIAN Luxe",
             "TransactionDesc": "Order Payment"
         }
 
+        # Make the API request
         response = requests.post(api_url, json=request_data, headers=headers)
 
         if response.status_code == 200:
             # Payment initiated successfully
-            return redirect('order_success')  # Redirect to your order success page
+            return redirect('order_success')  # Replace 'order_success' with your actual success view name
         else:
-            # Handle errors in the payment process
+            # Log the error response for debugging
+            error_message = f"Payment failed: {response.text}"
+            print(error_message)  # Log error (you can use logging instead of print)
             return HttpResponse("Payment failed. Please try again.", status=400)
 
-
+    # Handle non-POST requests gracefully
+    return HttpResponse("Invalid request method. Only POST is allowed.", status=405)
 
 
 def order_success(request):
-    return render(request, 'order_success.html')
+    # Fetch the most recent order or use a specific identifier (e.g., order ID)
+    order_id = request.session.get('order_id')  # Store the order ID in session after payment
+    if not order_id:
+        return HttpResponse("No order information available.", status=400)
+
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'order_success.html', {'order': order})

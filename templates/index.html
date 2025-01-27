@@ -6,13 +6,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
- 
+
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/icons8-bag-16.png' %}">
 
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/templatemo.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
-    
+
     <!-- Load fonts style after rendering the layout styles -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
     <link rel="stylesheet" href="{% static 'assets/css/fontawesome.min.css' %}">
@@ -26,7 +26,7 @@
             box-shadow: none; /* Removes the focus outline */
         }
     </style>
-    
+
 
 </head>
 
@@ -44,8 +44,8 @@
                 <div>
                     <a class="text-light" href="https://fb.com/templatemo" target="_blank" rel="sponsored"><i class="fab fa-facebook-f fa-sm fa-fw me-2"></i></a>
                     <a class="text-light" href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram fa-sm fa-fw me-2"></i></a>
-                    <a class="text-light" href="" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
                     
+
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
 <nav class="navbar navbar-expand-lg navbar-light shadow sticky-top" style="background-color: white; z-index: 1000;">
     <div class="container d-flex justify-content-between align-items-center">
 
-        <a class="navbar-brand text-dark logo fa fa-bold h2 align-self-center" href="{% url 'index' %}">
+        <a class="navbar-brand text-dark logo fa fa-bold h2 pt-2 align-self-center" href="{% url 'index' %}">
             PRIDRIAN Luxe
         </a>
 
@@ -69,32 +69,32 @@
             <div class="flex-fill">
                 <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'index' %}">Home</a>
+                        <a class="nav-link fs-6" href="{% url 'index' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'about' %}">About</a>
+                        <a class="nav-link fs-6" href="#about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'shop' %}">Shop</a>
+                        <a class="nav-link fs-6" href="{% url 'shop' %}">Shop</a>
                     </li>
                 </ul>
             </div>
             <div class="navbar align-self-center d-flex">
                 <div class="dropdown">
-                    <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown">
+                    <button type="button" class="dropdown-toggle fs-6" data-bs-toggle="dropdown">
                         <i class="fa fa-fw fa-user text-dark mr-3"></i>
                         {% if user.is_authenticated %}
                             <span class="greeting" style="font-family: serif">Hi, {{ user.username }}</span>
                         {% endif %}
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" style="font-family: serif" href="{% url 'profile' %}">Profile</a></li>
+                        <li><a class="dropdown-item fs-6" style="font-family: serif" href="{% url 'profile' %}">Profile</a></li>
                         {% if user.is_superuser %}  <!-- Check if the user is an admin -->
-                            <li><a class="dropdown-item" style="font-family: serif" href="{% url 'addproduct' %}">Add Product</a></li>
+                            <li><a class="dropdown-item fs-6" style="font-family: serif" href="{% url 'addproduct' %}">Add Product</a></li>
                         {% endif %}
-                        <li><a class="dropdown-item" style="font-family: serif" href="{% url 'order_history' %}">Order History</a></li>
+                        <li><a class="dropdown-item fs-6" style="font-family: serif" href="{% url 'order_history' %}">Order History</a></li>
                         {% if user.is_authenticated %}
-                            <li><a class="dropdown-item" style="font-family: serif" href="{% url 'logout' %}">Sign Out</a></li>
+                            <li><a class="dropdown-item fs-6" style="font-family: serif" href="{% url 'logout' %}">Sign Out</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -108,212 +108,509 @@
 
 
 
-    <!-- Start Banner Hero -->
-    <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
-            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li>
-            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <div class="container">
-                    <div class="row p-5">
-                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <img class="img-fluid" src="{% static 'assets/img/one.avif' %}" alt="">
-                        </div>
-                        <div class="col-lg-6 mb-0 d-flex align-items-center">
-                            <div class="text-align-left align-self-center">
-                                
-                                <h2 class="h2 fw-bold" style="font-family: serif">Louis Vuitton Keepall Bandoulière</h2>
-                                <p style="font-family: serif">
-Louis Vuitton Keepall Bandoulière in Monogram Eclipse canvas is a sleek, durable travel bag with a spacious interior. It features an adjustable shoulder strap, sturdy top handles, and iconic monogram detailing, making it perfect for short trips or as a carry-on.                                </p>
-                            </div>
-                        </div>
+<!-- Start Banner Hero -->
+<div id="template-mo-zay-hero-carousel" class=" carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+    <ol class="carousel-indicators">
+        <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
+        <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li>
+        <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
+    </ol>
+    <div class="bg-light carousel-inner">
+        <div class="carousel-item active">
+            <div class="container">
+                <div class="row p-2">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid" src="{% static 'assets/img/one.avif' %}" alt="" 
+                             style="object-fit: contain; object-position: center; max-height: 400px; width: 100%; height: auto;">
                     </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <div class="container">
-                    <div class="row p-5">
-                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <img class="img-fluid" src="{% static 'assets/img/two.webp' %}" alt="">
-                        </div>
-                        <div class="col-lg-6 mb-0 d-flex align-items-center">
-                            <div class="text-align-left">
-                                <h2 class="h2 fw-bold" style="font-family: serif">Dior Book Tote</h2>
-                                <p style="font-family: serif">
-                                    Dior Book Tote is a statement piece showcasing the iconic Toile de Jouy embroidery. Designed for versatility, it features spacious dimensions and top handles, perfect for carrying daily essentials. The "CHRISTIAN DIOR" signature adds a bold, luxurious touch.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <div class="container">
-                    <div class="row p-5">
-                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <img class="img-fluid" src="{% static 'assets/img/three.webp' %}" alt="">
-                        </div>
-                        <div class="col-lg-6 mb-0 d-flex align-items-center">
-                            <div class="text-align-left">
-                                <h2 class="h2 fw-bold" style="font-family: serif">Gucci GG Marmont Half-Moon Shoulder Bag </h2>
-                                <p style="font-family: serif">
-                                    Gucci GG Marmont Small Shoulder Bag, featuring a crescent shape with the iconic GG logo. Its quilted leather design and chain strap add a touch of sophistication, making it versatile for both casual and formal occasions.
-                                </p>
-                            </div>
+                    <div class="col-lg-6 mb-0 d-flex align-items-center">
+                        <div class="text-align-left align-self-center">
+                            <h2 class="h2 fw-bold" style="font-family: serif">Louis Vuitton Keepall Bandoulière</h2>
+                            <p style="font-family: serif" class="fs-6">
+                                Louis Vuitton Keepall Bandoulière in Monogram Eclipse canvas is a sleek, durable travel bag with a spacious interior. It features an adjustable shoulder strap, sturdy top handles, and iconic monogram detailing, making it perfect for short trips or as a carry-on.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
-            <i class="fas fa-chevron-left"></i>
-        </a>
-        <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="next">
-            <i class="fas fa-chevron-right"></i>
-        </a>
+        <div class="carousel-item">
+            <div class="container">
+                <div class="row p-2">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid" src="{% static 'assets/img/two.webp' %}" alt="" 
+                             style="object-fit: contain; object-position: center; max-height: 400px; width: 100%; height: auto;">
+                    </div>
+                    <div class="col-lg-6 mb-0 d-flex align-items-center">
+                        <div class="text-align-left">
+                            <h2 class="h2 fw-bold" style="font-family: serif">Dior Book Tote</h2>
+                            <p style="font-family: serif" class="fs-6">
+                                Dior Book Tote is a statement piece showcasing the iconic Toile de Jouy embroidery. Designed for versatility, it features spacious dimensions and top handles, perfect for carrying daily essentials. The "CHRISTIAN DIOR" signature adds a bold, luxurious touch.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="container">
+                <div class="row p-2">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid" src="{% static 'assets/img/three.webp' %}" alt="" 
+                             style="object-fit: contain; object-position: center; max-height: 400px; width: 100%; height: auto;">
+                    </div>
+                    <div class="col-lg-6 mb-0 d-flex align-items-center">
+                        <div class="text-align-left">
+                            <h2 class="h2 fw-bold" style="font-family: serif">Gucci GG Marmont Half-Moon Shoulder Bag</h2>
+                            <p style="font-family: serif" class="fs-6">
+                                Gucci GG Marmont Small Shoulder Bag, featuring a crescent shape with the iconic GG logo. Its quilted leather design and chain strap add a touch of sophistication, making it versatile for both casual and formal occasions.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- End Banner Hero -->
+
+</div>
+<!-- End Banner Hero -->
 
 <hr style="width: 80%" class="mx-auto">
-    <!-- Start Categories of The Month -->
-    <section class="container py-3">
-        <div class="row text-center pt-3">
-            <div class="col-lg-6 m-auto">
-                <h2 class="h2 fw-bold" style="font-family: serif">Categories of The Month</h2>
-                <p style="font-family: serif">
-From elegant shoulder bags to spacious tote bags and practical cross bags, each piece combines luxury with functionality. 
-                    Explore these curated collections to find the perfect accessory for any occasion.
-                </p>
+<!-- Start Categories of The Month -->
+<section class="container py-5">
+    <div class="row text-center mb-4">
+        <div class="col-lg-8 mx-auto">
+            <h2 class="fs-4 fw-bold" style="font-family: serif;">Categories of The Month</h2>
+            <p class="fs-6" style="font-family: serif;">
+                From elegant shoulder bags to spacious tote bags and practical cross bags, each piece combines luxury with functionality. Explore these curated collections to find the perfect accessory for any occasion.
+            </p>
+        </div>
+    </div>
+
+    <!-- Carousel (Visible only on small screens) -->
+    <div id="categoryCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner">
+            <!-- Category 1 -->
+            <div class="carousel-item active">
+                <div class="row gy-3">
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm d-flex flex-column">
+                            <a href="#" class="d-block">
+                                <img src="{% static 'assets/img/balenciage.jpg' %}" class="card-img-top img-fluid w-100" style="height: 250px; object-fit: contain; object-position: center;" alt="Shoulder Bags">
+                            </a>
+                            <div class="card-body text-center p-3">
+                                <h5 class="card-title fs-6" style="font-family: serif;">Shoulder Bags</h5>
+                                <a href="{% url 'shop' %}" class="btn btn-outline-dark fs-6">Go Shop</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Category 2 -->
+            <div class="carousel-item">
+                <div class="row gy-3">
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm d-flex flex-column">
+                            <a href="#" class="d-block">
+                                <img src="{% static 'assets/img/lvpr.jpg' %}" class="card-img-top img-fluid w-100" style="height: 250px; object-fit: contain; object-position: center;" alt="Tote Bags">
+                            </a>
+                            <div class="card-body text-center p-3">
+                                <h5 class="card-title fs-6" style="font-family: serif;">Tote Bags</h5>
+                                <a href="{% url 'shop' %}" class="btn btn-outline-dark fs-6">Go Shop</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Category 3 -->
+            <div class="carousel-item">
+                <div class="row gy-3">
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm d-flex flex-column">
+                            <a href="#" class="d-block">
+                                <img src="{% static 'assets/img/lv3.jpg' %}" class="card-img-top img-fluid w-100" style="height: 250px; object-fit: contain; object-position: center;" alt="Cross Bags">
+                            </a>
+                            <div class="card-body text-center p-3">
+                                <h5 class="card-title fs-6" style="font-family: serif;">Cross Bags</h5>
+                                <a href="{% url 'shop' %}" class="btn btn-outline-dark fs-6">Go Shop</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="{% static 'assets/img/ysl.jpg' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
-                <h5 class="text-center mt-3 mb-3" style="font-family: serif">Shoulder Bags</h5>
-                <p class="text-center"><a href="{% url 'shop' %}" class="button-class btn btn-outline-dark"> Go Shop</a></p>
-                
-            </div>
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="{% static 'assets/img/lvpr.jpg' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
-                <h2 class="h5 text-center mt-3 mb-3" style="font-family: serif">Tote Bags</h2>
-                <p class="text-center"><a href="{% url 'shop' %}" class="button-class btn btn-outline-dark"> Go Shop</a></p>
-            </div>
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="{% static 'assets/img/lv3.jpg' %}" class="rounded-circle img-fluid border w-100 h-75"></a>
-                <h2 class="h5 text-center mt-3 mb-3" style="font-family: serif">Cross Bags</h2>
-                <p class="text-center"><a href="{% url 'shop' %}" class="button-class btn btn-outline-dark"> Go Shop</a></p>
+
+      
+    </div>
+
+    <!-- Columns for Large Screens (Visible only on medium and larger screens) -->
+    <div class="row gy-3 d-none d-md-flex">
+        <!-- Category 1 -->
+        <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm d-flex flex-column">
+                <a href="#" class="d-block">
+                    <img src="{% static 'assets/img/balenciage.jpg' %}" class="card-img-top img-fluid w-100" style="height: 250px; object-fit: contain; object-position: center;" alt="Shoulder Bags">
+                </a>
+                <div class="card-body text-center p-3">
+                    <h5 class="card-title fs-6" style="font-family: serif;">Shoulder Bags</h5>
+                    <a href="{% url 'shop' %}" class="btn btn-outline-dark fs-6" style="font-family: serif">Go Shop</a>
+                </div>
             </div>
         </div>
-    </section>
-    <!-- End Categories of The Month -->
+
+        <!-- Category 2 -->
+        <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm d-flex flex-column">
+                <a href="#" class="d-block">
+                    <img src="{% static 'assets/img/lvpr.jpg' %}" class="card-img-top img-fluid w-100" style="height: 250px; object-fit: contain; object-position: center;" alt="Tote Bags">
+                </a>
+                <div class="card-body text-center p-3">
+                    <h5 class="card-title fs-6" style="font-family: serif;">Tote Bags</h5>
+                    <a href="{% url 'shop' %}" class="btn btn-outline-dark fs-6" style="font-family: serif">Go Shop</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 3 -->
+        <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm d-flex flex-column">
+                <a href="#" class="d-block">
+                    <img src="{% static 'assets/img/lv3.jpg' %}" class="card-img-top img-fluid w-100" style="height: 250px; object-fit: contain; object-position: center;" alt="Cross Bags">
+                </a>
+                <div class="card-body text-center p-3">
+                    <h5 class="card-title fs-6" style="font-family: serif;">Cross Bags</h5>
+                    <a href="{% url 'shop' %}" class="btn btn-outline-dark fs-6" style="font-family: serif">Go Shop</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Categories of The Month -->
+<!-- End Categories of The Month -->
 <hr style="width: 80%" class="mx-auto">
 
 <!-- Start Featured Product -->
 <section class="bg-muted">
-    <div class="container py-3">
+    <div class="container py-1">
         <div class="row text-center py-3">
             <div class="col-lg-6 m-auto">
-                <h2 class="h2 fw-bold" style="font-family: serif">Featured Products</h2>
-                <p style="font-family: serif">
+                <h2 class="fs-4 fw-bold" style="font-family: serif">Featured Products</h2>
+                <p style="font-family: serif" class="fs-6">
                     These handpicked selections showcase the finest craftsmanship and design...
                 </p>
             </div>
         </div>
 
-        <div id="featuredProductsCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
+<div id="featuredProductsCarousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- Carousel Indicators -->
+    <ol class="carousel-indicators">
+        {% for product in featured_products %}
+            <li data-bs-target="#featuredProductsCarousel" data-bs-slide-to="{{ forloop.counter0|divisibleby:4 }}" class="{% if forloop.first %}active{% endif %}"></li>
+        {% endfor %}
+    </ol>
+
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="d-flex gap-3"> <!-- Ensure products are in a row -->
                 {% for product in featured_products %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                    <div class="row">
-                        <div class="col-12 col-md-4 mb-4">
-                            <div class="card h-100">
-                                <a href="{% url 'shopandcart' product.id %}">
-                                    <img src="{{ product.image.url }}" class="card-img-top w-100 h-100" alt="{{ product.name }}">
-                                </a>
-                                <div class="card-body">
-                                    <ul class="list-unstyled d-flex justify-content-between">
-                                        <li>
-                                            {% for star in "12345"|make_list %}
-                                                <i class="text-dark fa fa-star" style="color: {% if star <= product.average_rating %}gold{% else %}#ddd{% endif %};"></i>
-                                            {% endfor %}
-                                        </li>
-                                        <li class="text-muted text-right" style="font-family: serif">Ksh {{ product.price }}</li>
-                                    </ul>
-                                    <a href="{% url 'shopandcart' product.id %}" class="p fw-bold text-decoration-none text-dark" style="font-family: serif">{{ product.name }}</a>
-                                    <p class="card-text" style="font-family: serif">{{ product.description }}</p>
-                                    <p class="text-muted" style="font-family: serif">Reviews ({{ product.reviews.count }})</p>
-                                </div>
-                            </div>
+                <div class="col-12 col-md-3 mb-1">
+                    <div class="card gap-2" >
+                        <a href="{% url 'shopandcart' product.id %}">
+                            <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}" style="max-height: 200px; object-fit: contain; object-position: center;">
+                        </a>
+                        <div class="card-body">
+                            <ul class="list-unstyled pe-3 d-flex justify-content-around">
+                                <li>
+                                    {% for star in "12345"|make_list %}
+                                        <i class="text-muted fs-6 fa fa-star" style="color: {% if star <= product.average_rating %}gold{% else %}#ddd{% endif %};"></i>
+                                    {% endfor %}
+                                </li>
+                                <li class="text-dark fs-6" style="font-family: serif">Ksh {{ product.price }}</li>
+                            </ul>
+                            <a href="{% url 'shopandcart' product.id %}" class="p fw-normal fs-6 text-decoration-none text-dark" style="font-family: serif">{{ product.name }}</a>
+                            <p class="card-text fs-6" style="font-family: serif">{{ product.description }}</p>
+                            <p class="text-muted fs-6" style="font-family: serif">Reviews ({{ product.reviews.count }})</p>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
-
-            <a class="carousel-control-prev" href="#featuredProductsCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#featuredProductsCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
         </div>
+    </div>
+
+    <!-- Carousel Controls -->
+    <a class="carousel-control-prev" href="#featuredProductsCarousel" role="button" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#featuredProductsCarousel" role="button" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
     </div>
 </section>
 <!-- End Featured Product -->
+<section id="about" class="bg-light py-3">
+    <div class="container py-5">
+        <div class="row align-items-center py-3">
+            <!-- Text Column -->
+            <div class="col-12 col-md-8 text-black py-3 mb-3 mb-md-0"> <!-- Make the text column full-width on small screens -->
+                <h2 class="fw-bold fs-4 pb-4 text-center" style="font-family: serif; color: #031429;">About Us</h2>
+                <p class="fs-6" style="text-align: justify; font-family: serif;">
+                    PRIDRIAN Luxe is your ultimate destination for luxury, sophistication, and timeless fashion. We specialize in curating a stunning collection of premium designer bags that blend elegance with practicality. At PRIDRIAN Luxe, we believe in empowering individuals to express their unique style with iconic pieces that exude quality, craftsmanship, and exclusivity.
+                </p>
+                <p class="fs-6" style="text-align: justify; font-family: serif;">
+                    Our mission is to bring luxury closer to you, offering a seamless shopping experience with a handpicked selection of the world’s most coveted brands. Whether you're looking for a statement bag for special occasions or an everyday essential, PRIDRIAN Luxe is here to elevate your style with unparalleled grace.
+                </p>
+            </div>
+<!-- Image Column -->
+<div class="col-12 col-md-4 mx-auto">
+    <img src="{% static 'assets/img/aboutus.png' %}" class="img-fluid" alt="About Us" 
+         style="max-width: 60%; height: auto; object-fit: contain; display: block; margin-left: auto; margin-right: auto;">
+</div>
+        </div>
+    </div>
+</section>
+
+<hr style="width: 80%;" class="mx-auto">
+
+<!-- Start Our Services Section -->
+<section class="container py-3">
+    <div class="row text-center pt-3">
+        <div class="col-12 col-lg-6 mx-auto">
+            <h2 class="fs-4 mb-3 fw-bold" style="font-family: serif; color: #031429;">Our Services</h2>
+        </div>
+    </div>
+<!-- Start Carousel -->
+<div class="container py-3">
+    
+
+    <div id="servicesCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="2000">
+        <div class="carousel-inner">
+            <!-- Delivery Services -->
+            <div class="carousel-item active">
+                <div class="h-100 py-3 services-icon-wap shadow rounded text-center">
+                    <div class="h2 text-black">
+                        <i class="fa fa-truck fa-lg"></i>
+                    </div>
+                    <h2 class="fs-6 mt-4" style="font-family: serif;">Delivery Services</h2>
+                </div>
+            </div>
+            <!-- Shipping & Return -->
+            <div class="carousel-item">
+                <div class="h-100 py-3 services-icon-wap shadow rounded text-center">
+                    <div class="h2 text-black">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h2 class="fs-6 mt-4" style="font-family: serif;">Shipping & Return</h2>
+                </div>
+            </div>
+            <!-- 24 Hours Service -->
+            <div class="carousel-item">
+                <div class="h-100 py-3 services-icon-wap shadow rounded text-center">
+                    <div class="h2 text-black">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <h2 class="fs-6 mt-4" style="font-family: serif;">24 Hours Service</h2>
+                </div>
+            </div>
+        </div>
+        <!-- Carousel Controls (Smaller Arrows) -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#servicesCarousel" data-bs-slide="prev" style="width: 30px; height: 30px; background-color: transparent; border: none;">
+            <span class="carousel-control-prev-icon" aria-hidden="true" style="font-size: 20px; color: #031429;"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#servicesCarousel" data-bs-slide="next" style="width: 30px; height: 30px; background-color: transparent; border: none;">
+            <span class="carousel-control-next-icon" aria-hidden="true" style="font-size: 20px; color: #031429;"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Row for desktop -->
+    <div class="row mx-auto d-none d-md-flex" style="justify-content: center; text-align: center;">
+        <!-- Delivery Services -->
+        <div class="col-12 col-md-4 pb-5">
+            <div class="h-100 py-5 services-icon-wap shadow rounded">
+                <div class="h2 text-black text-center">
+                    <i class="fa fa-truck fa-lg"></i>
+                </div>
+                <h2 class="fs-6 mt-4 text-center" style="font-family: serif;">Delivery Services</h2>
+            </div>
+        </div>
+        <!-- Shipping & Return -->
+        <div class="col-12 col-md-4 pb-5">
+            <div class="h-100 py-5 services-icon-wap shadow rounded">
+                <div class="h2 text-black text-center">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <h2 class="fs-6 mt-4 text-center" style="font-family: serif;">Shipping & Return</h2>
+            </div>
+        </div>
+        <!-- 24 Hours Service -->
+        <div class="col-12 col-md-4 pb-5">
+            <div class="h-100 py-5 services-icon-wap shadow rounded">
+                <div class="h2 text-black text-center">
+                    <i class="fa fa-user"></i>
+                </div>
+                <h2 class="fs-6 mt-4 text-center" style="font-family: serif;">24 Hours Service</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Carousel -->
+</section>
+<!-- End Our Services Section -->
+
+<hr style="width: 80%;" class="mx-auto">
+
+<!-- Start Brands Section -->
+<section class="bg-light py-3">
+    <div class="container my-2">
+        <div class="row text-center py-3">
+            <div class="col-lg-6 m-auto">
+                <h2 class="fs-4 fw-bold" style="font-family: serif; color: #031429;">Bag Brands</h2>
+                <p class="mt-3 fs-6" style="font-family: serif;">
+                    All product names, logos, and brands are the property of their respective owners. All company, product, and service names used in this website are for identification purposes only. Use of these names, logos, and brands does not imply endorsement. PRIDRIAN Luxe only sells authentic products from established designers and brands. All imagery is either original or used with permission where applicable.
+                </p>
+            </div>
+            <div class="col-lg-9 m-auto tempaltemo-carousel">
+                <div class="row d-flex flex-row align-items-center">
+                    <!-- Controls -->
+                    <div class="col-1 align-self-center">
+                        <a class="h1" href="#templatemo-slide-brand" role="button" data-bs-slide="prev">
+                            <i class="text-dark fas fa-chevron-left"></i>
+                        </a>
+                    </div>
+                    <!-- Carousel Wrapper -->
+                    <div class="col">
+                        <div class="carousel slide carousel-multi-item pt-2" id="templatemo-slide-brand" data-bs-ride="carousel">
+                            <!-- Slides -->
+                            <div class="carousel-inner product-links-wap" role="listbox">
+                                <!-- First Slide -->
+                                <div class="carousel-item active">
+                                    <div class="row fs-4">
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/chanel_logo.png' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/hermes.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/dior.png' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/louisvuitton.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End First Slide -->
+
+                                <!-- Second Slide -->
+                                <div class="carousel-item">
+                                    <div class="row">
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/chloe.jpg' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/gucci.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/celine.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/prada.png' %}" alt="Brand Logo"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Second Slide -->
+
+                                <!-- Third Slide -->
+                                <div class="carousel-item">
+                                    <div class="row">
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/fendi.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/balenciaga.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/saintlaurent.png' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/bottegaveneta.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Third Slide -->
+                            </div>
+                            <!-- End Slides -->
+                        </div>
+                    </div>
+                    <!-- End Carousel Wrapper -->
+
+                    <!-- Controls -->
+                    <div class="col-1 align-self-center">
+                        <a class="h1" href="#templatemo-slide-brand" role="button" data-bs-slide="next">
+                            <i class="text-dark fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                    <!-- End Controls -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 
 
 
-     <!-- Start Footer -->
+<!-- Start Footer -->
 <footer class="bg-black" id="tempaltemo_footer">
     <div class="container">
         <div class="row">
             <!-- Logo Column -->
-            <div class="col-md-4 col-12 text-center text-md-start pt-2">
+            <div class="col-12 col-md-4 text-center text-md-start py-2 py-md-1">
                 <h2 class="h2 text-light logo" style="font-family: serif;">PRIDRIAN Luxe</h2>
                 <!-- Newsletter Subscription -->
-                <form class="mt-3">
-                    <p class="text-light" style="font-family: serif;">Subscribe to our newsletter:</p>
-                    <div class="input-group">
-                        <input type="email" class="form-control" placeholder="Your email" aria-label="Email">
-                        <button class="btn btn-outline-light" type="submit">Subscribe</button>
+                <form class="pt-3 w-100">
+                    <p class="text-light fs-6" style="font-family: serif;">Subscribe to our newsletter:</p>
+                    <div class="input-group" style="width: 400px">
+                        <input type="email" class="form-control fs-6"  placeholder="Your email" style="font-family: serif;" aria-label="Email">
+                        <button class="btn btn-outline-light fs-6" type="submit" style="font-family: serif">Subscribe</button>
                     </div>
                 </form>
             </div>
 
             <!-- Contact Info Column -->
-            <div class="col-md-4 col-12 ps-5 text-center text-md-start pt-2">
+            <div class="col-12 col-md-4 text-center py-3 py-md-3">
                 <ul class="list-unstyled text-light footer-link-list mb-0">
-                    <li style="font-family: serif">
+                    <li style="font-family: serif" class="fs-6">
                         <i class="fas fa-map-marker-alt fa-fw"></i> Nairobi - Kenya
                     </li>
                     <li>
                         <i class="fa fa-phone fa-fw"></i>
-                        <a class="text-decoration-none text-light" href="tel:010-020-0340" style="font-family: serif">070-020-0340</a>
+                        <a class="text-decoration-none text-light fs-6" href="tel:010-020-0340" style="font-family: serif">070-020-0340</a>
                     </li>
                     <li>
                         <i class="fa fa-envelope fa-fw"></i>
-                        <a class="text-decoration-none text-light" href="mailto:info@pridrianluxe.com" style="font-family: serif">info@pridrianluxe.com</a>
+                        <a class="text-decoration-none text-light fs-6" href="mailto:info@pridrianluxe.com" style="font-family: serif">info@pridrianluxe.com</a>
                     </li>
                 </ul>
             </div>
 
             <!-- Social Media Column -->
-            <div class="col-md-4 col-12 ps-5 mt-3 pt-5 text-center text-md-start pt-2">
-                <ul class="list-inline footer-icons mb-0">
+            <div class="col-12 col-md-4 text-center pt-3 pt-md-5 mt-md-3">
+                <ul class="list-inline footer-icons mb-0 d-flex justify-content-center">
                     <li class="list-inline-item border border-light rounded-circle text-center me-2">
                         <a class="text-light text-decoration-none" target="_blank" href="http://facebook.com/">
-                            <i class="fab fa-facebook-f fa-lg fa-fw"></i>
+                            <i class="fab fa-facebook-f fs-6 fa-lg fa-fw"></i>
                         </a>
                     </li>
                     <li class="list-inline-item border border-light rounded-circle text-center">
                         <a class="text-light text-decoration-none" target="_blank" href="https://www.instagram.com/">
-                            <i class="fab fa-instagram fa-lg fa-fw"></i>
+                            <i class="fab fa-instagram fs-6 fa-lg fa-fw"></i>
                         </a>
                     </li>
                 </ul>
@@ -322,21 +619,53 @@ From elegant shoulder bags to spacious tote bags and practical cross bags, each 
 
         <!-- Bottom Border -->
         <div class="row">
-            <div class="col-12 mt-4">
-                <div class="w-100 my-2 border-top border-light"></div>
+            <div class="col-12 pt-3">
+                <div class="w-100 py-2 border-top border-light"></div>
             </div>
         </div>
 
         <!-- Bottom Text -->
         <div class="row">
             <div class="col-12">
-                <p class="text-center text-light mb-0" style="font-family: serif;">
-                    Copyright &copy; 2024 PRIDRIAN Luxe. All Rights Reserved.
+                <p class="text-center text-light mb-0 fs-6" style="font-family: serif;">
+                    Copyright &copy; <span id="current-year">2024</span> PRIDRIAN Luxe. All Rights Reserved.
                 </p>
             </div>
         </div>
     </div>
 </footer>
+<!-- End Footer -->
+
+<style>
+/* Reduce padding and margins for small screens */
+@media (max-width: 576px) {
+    #tempaltemo_footer .py-5 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    #tempaltemo_footer .pt-5 {
+        padding-top: 1rem !important;
+    }
+
+    #tempaltemo_footer .mt-5 {
+        margin-top: 1rem !important;
+    }
+
+    #tempaltemo_footer .text-center {
+        text-align: center !important;
+    }
+
+    #tempaltemo_footer .footer-link-list li {
+        margin-bottom: 0.5rem;
+    }
+
+    .footer-icons .list-inline-item {
+        margin-right: 0.5rem;
+    }
+}
+</style>
+
     <!-- Start Script -->
     <script src="{% static 'assets/js/jquery-1.11.0.min.js' %}"></script>
     <script src="{% static 'assets/js/jquery-migrate-1.2.1.min.js' %}"></script>
@@ -344,6 +673,14 @@ From elegant shoulder bags to spacious tote bags and practical cross bags, each 
     <script src="{% static 'assets/js/templatemo.js' %}"></script>
     <script src="{% static 'assets/js/custom.js' %}"></script>
     <!-- End Script -->
+
+    <!-- JavaScript for Dynamic Year -->
+    <script>
+        const currentYear = new Date().getFullYear();
+        document.getElementById("current-year").textContent = currentYear;
+    </script>
+    <!-- End Script -->
+
 </body>
 
 </html>
