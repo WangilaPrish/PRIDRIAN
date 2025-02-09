@@ -66,8 +66,8 @@
                                     </li>
                                     {% if user.is_authenticated and user.is_superuser %}
                                     <li>
-                                        <a class="btn btn-primary text-white mt-2 fs-6" style="background-color: #031429" href="{% url 'edit_product' product.id %}">
-                                            Edit
+                                       <a class="btn btn-primary text-white mt-2 fs-6" style="background-color: #031429;" href="{% url 'edit_product' product.id %}">
+                                            <i class="fas fa-pen" style="font-size: 9px; cursor: pointer; color: #6c757d;"></i>
                                         </a>
                                     </li>
                                     {% endif %}

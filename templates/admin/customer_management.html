@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRIDRIAN Luxe</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/icons8-bag-16.png' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.min.css' %}">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        .navbar {
+            background-color: #031429;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #f8c146 !important;
+        }
+
+        .table th {
+            background-color: #031429;
+            color: white;
+            text-align: center;
+        }
+
+        .table td {
+            text-align: center;
+        }
+
+        .btn-add-product {
+            background-color: #031429;
+            color: white;
+        }
+
+        .btn-add-product:hover {
+            background-color: #f8c146;
+            color: #031429;
+        }
+
+        .form-control {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background-color: #031429;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: #f8c146;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'admin_dashboard' %}" style="font-family: serif;">PRIDRIAN Luxe</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_management' %}" style="font-family: serif;">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'order_management' %}" style="font-family: serif;">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'customer_management' %}" style="font-family: serif;">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_settings' %}" style="font-family: serif;">Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}" style="font-family: serif;">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Customer Management Content -->
+    <div class="container my-3">
+        <h1 class="text-center mb-4 fs-8" style="font-family: serif;">Customer Management</h1>
+
+        <!-- Customers Table -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="font-family: serif;">Customer ID</th>
+                    <th style="font-family: serif;">Name</th>
+                    <th style="font-family: serif;">Email</th>
+                    <th style="font-family: serif;">Phone</th>
+                    <th style="font-family: serif;">Address</th>
+                    <th style="font-family: serif;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td style="font-family: serif;">{{ customer.id }}</td>
+                    <td style="font-family: serif;">{{ customer.profile.full_name|default:"N/A" }}</td>
+                    <td style="font-family: serif;">{{ customer.email }}</td>
+                    <td style="font-family: serif;">{{ customer.profile.phone|default:"N/A" }}</td>
+                    <td style="font-family: serif;">{{ customer.profile.address|default:"N/A" }}</td>
+                    <td>
+                        <a href="{% url 'admin_buyer_profiles' %}" class="btn btn-sm" style="font-family: serif; background-color: grey;"><i class="fas fa-eye text-dark" style="cursor: pointer;"></i></a>
+                        <form method="POST" action="{% url 'delete_user' customer.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm" style="font-family: serif; background-color: #031429; color: white;"><i class="fas fa-trash" style="cursor: pointer;"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <p style="font-family: serif;">&copy; 2024 PRIDRIAN Luxe. All Rights Reserved. <a href="{% url 'index' %}">Store</a></p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

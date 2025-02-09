@@ -1,12 +1,112 @@
-{% extends 'contact.html' %}
+<!DOCTYPE html>
+<html lang="en">
 {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRIDRIAN Luxe</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/icons8-bag-16.png' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.min.css' %}">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
 
-{% block body %}
+        .navbar {
+            background-color: #031429;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #f8c146 !important;
+        }
+
+        .table th {
+            background-color: #031429;
+            color: white;
+            text-align: center;
+        }
+
+        .table td {
+            text-align: center;
+        }
+
+        .btn-add-product {
+            background-color: #031429;
+            color: white;
+        }
+
+        .btn-add-product:hover {
+            background-color: #f8c146;
+            color: #031429;
+        }
+
+        .form-control {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background-color: #031429;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: #f8c146;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'admin_dashboard' %}" style="font-family: serif;">PRIDRIAN Luxe</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_management' %}" style="font-family: serif;">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'order_management' %}" style="font-family: serif;">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'customer_management' %}" style="font-family: serif;">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'settings' %}" style="font-family: serif;">Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}" style="font-family: serif;">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 <main class="main" 
       style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; background-color: #f4f7fb; padding: 20px;">
     <div class="container" style="width: 100%; max-width: 600px; padding: 0;">
         <div class="card-login" style="border-radius: 15px; border: 1px solid #ececec; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); overflow: hidden; background-color: #fff; padding: 40px;">
-            <h2 class="fs-4" style="font-weight: 700; font-family: serif; text-align: center; color: #031429; font-size: 14px;">Add a New Product</h2>
+            <h1 class="fs-4" style="font-weight: 700; font-family: serif; text-align: center; color: #031429; font-size: 14px;">Add a New Product</h2>
             <p class="fs-6" style="color: #666; font-family: serif; text-align: center; font-size: 16px;">Fill out the details below to add a product to your store.</p>
 
             <form method="POST" enctype="multipart/form-data" style="width: 100%; display: flex; flex-direction: column; gap: 20px;" class="fs-6">
@@ -69,7 +169,7 @@
 
                 <!-- Submit Button -->
                 <div class="form-group">
-                    <button type="submit" class="fs-6" style="background-color: #031429; color: #fff; font-family: serif; padding: 14px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: all 0.3s ease; width: 100%; text-transform: uppercase; letter-spacing: 1px;">
+                    <button type="submit" class="fs-6" style="background-color: #031429; color: #fff; font-family: serif; padding: 14px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 500; transition: all 0.3s ease; width: 100%;  letter-spacing: 1px;">
                         Add Product
                     </button>
                 </div>
@@ -77,4 +177,18 @@
         </div>
     </div>
 </main>
-{% endblock %}
+    <!-- Footer -->
+    <footer style="font-family: serif;">
+        <p>Copyright &copy; <span id="current-year">2024</span> PRIDRIAN Luxe. All Rights Reserved. <a href="{% url 'index' %}">Store</a></p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+        <!-- JavaScript for Dynamic Year -->
+        <script>
+            const currentYear = new Date().getFullYear();
+            document.getElementById("current-year").textContent = currentYear;
+        </script>
+        <!-- End Script -->
+</body>
+</html>

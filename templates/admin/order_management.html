@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRIDRIAN Luxe</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/icons8-bag-16.png' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.min.css' %}">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        .navbar {
+            background-color: #031429;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #f8c146 !important;
+        }
+
+        .table th {
+            background-color: #031429;
+            color: white;
+            text-align: center;
+        }
+
+        .table td {
+            text-align: center;
+        }
+
+        .btn-add-product {
+            background-color: #031429;
+            color: white;
+        }
+
+        .btn-add-product:hover {
+            background-color: #f8c146;
+            color: #031429;
+        }
+
+        .form-control {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background-color: #031429;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: #f8c146;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'admin_dashboard' %}" style="font-family: serif;">PRIDRIAN Luxe</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_management' %}" style="font-family: serif;">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'order_management' %}" style="font-family: serif;">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'customer_management' %}" style="font-family: serif;">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_settings' %}" style="font-family: serif;">Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}" style="font-family: serif;">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Order Management Content -->
+    <div class="container my-5">
+        <h1 class="text-center mb-4 fs-8" style="font-family: serif;">Order Management</h1>
+
+        <!-- Orders Table -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="font-family: serif;">Order ID</th>
+                    <th style="font-family: serif;">Customer Name</th>
+                    <th style="font-family: serif;">Total</th>
+                    <th style="font-family: serif;">Status</th>
+                    <th style="font-family: serif;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td style="font-family: serif;">{{ order.id }}</td>
+                    <td style="font-family: serif;">{{ order.name }}</td>
+                    <td style="font-family: serif;">Ksh {{ order.total }}</td>
+                    <td style="font-family: serif;">{{ order.status }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-update-status" data-bs-toggle="modal" data-bs-target="#updateOrderStatusModal{{ order.id }}" style="font-family: serif;">Update Status</button>
+                        <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-secondary" style="font-family: serif;">View Details</a>
+                    </td>
+                </tr>
+
+                <!-- Update Status Modal -->
+                <div class="modal fade" id="updateOrderStatusModal{{ order.id }}" tabindex="-1" aria-labelledby="updateOrderStatusModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateOrderStatusModalLabel" style="font-family: serif;">Update Order Status</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form method="POST" action="{% url 'update_order_status' order.id %}">
+                                {% csrf_token %}
+                                <div class="modal-body">
+                                    <label for="status" class="form-label" style="font-family: serif;">Select New Status:</label>
+                                    <select name="status" id="status" class="form-control" style="font-family: serif;">
+                                        <option value="Pending" {% if order.status == "Pending" %}selected{% endif %}>Pending</option>
+                                        <option value="Confirmed" {% if order.status == "Confirmed" %}selected{% endif %}>Confirmed</option>
+                                        <option value="Shipped" {% if order.status == "Shipped" %}selected{% endif %}>Shipped</option>
+                                        <option value="Delivered" {% if order.status == "Delivered" %}selected{% endif %}>Delivered</option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="font-family: serif;">Close</button>
+                                    <button type="submit" class="btn btn-update-status" style="font-family: serif;">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <footer style="font-family: serif;">
+        <p>Copyright &copy; <span id="current-year">2024</span> PRIDRIAN Luxe. All Rights Reserved. <a href="{% url 'index' %}">Store</a></p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+        <!-- JavaScript for Dynamic Year -->
+        <script>
+            const currentYear = new Date().getFullYear();
+            document.getElementById("current-year").textContent = currentYear;
+        </script>
+        <!-- End Script -->
+</body>
+</html>

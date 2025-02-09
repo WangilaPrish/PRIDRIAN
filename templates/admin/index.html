@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - PRIDRIAN Luxe</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/icons8-bag-16.png' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.min.css' %}">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+        main {
+            flex: 1; /* Make the main content take up available space */
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #031429;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-size: 1rem;
+            margin-right: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #f8c146 !important;
+        }
+
+        /* Cards Styling */
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-stats h5 {
+            font-size: 1.2rem;
+            color: #031429;
+            font-weight: bold;
+        }
+
+        .dashboard-stats p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        /* Table Styling */
+        .table {
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table th {
+            background-color: #031429;
+            color: white;
+            text-align: center;
+        }
+
+        .table td {
+            text-align: center;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #031429;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #f8c146;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-stats h5 {
+                font-size: 1rem;
+            }
+
+            .dashboard-stats p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand " style="font-family: serif;" href="{% url 'admin_dashboard' %}">PRIDRIAN Luxe </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" style="font-family: serif;" href="{% url 'product_management' %}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"style="font-family: serif;" href="{% url 'order_management' %}">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="font-family: serif;" href="{% url 'customer_management' %}">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="font-family: serif;"  href="{% url 'view_settings' %}">Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="font-family: serif;" href="{% url 'logout' %}">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="container my-5">
+        <h1 class="text-center mb-4" style="font-family: serif;">Admin Dashboard</h1>
+
+        <!-- Stats Cards -->
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="card p-3 dashboard-stats">
+                    <h5 style="font-family: serif;">Total Sales</h5>
+                    <p style="font-family: serif;">Ksh {{ total_sales|default:"0" }}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 dashboard-stats">
+                    <h5 style="font-family: serif;">Total Orders</h5>
+                    <p style="font-family: serif;">{{ total_orders|default:"0" }}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 dashboard-stats">
+                    <h5 style="font-family: serif;">Total Customers</h5>
+                    <p style="font-family: serif;">{{ total_customers|default:"0" }}</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 dashboard-stats">
+                    <h5 style="font-family: serif;">Total Products</h5>
+                    <p style="font-family: serif;">{{ total_products|default:"0" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top-Selling Products -->
+        <div class="mt-5">
+            <h3 style="font-family: serif;">Top-Selling Products</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr style="font-family: serif;">
+                        <th style="font-family: serif;">Product Name</th>
+                        <th style="font-family: serif;">Sold Quantity</th>
+                    </tr>
+                </thead>
+                <tbody style="font-family: serif;">
+                    {% if top_products %}
+                        {% for product in top_products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.total_sold|default:"0" }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="2" style="font-family: serif;">No products sold yet.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="font-family: serif;">
+        <p>Copyright &copy; <span id="current-year">2024</span> PRIDRIAN Luxe. All Rights Reserved. <a href="{% url 'index' %}">Store</a></p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+        <!-- JavaScript for Dynamic Year -->
+        <script>
+            const currentYear = new Date().getFullYear();
+            document.getElementById("current-year").textContent = currentYear;
+        </script>
+        <!-- End Script -->
+</body>
+</html>
