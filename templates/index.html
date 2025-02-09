@@ -291,7 +291,7 @@
 
 <!-- Start Featured Product -->
 <section class="bg-muted">
-    <div class="container py-1">
+    <div class="container py-1 mb-4">
         <div class="row text-center py-3">
             <div class="col-lg-6 m-auto">
                 <h2 class="fs-4 fw-bold" style="font-family: serif">Featured Products</h2>
@@ -316,19 +316,22 @@
                 <div class="col-12 col-md-3 mb-1">
                     <div class="card gap-2" >
                         <a href="{% url 'shopandcart' product.id %}">
-                            <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}" style="max-height: 200px; object-fit: contain; object-position: center;">
+                            {% if product.image1 %}
+    <img src="{{ product.image1.url }}" class="card-img-top img-fluid" alt="{{ product.name }}" style="max-height: 200px; object-fit: contain; object-position: center;">
+{% else %}
+    <p class="text-muted">No image available</p>
+{% endif %}
                         </a>
                         <div class="card-body">
                             <ul class="list-unstyled pe-3 d-flex justify-content-around">
                                 <li>
                                     {% for star in "12345"|make_list %}
-                                        <i class="text-muted fs-6 fa fa-star" style="color: {% if star <= product.average_rating %}gold{% else %}#ddd{% endif %};"></i>
+                                        <i class="text-muted fs-6 fa fa-star" style="color: '{% if star <= product.average_rating %}gold{% else %}#ddd{% endif %}'"></i>
                                     {% endfor %}
                                 </li>
                                 <li class="text-dark fs-6" style="font-family: serif">Ksh {{ product.price }}</li>
                             </ul>
                             <a href="{% url 'shopandcart' product.id %}" class="p fw-normal fs-6 text-decoration-none text-dark" style="font-family: serif">{{ product.name }}</a>
-                            <p class="card-text fs-6" style="font-family: serif">{{ product.description }}</p>
                             <p class="text-muted fs-6" style="font-family: serif">Reviews ({{ product.reviews.count }})</p>
                         </div>
                     </div>

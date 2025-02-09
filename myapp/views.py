@@ -7,16 +7,17 @@ from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
-from myapp.forms import ProductForm, ProfileForm, UserRegisterForm, ReviewForm, AddressForm
-from myapp.models import User, Product, CartItem, Newsletter, Profile, Review, Order, OrderItem, Wishlist, Address
+from myapp.forms import ProductForm, ProfileForm, SettingsForm, UserRegisterForm, ReviewForm, AddressForm
+from myapp.models import User, Product, Settings, CartItem, Newsletter, Profile, Review, Order, OrderItem, Wishlist, Address
 import json
 from django.http import HttpResponse
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from .models import User
+from .models import Settings, User
 from requests.auth import HTTPBasicAuth
 from myapp.credentials import MpesaAccessToken, LipanaMpesaPpassword
 
@@ -223,38 +224,130 @@ def register(request):
 
     return render(request, "register.html", {"form": form})
 
+def is_admin(user):
+    """Check if the user is an admin."""
+    return user.is_superuser
 
-
-
+@login_required
 def index(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-
-        if not email:
-            messages.error(request, "Email is required.")
-            return redirect('/index')
-
-        # Validate the email
-        try:
-            validate_email(email)
-        except ValidationError:
-            messages.error(request, "Invalid email address.")
-            return redirect('/index')
-
-        # Proceed with saving the newsletter
-        members = Newsletter(email=email)
-        members.save()
-
-        messages.success(request, "Successfully subscribed.")
-        return redirect('/index')
-
+    if request.user.is_superuser:
+        # Redirect superusers to the admin dashboard
+        return redirect('admin_dashboard')
     else:
-        # Fetch all products that have at least one review
-        featured_products = Product.objects.annotate(review_count=Count('reviews')).filter(review_count__gt=0)
+        # Render the normal homepage for users
+        if request.method == 'POST':
+            email = request.POST.get('email')
 
-        return render(request, 'index.html', {
-            'featured_products': featured_products  # Pass the featured products to the template
-        })
+            if not email:
+                messages.error(request, "Email is required.")
+                return redirect('index')
+
+            # Validate the email
+            try:
+                validate_email(email)
+            except ValidationError:
+                messages.error(request, "Invalid email address.")
+                return redirect('index')
+
+            # Save newsletter subscription
+            members = Newsletter(email=email)
+            members.save()
+
+            messages.success(request, "Successfully subscribed.")
+            return redirect('index')
+
+        else:
+            # Fetch featured products (products with reviews)
+            featured_products = Product.objects.annotate(
+                review_count=Count('reviews')
+            ).filter(review_count__gt=0)
+
+            return render(request, 'index.html', {
+                'featured_products': featured_products  # Pass the featured products to the template
+            })
+
+@login_required
+@user_passes_test(is_admin)
+def admin_dashboard(request):
+    # Total sales (sum of all 'total' fields in Order model)
+    total_sales = Order.objects.aggregate(Sum('total'))['total__sum'] or 0
+
+    # Total number of orders
+    total_orders = Order.objects.count()
+
+    # Total number of customers (Users who have placed at least one order)
+    total_customers = User.objects.filter(order__isnull=False).distinct().count()
+
+    # Total products in stock (sum of all 'stock' in Product model)
+    total_products = Product.objects.aggregate(Sum('stock'))['stock__sum'] or 0
+
+    # Top-selling products (sum of quantities in OrderItem model grouped by product)
+    top_products = Product.objects.annotate(
+        total_sold=Sum('orderitem__quantity')
+    ).order_by('-total_sold')[:5]
+
+    context = {
+        'total_sales': total_sales,
+        'total_orders': total_orders,
+        'total_customers': total_customers,
+        'total_products': total_products,
+        'top_products': top_products,
+    }
+    return render(request, "admin/index.html", context)
+
+@login_required
+@user_passes_test(is_admin)
+def product_management(request):
+    products = Product.objects.all()
+    return render(request, "admin/product_management.html", {'products': products})
+
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    product.delete()
+    messages.success(request, "Product deleted successfully.")
+    return redirect('admin/product_management')
+
+@login_required
+@user_passes_test(is_admin)
+def order_management(request):
+    orders = Order.objects.all()
+    return render(request, "admin/order_management.html", {'orders': orders})
+
+@login_required
+@user_passes_test(is_admin)
+def customer_management(request):
+    customers = User.objects.filter(order__isnull=False).distinct()
+    return render(request, "admin/customer_management.html", {'customers': customers})
+
+@login_required
+@user_passes_test(is_admin)
+def view_settings(request):
+    # Get the current settings
+    settings = Settings.objects.first()
+    if not settings:
+        settings = Settings.objects.create()  # Create default settings if none exist
+
+    return render(request, "admin/view_settings.html", {'settings': settings})
+
+@login_required
+@user_passes_test(is_admin)
+def edit_settings(request):
+    settings = Settings.objects.first()
+    if not settings:
+        settings = Settings.objects.create()
+
+    if request.method == 'POST':
+        form = SettingsForm(request.POST, request.FILES, instance=settings)
+        if form.is_valid():
+            form.save()
+            print("Settings saved successfully")  # Debugging statement
+            return redirect('view_settings')  # Redirect back to the read-only view
+        else:
+            print("Form errors:", form.errors)  # Debugging statement
+    else:
+        form = SettingsForm(instance=settings)
+
+    return render(request, "admin/edit_settings.html", {'form': form, 'settings': settings})
 
 
 def shop(request):
@@ -444,12 +537,18 @@ def addproduct(request):
             # Save the product with the images
             product.save()
 
-            return redirect('shop')  # Redirect to the shop page after successful product creation
+            return redirect('product_management')  # Redirect to the product management page
     else:
         form = ProductForm()
 
     return render(request, 'addproduct.html', {'form': form})
-
+login_required
+@user_passes_test(is_admin)
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    product.delete()
+    messages.success(request, "Product deleted successfully.")
+    return redirect('product_management')  # Use the name of the URL
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
@@ -459,7 +558,7 @@ def edit_product(request, product_id):
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            return redirect('shop')  # Redirect to shop or wherever you want
+            return redirect('product_management')  # Redirect to shop or wherever you want
     else:
         form = ProductForm(instance=product)
 

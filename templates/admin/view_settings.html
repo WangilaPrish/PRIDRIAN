@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PRIDRIAN Luxe{% endblock %}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/icons8-bag-16.png' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.min.css' %}">
+    <style>
+        body {
+            font-family: serif, 'Roboto', Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #031429;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff !important;
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #f8c146 !important;
+        }
+        footer {
+            background-color: #031429;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            margin-top: 20px;
+        }
+        footer a {
+            color: #f8c146;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'admin_dashboard' %}">PRIDRIAN Luxe</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'product_management' %}">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'order_management' %}">Orders</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'customer_management' %}">Customers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'view_settings' %}">Settings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Sign Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<div class="container my-5">
+    <h1 class="mb-4 text-center">Admin Settings</h1>
+    <table class="table table-bordered">
+        <tr>
+            <th>Site Name</th>
+            <td>{{ settings.site_name }}</td>
+        </tr>
+        <tr>
+            <th>Contact Email</th>
+            <td>{{ settings.contact_email }}</td>
+        </tr>
+        <tr>
+            <th>Contact Phone</th>
+            <td>{{ settings.contact_phone }}</td>
+        </tr>
+        <tr>
+            <th>Business Address</th>
+            <td>{{ settings.business_address }}</td>
+        </tr>
+        <tr>
+            <th>Currency</th>
+            <td>{{ settings.currency }}</td>
+        </tr>
+        <tr>
+            <th>Flat Shipping Rate</th>
+            <td>{{ settings.flat_shipping_rate }}</td>
+        </tr>
+        <tr>
+            <th>Enable Free Shipping</th>
+            <td>{{ settings.enable_free_shipping|yesno:"Yes,No" }}</td>
+        </tr>
+        <tr>
+            <th>Free Shipping Threshold</th>
+            <td>{{ settings.free_shipping_threshold }}</td>
+        </tr>
+        <tr>
+            <th>Maintenance Mode</th>
+            <td>{{ settings.maintenance_mode|yesno:"Enabled,Disabled" }}</td>
+        </tr>
+    </table>
+    <div class="text-center mt-4">
+        <a href="{% url 'edit_settings' %}">
+            <i class="fas fa-edit edit-icon"></i>
+        </a>
+    </div>
+</div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 PRIDRIAN Luxe. All Rights Reserved. <a href="{% url 'index' %}">Store</a></p>
+    </footer>
+</body>
+</html>

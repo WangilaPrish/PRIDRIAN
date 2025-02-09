@@ -186,3 +186,43 @@ post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)
 
 
+class Settings(models.Model):
+    # General Settings
+    site_name = models.CharField(max_length=255, default="PRIDRIAN Luxe")
+    logo = models.ImageField(upload_to="settings/logos/", null=True, blank=True)
+    contact_email = models.EmailField(max_length=255, default="info@pridrianluxe.com")
+    contact_phone = models.CharField(max_length=15, default="070-020-0340")
+    business_address = models.TextField(null=True, blank=True)
+    currency = models.CharField(max_length=10, default="KES")
+
+    # Payment Settings
+    enable_mpesa = models.BooleanField(default=True)
+    mpesa_api_key = models.CharField(max_length=255, null=True, blank=True)
+    enable_paypal = models.BooleanField(default=False)
+    paypal_client_id = models.CharField(max_length=255, null=True, blank=True)
+    paypal_client_secret = models.CharField(max_length=255, null=True, blank=True)
+    enable_visa = models.BooleanField(default=False)  # Add this field
+    visa_api_key = models.CharField(max_length=255, blank=True, null=True)  # Add this field
+
+
+    # Shipping Settings
+    flat_shipping_rate = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    enable_free_shipping = models.BooleanField(default=False)
+    free_shipping_threshold = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    # SEO and Marketing
+    homepage_meta_title = models.CharField(max_length=255, null=True, blank=True)
+    homepage_meta_description = models.TextField(null=True, blank=True)
+    facebook_url = models.URLField(null=True, blank=True)
+    instagram_url = models.URLField(null=True, blank=True)
+
+    # Maintenance Mode
+    maintenance_mode = models.BooleanField(default=False)
+    maintenance_message = models.TextField(default="We are currently performing maintenance. Please check back later.")
+
+    # Other Settings
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.site_name
