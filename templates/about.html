@@ -3,169 +3,196 @@
 {% block body %}
 
 
-    <section class="bg-muted py-3">
-        <div class="container"  style="justify-content: center;  display: flex; align-items: center;">
-            <div class="row align-items-center py-5">
-                <div class="col-md-8 text-black">
-                    <h2 class="fw-bold" style="font-family: serif">About Us</h2>
-                    <p style="text-align: left; font-family: serif;">
-                        PRIDRIAN Luxe is your ultimate destination for luxury, sophistication, and timeless fashion. We specialize in curating a stunning collection of premium designer bags that blend elegance with practicality. At PRIDRIAN Luxe, we believe in empowering individuals to express their unique style with iconic pieces that exude quality, craftsmanship, and exclusivity.
-
-                        Our mission is to bring luxury closer to you, offering a seamless shopping experience with a handpicked selection of the world’s most coveted brands. Whether you're looking for a statement bag for special occasions or an everyday essential, PRIDRIAN Luxe is here to elevate your style with unparalleled grace.</p>
-                </div>
-               <div class="col-md-4">
-    <img src="{% static 'assets/img/aboutus.png' %}" class="img-fluid" alt="About Hero">
-</div>
-
+<section class="bg-muted py-3">
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="row align-items-center py-5">
+            <div class="col-md-8">
+                <h2 class="fw-bold fs-2" style="font-family: serif; color: #c9b037; letter-spacing: 1px;">About Us</h2>
+                <p style="text-align: left; font-family: serif; color: #031429; font-size: 1.1rem;">
+                    PRIDRIAN Luxe is your ultimate destination for luxury, sophistication, and timeless fashion. We
+                    specialize in curating a stunning collection of premium designer bags that blend elegance with
+                    practicality. At PRIDRIAN Luxe, we believe in empowering individuals to express their unique style
+                    with iconic pieces that exude quality, craftsmanship, and exclusivity.<br><br>
+                    Our mission is to bring luxury closer to you, offering a seamless shopping experience with a
+                    handpicked selection of the world’s most coveted brands. Whether you're looking for a statement bag
+                    for special occasions or an everyday essential, PRIDRIAN Luxe is here to elevate your style with
+                    unparalleled grace.
+                </p>
+            </div>
+            <div class="col-md-4 text-center">
+                <img src="{% static 'assets/img/aboutus.png' %}" class="img-fluid" alt="About Hero"
+                    style="max-width: 70%; border-radius: 16px; box-shadow: 0 4px 24px rgba(201,176,55,0.10);">
             </div>
         </div>
-    </section>
-    <!-- Close Banner -->
-    <hr style="width: 80%" class="mx-auto">
-    <!-- Start Section -->
-    <section class="container py-2">
-        <div class="row text-center pt-5 pb-3"  >
+    </div>
+</section>
+<!-- Close Banner -->
+<hr style="width: 80%" class="mx-auto">
+<!-- Start Section -->
+<section class="container py-2">
+    <div class="row text-center pt-5 pb-3">
+        <div class="col-lg-6 m-auto">
+            <h2 class="fw-bold fs-3 mb-5" style="font-family: serif; color: #c9b037;">Our Services</h2>
+        </div>
+    </div>
+    <div class="row mx-auto justify-content-center align-items-center">
+        <!-- Column 1 -->
+        <div class="col-md-4 pb-5">
+            <div class="h-100 py-5 services-icon-wap shadow rounded text-center"
+                style="background: #fff; border-radius: 16px;">
+                <div class="h2" style="color: #c9b037;">
+                    <i class="fa fa-truck fa-lg"></i>
+                </div>
+                <h2 class="h5 mt-4" style="font-family: serif; color: #031429;">Delivery Services</h2>
+            </div>
+        </div>
+        <!-- Column 2 -->
+        <div class="col-md-4 pb-5">
+            <div class="h-100 py-5 services-icon-wap shadow rounded text-center"
+                style="background: #fff; border-radius: 16px;">
+                <div class="h2" style="color: #c9b037;">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <h2 class="h5 mt-4" style="font-family: serif; color: #031429;">Shipping & Return</h2>
+            </div>
+        </div>
+        <!-- Column 3 -->
+        <div class="col-md-4 pb-5">
+            <div class="h-100 py-5 services-icon-wap shadow rounded text-center"
+                style="background: #fff; border-radius: 16px;">
+                <div class="h2" style="color: #c9b037;">
+                    <i class="fa fa-user"></i>
+                </div>
+                <h2 class="h5 mt-4" style="font-family: serif; color: #031429;">24 Hours Service</h2>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Section -->
+<hr style="width: 80%" class="mx-auto">
+<!-- Start Brands -->
+<section class="bg-muted py-5">
+    <div class="container my-2">
+        <div class="row text-center py-3">
             <div class="col-lg-6 m-auto">
-                <h2 class="h2 mb-5 fw-bold" style="font-family: serif">Our Services</h2>
+                <h2 class="fw-bold fs-3" style="font-family: serif; color: #c9b037;">Bag Brands</h2>
+                <p class="mt-3" style="font-family: serif; color: #031429;">
+                    All product names, logos, and brands are the property of their respective owners. All company,
+                    product, and service names used in this website are for identification purposes only. Use of these
+                    names, logos, and brands does not imply endorsement. PRIDRIAN Luxe only sells authentic products
+                    from established designers and brands. All imagery is either original or used with permission where
+                    applicable.
+                </p>
             </div>
-        </div>
- <div class="row mx-auto" style="justify-content: center; display: flex; align-items: center; ">
-    <!-- Column 1 -->
-    <div class="col-md-4 pb-5">
-        <div class="h-100 py-5 services-icon-wap shadow">
-            <div class="h2 text-black text-center">
-                <i class="fa fa-truck fa-lg"></i>
-            </div>
-            <h2 class="h5 mt-4 text-center" style="font-family: serif">Delivery Services</h2>
-        </div>
-    </div>
-
-    <!-- Column 2 -->
-    <div class="col-md-4 pb-5">
-        <div class="h-100 py-5 services-icon-wap shadow">
-            <div class="h2 text-black text-center">
-                <i class="fas fa-exchange-alt"></i>
-            </div>
-            <h2 class="h5 mt-4 text-center" style="font-family: serif">Shipping & Return</h2>
-        </div>
-    </div>
-
-    <!-- Column 3 -->
-    <div class="col-md-4 pb-5">
-        <div class="h-100 py-5 services-icon-wap shadow">
-            <div class="h2 text-black text-center">
-                <i class="fa fa-user"></i>
-            </div>
-            <h2 class="h5 mt-4 text-center" style="font-family: serif">24 Hours Service</h2>
-        </div>
-    </div>
-</div>
-
-    </section>
-    <!-- End Section -->
-    <hr style="width: 80%" class="mx-auto">
-    <!-- Start Brands -->
-    <section class="bg-muted py-5">
-        <div class="container my-2">
-            <div class="row text-center py-3">
-                <div class="col-lg-6 m-auto">
-                    <h2 class="h2 fw-bold" style="font-family: serif">Bag Brands</h2>
-                    <p class="mt-3" style="font-family: serif">
-                        All product names, logos, and brands are the property of their respective owners. All company, product, and service names used in this website are for identification purposes only. Use of these names, logos, and brands does not imply endorsement. PRIDRIAN Luxe only sells authentic products from established designers and brands. All imagery is either original or used with permission where applicable.
-                    </p>
-                </div>
-                <div class="col-lg-9 m-auto tempaltemo-carousel">
-                    <div class="row d-flex flex-row">
-                        <!--Controls-->
-                        <div class="col-1 align-self-center">
-                            <a class="h1" href="#templatemo-slide-brand" role="button" data-bs-slide="prev">
-                                <i class="text-light fas fa-chevron-left"></i>
-                            </a>
-                        </div>
-                        <!--End Controls-->
-
-                        <!--Carousel Wrapper-->
-                        <div class="col">
-                            <div class="carousel slide carousel-multi-item pt-2 pt-md-0" id="templatemo-slide-brand" data-bs-ride="carousel">
-                                <!--Slides-->
-                                <div class="carousel-inner product-links-wap" role="listbox">
-
-                                    <!--First slide-->
-                                    <div class="carousel-item active">
-                                        <div class="row">
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/chanel_logo.png' %}" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/hermes.gif' %}" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/dior.png' %}" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/louisvuitton.gif' %}" alt="Brand Logo"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--End First slide-->
-
-                                    <!--Second slide-->
-                                    <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/chloe.jpg' %}" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/gucci.gif' %}" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/celine.gif' %}" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/prada.png' %}" alt="Brand Logo"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--End Second slide-->
-
-                                    <!--Third slide-->
-                                    <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/fendi.gif' %}" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/balenciaga.gif' %}" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/saintlaurent.png' %}" alt="Brand Logo"></a>
-                                            </div>
-                                            <div class="col-3 p-md-5">
-                                                <a href="#"><img class="img-fluid brand-img" src="{% static 'assets/img/bottegaveneta.gif' %}" alt="Brand Logo"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--End Third slide-->
-
-                                </div>
-                                <!--End Slides-->
-                            </div>
-                        </div>
-                        <!--End Carousel Wrapper-->
-
-                        <!--Controls-->
-                        <div class="col-1 align-self-center">
-                            <a class="h1" href="#templatemo-slide-brand" role="button" data-bs-slide="next">
-                                <i class="text-light fas fa-chevron-right"></i>
-                            </a>
-                        </div>
-                        <!--End Controls-->
+            <div class="col-lg-9 m-auto tempaltemo-carousel">
+                <div class="row d-flex flex-row">
+                    <!--Controls-->
+                    <div class="col-1 align-self-center">
+                        <a class="h1" href="#templatemo-slide-brand" role="button" data-bs-slide="prev">
+                            <i class="text-light fas fa-chevron-left"></i>
+                        </a>
                     </div>
+                    <!--End Controls-->
+
+                    <!--Carousel Wrapper-->
+                    <div class="col">
+                        <div class="carousel slide carousel-multi-item pt-2 pt-md-0" id="templatemo-slide-brand"
+                            data-bs-ride="carousel">
+                            <!--Slides-->
+                            <div class="carousel-inner product-links-wap" role="listbox">
+
+                                <!--First slide-->
+                                <div class="carousel-item active">
+                                    <div class="row">
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/chanel_logo.png' %}"
+                                                    alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/hermes.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/dior.png' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/louisvuitton.gif' %}"
+                                                    alt="Brand Logo"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--End First slide-->
+
+                                <!--Second slide-->
+                                <div class="carousel-item">
+                                    <div class="row">
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/chloe.jpg' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/gucci.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/celine.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/prada.png' %}" alt="Brand Logo"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--End Second slide-->
+
+                                <!--Third slide-->
+                                <div class="carousel-item">
+                                    <div class="row">
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/fendi.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/balenciaga.gif' %}" alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/saintlaurent.png' %}"
+                                                    alt="Brand Logo"></a>
+                                        </div>
+                                        <div class="col-3 p-md-5">
+                                            <a href="#"><img class="img-fluid brand-img"
+                                                    src="{% static 'assets/img/bottegaveneta.gif' %}"
+                                                    alt="Brand Logo"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--End Third slide-->
+
+                            </div>
+                            <!--End Slides-->
+                        </div>
+                    </div>
+                    <!--End Carousel Wrapper-->
+
+                    <!--Controls-->
+                    <div class="col-1 align-self-center">
+                        <a class="h1" href="#templatemo-slide-brand" role="button" data-bs-slide="next">
+                            <i class="text-light fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                    <!--End Controls-->
                 </div>
             </div>
         </div>
-    </section>
-    <!--End Brands-->
+    </div>
+</section>
+<!--End Brands-->
 
 
- {% endblock %}
+{% endblock %}
