@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME':  'pridrian',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'WangilaP@0911',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
@@ -140,5 +140,3 @@ LOGOUT_REDIRECT_URL = '/login/'  # or wherever you want users to go after loggin
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default session engine
 AUTH_USER_MODEL = 'myapp.User'
-
-
