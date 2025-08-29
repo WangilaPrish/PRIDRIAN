@@ -9,68 +9,86 @@
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/fontawesome.min.css' %}">
     <style>
-        /* General Styling */
+        :root {
+            --luxury-gold: #c9b037;
+            --luxury-black: #031429;
+            --luxury-white: #fff;
+        }
         body {
             font-family: 'Roboto', Arial, sans-serif;
             background-color: #f4f4f9;
         }
-
         .navbar {
-            background-color: #031429;
+            background-color: var(--luxury-black);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
         .navbar-brand {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #fff !important;
+            color: var(--luxury-gold) !important;
+            letter-spacing: 2px;
         }
-
         .navbar-nav .nav-link {
-            color: #fff !important;
+            color: var(--luxury-white) !important;
             font-size: 1rem;
             margin-right: 10px;
+            transition: color 0.2s;
         }
-
         .navbar-nav .nav-link:hover {
-            color: #f8c146 !important;
+            color: var(--luxury-gold) !important;
         }
-
-        .table th {
-            background-color: #031429;
-            color: white;
-            text-align: center;
+        .card-login {
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(201,176,55,0.12);
+            border: 1px solid #ececec;
+            background-color: #fff;
+            padding: 40px;
         }
-
-        .table td {
-            text-align: center;
-        }
-
-        .btn-add-product {
-            background-color: #031429;
-            color: white;
-        }
-
-        .btn-add-product:hover {
-            background-color: #f8c146;
-            color: #031429;
-        }
-
         .form-control {
             margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid #c9b037;
         }
-
+        label {
+            color: var(--luxury-gold);
+            font-weight: 500;
+        }
+        .btn-add-product, button[type="submit"] {
+            background-color: var(--luxury-gold);
+            color: var(--luxury-black);
+            font-family: serif;
+            padding: 14px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+            letter-spacing: 1px;
+        }
+        .btn-add-product:hover, button[type="submit"]:hover {
+            background-color: var(--luxury-black);
+            color: var(--luxury-gold);
+        }
+        h1.fs-4 {
+            color: var(--luxury-gold);
+            font-size: 1.5rem;
+            font-family: serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .main {
+            background-color: #f4f7fb;
+        }
         footer {
-            background-color: #031429;
-            color: white;
+            background-color: var(--luxury-black);
+            color: var(--luxury-gold);
             padding: 10px 0;
             text-align: center;
         }
-
         footer a {
-            color: #f8c146;
+            color: var(--luxury-gold);
         }
-
         footer a:hover {
             text-decoration: underline;
         }
@@ -106,7 +124,7 @@
       style="display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; background-color: #f4f7fb; padding: 20px;">
     <div class="container" style="width: 100%; max-width: 600px; padding: 0;">
         <div class="card-login" style="border-radius: 15px; border: 1px solid #ececec; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); overflow: hidden; background-color: #fff; padding: 40px;">
-            <h1 class="fs-4" style="font-weight: 700; font-family: serif; text-align: center; color: #031429; font-size: 14px;">Add a New Product</h2>
+            <h1 class="fs-4" style="font-weight: 700; font-family: serif; text-align: center;">Add a New Product</h1>
             <p class="fs-6" style="color: #666; font-family: serif; text-align: center; font-size: 16px;">Fill out the details below to add a product to your store.</p>
 
             <form method="POST" enctype="multipart/form-data" style="width: 100%; display: flex; flex-direction: column; gap: 20px;" class="fs-6">
